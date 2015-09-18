@@ -18,11 +18,11 @@ namespace Marimba
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription + "\r\n\r\nSpecial thanks to:" +
-                "\r\n\r\nKevin Chen and Krista Poon for providing the inspiration for this project." +
-                "\r\n\r\nNicholas Champion for his ideas for how to handle attendance, membership, and terms, as well as the atomized budget." +
+            this.textBoxDescription.Text = AssemblyDescription + "\r\n\r\nSpecial thanks to:" + 
+                "\r\n\r\nKevin Chen and Krista Poon for providing the inspiration for this project." + 
+                "\r\n\r\nNicholas Champion for his ideas for how to handle attendance, membership, and terms, as well as the atomized budget." + 
                 "\r\n\r\nCathy Zhang and Cassandra Beaton for their work on presenting financial information." +
-                "\r\n\r\nLawrence Veregin for originally developing Marimba.";
+                "\r\n\r\nLawrence Veregin for originally developing Marimba."
         }
 
         #region Assembly Attribute Accessors
