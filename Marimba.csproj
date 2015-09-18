@@ -197,12 +197,6 @@
     <Compile Include="MembershipMenu.Designer.cs">
       <DependentUpon>MembershipMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="mergeMrb.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="mergeMrb.Designer.cs">
-      <DependentUpon>mergeMrb.cs</DependentUpon>
-    </Compile>
     <Compile Include="moneyMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -329,10 +323,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MembershipMenu.resx">
       <DependentUpon>MembershipMenu.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="mergeMrb.resx">
-      <DependentUpon>mergeMrb.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="moneyMenu.resx">
