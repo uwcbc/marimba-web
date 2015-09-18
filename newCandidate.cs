@@ -12,7 +12,6 @@ namespace Marimba
 {
     public partial class newCandidate : Form
     {
-        bool fromMember = false;
         int iPositions;
         Label[] positionLabels;
         ComboBox[] positionRank;

@@ -489,21 +489,21 @@ namespace Marimba
             SHA256 shaHash = SHA256.Create();
 
             //salt
-            byte[] salt = new byte[4];
+            byte[] salt = new byte[16];
             int passwordLength = Encoding.UTF8.GetBytes(strPassword).Length;
-            byte[] saltPlusPassword = new byte[4 + passwordLength];
+            byte[] saltPlusPassword = new byte[16 + passwordLength];
 
             //generate salt
             RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
             rngCsp.GetBytes(salt);
             //combine the salt and password
-            Array.Copy(salt, saltPlusPassword, 4);
-            Array.Copy(Encoding.UTF8.GetBytes(strPassword), 0, saltPlusPassword, 4, passwordLength);
+            Array.Copy(salt, saltPlusPassword, 16);
+            Array.Copy(Encoding.UTF8.GetBytes(strPassword), 0, saltPlusPassword, 16, passwordLength);
 
             // Convert the input string to a byte array and compute the hash. 
             byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(Encoding.UTF8.GetBytes(strPassword)));
 
-            this.strUsers[iUser, 1] = bytesToHex(data);
+            this.strUsers[iUser, 1] = bytesToHex(salt) + "$" + bytesToHex(data);
             this.strUsers[iUser, 2] = strPrivileges;
             this.strUsers[iUser, 3] = Convert.ToBase64String(clsStorage.byteXOR(aesInfo.Key, shaHash.ComputeHash(Encoding.UTF8.GetBytes(strPassword))));
             iUser++;
