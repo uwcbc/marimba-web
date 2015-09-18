@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="Marimba.Ribbon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" SnapsToDevicePixels="True" >
+    <Grid SnapsToDevicePixels="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Ribbon x:Name="MainRibbon" Background="#FFEBDEC1" BorderBrush="#FF00A1A5" ShowQuickAccessToolBarOnTop="False" SnapsToDevicePixels="True" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <!-- Application Menu, located at the left-hand side (down arrow) -->
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu KeyTip="F" Background="#FF00A18E" BorderBrush="#FF00A18E">
+                    <RibbonApplicationMenuItem Header="Settings" ImageSource="ribbon_images\settings.png" Click="Settings_Click" SnapsToDevicePixels="True" />
+                    <RibbonApplicationMenuItem x:Name="SaveMenu" Header="Save" ImageSource="ribbon_images\save.png" Click="SaveButton_Click" SnapsToDevicePixels="True" />
+                    <RibbonApplicationMenuItem Header="Save As" ImageSource="ribbon_images\save.png" Click="SaveAsButton_Click" SnapsToDevicePixels="True" />
+                    <RibbonApplicationMenuItem Header="About" ImageSource="ribbon_images\Marimba-logo.ico" Click="AboutButton_Click" SnapsToDevicePixels="True" />
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
+            <!-- Ribbon Tab #1: Home -->
+            <RibbonTab Header="Home" KeyTip="H" SnapsToDevicePixels="True" >
+                <!-- File  group-->
+                <RibbonGroup x:Name="FileGroup" Header="File" SnapsToDevicePixels="True">
+                    <RibbonSplitButton x:Name="SaveButton" LargeImageSource="ribbon_images\save.png" SmallImageSource="ribbon_images\save_small.png" Label="Save" KeyTip="S" Click="SaveButton_Click" SnapsToDevicePixels="True">
+                        <RibbonSplitMenuItem x:Name="SaveAsButton" ImageSource="ribbon_images\save_small.png" Header="Save As..." KeyTip="A" Click="SaveAsButton_Click"/>
+                    </RibbonSplitButton>
+                    <RibbonButton x:Name="MergeButton" Label="Merge" KeyTip="M" Click="MergeButton_Click" LargeImageSource="ribbon_images/merge.png" SnapsToDevicePixels="True" IsEnabled="False" >
+                        <RibbonButton.QuickAccessToolBarControlSizeDefinition>
+                            <RibbonControlSizeDefinition/>
+                        </RibbonButton.QuickAccessToolBarControlSizeDefinition>
+                    </RibbonButton>
+                    <RibbonButton SmallImageSource="ribbon_images\settings.png" Label="Settings" KeyTip="S" Click="Settings_Click" />
+                    <RibbonButton x:Name="PasswordButton" SmallImageSource="ribbon_images\password.png" Label="Change Password" KeyTip="P" Click="PasswordButton_Click">
+                    </RibbonButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="MailGroup" Header="Mail">
+                    <RibbonButton x:Name="Mail" LargeImageSource="ribbon_images/new_mail.png" Label="Send Mail" KeyTip="M" SmallImageSource="ribbon_images/new_mail.png"  SnapsToDevicePixels="True" Click="Mail_Click" >
+                    </RibbonButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="HistoryGroup" Header="History">
+                    <RibbonButton x:Name="HistoryButton" LargeImageSource="ribbon_images\history.png" Label="History" KeyTip="H" SmallImageSource="ribbon_images/history.png" Click="HistoryButton_Click" SnapsToDevicePixels="True" >
+                    </RibbonButton>
+                    <RibbonButton x:Name="RefreshHistButton" LargeImageSource="ribbon_images\Refresh.png" Label="Refresh" KeyTip="R" SmallImageSource="ribbon_images/Refresh_small.png" Click="RefreshHistButton_Click" SnapsToDevicePixels="True" />
+                </RibbonGroup>
+                <RibbonGroup x:Name="AboutGroup" Header="About">
+                    <RibbonButton x:Name="AboutButton" LargeImageSource="ribbon_images\logo_32.png" Label="About" KeyTip="AB" SmallImageSource="ribbon_images\logo_32.png" Click="AboutButton_Click" SnapsToDevicePixels="True" >
+                    </RibbonButton>
+                </RibbonGroup>
+            </RibbonTab>
+            <!-- Ribbon Tab #2: Membership -->
+            <RibbonTab Header="Membership" KeyTip="M" >
+                <RibbonGroup x:Name="RehearsalGroup" Header="Rehearsal">
+                    <RibbonButton x:Name="SignInButton" LargeImageSource="ribbon_images/signin.png" Label="Sign In" KeyTip="I" SmallImageSource="ribbon_images/signin.png" SnapsToDevicePixels="True" Click="SignInButton_Click" >
+                    </RibbonButton>
+                    <RibbonButton x:Name="Attendance" LargeImageSource="ribbon_images/attendance.ico" Label="Attendance" KeyTip="A" SmallImageSource="ribbon_images/attendance.ico" SnapsToDevicePixels="True" Click="Attendance_Click"  >
+                    </RibbonButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="NewMemberGroup" Header="Members">
+                    <RibbonButton x:Name="SignUpButton" LargeImageSource="ribbon_images/new_large.png" Label="Sign Up" KeyTip="U" SmallImageSource="ribbon_images/new_small.png"  SnapsToDevicePixels="True" Click="SignUpButton_Click" >
+                    </RibbonButton>
+                    <RibbonButton x:Name="Profile" LargeImageSource="ribbon_images/profile.ico" Label="Profile" KeyTip="P" SmallImageSource="ribbon_images/profile.ico"  SnapsToDevicePixels="True" Click="Profile_Click" >
+                    </RibbonButton>
+                    <RibbonButton x:Name="Google_Button" Label="Import from Google Doc" KeyTip="G" SnapsToDevicePixels="True" Click="Google_Button_Click">
+                    </RibbonButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="ExportMemberGroup" Header="Export">
+                    <RibbonSplitButton x:Name="ExpMember" LargeImageSource="ribbon_images/xlsx.png" Label="Export" KeyTip="X" SmallImageSource="ribbon_images/xlsx.png"  SnapsToDevicePixels="True" Click="ExpMember_Click" >
+                        <RibbonSplitMenuItem x:Name="ExpXlsxMember" ImageSource="ribbon_images\xlsx.png" Header="Export As .xlsx" KeyTip="XL" Click="ExpXlsxMember_Click" />
+                        <RibbonSplitMenuItem x:Name="ExpCsvMember" ImageSource="ribbon_images\xlsx.png" Header="Export As .csv" KeyTip="CS" Click="ExpCsvMember_Click" />
+                    </RibbonSplitButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="ElectionGroup" Header="Election">
+                    <RibbonButton x:Name="Election" LargeImageSource="ribbon_images/Elections.png" Label="Elections" KeyTip="E" SmallImageSource="ribbon_images/Elections.png"  SnapsToDevicePixels="True" Click="Election_Click" >
+                    </RibbonButton>
+                </RibbonGroup>
+            </RibbonTab>
+            <!-- Ribbon #3: Finance -->
+            <RibbonTab x:Name="FinanceTab" Header="Finance" KeyTip="F" >
+                <RibbonGroup x:Name="Records" Header="Records">
+                    <RibbonButton x:Name="Account" Label="Account History" KeyTip="A" LargeImageSource="ribbon_images/budget.png" SnapsToDevicePixels="True" Click="Account_Click" >
+                    </RibbonButton>
+                    <RibbonButton x:Name="New_Record" Label="New Record" KeyTip="R" LargeImageSource="ribbon_images/Add_item.png" SmallImageSource="ribbon_images/Add_item_small.png" SnapsToDevicePixels="True" Click="New_Record_Click" >
+                    </RibbonButton>
+                    <RibbonButton x:Name="TermSummary" Label="Term Summary" KeyTip="S" LargeImageSource="ribbon_images/term summary_48x48.png" SmallImageSource="ribbon_images/term summary_48x48.png" SnapsToDevicePixels="True" Click="TermSummary_Click" >
+                    </RibbonButton>
+                    <RibbonSplitButton x:Name="ExpAccount" Label="Export Account" KeyTip="X" LargeImageSource="ribbon_images/xlsx.png" SmallImageSource="ribbon_images/xlsx.png" SnapsToDevicePixels="True" Click="ExpAccount_Click" >
+                        <RibbonSplitMenuItem x:Name="ExpXlsxAccount" ImageSource="ribbon_images\xlsx.png" Header="Export As .xlsx" KeyTip="XL" Click="ExpXlsxAccount_Click"  />
+                        <RibbonSplitMenuItem x:Name="ExpCsvAccount" ImageSource="ribbon_images\xlsx.png" Header="Export As .csv" KeyTip="CS" Click="ExpCsvAccount_Click" />
+                    </RibbonSplitButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="FeesGroup" Header="Fees">
+                    <RibbonButton x:Name="Fees" Label="Record Fees" KeyTip="FE" LargeImageSource="ribbon_images/Record_fees.png" SnapsToDevicePixels="True" Click="Fees_Click" >
+                    </RibbonButton>
+                    <RibbonSplitButton x:Name="ExpFees" Label="Export Fees of Current Term" KeyTip="XF" LargeImageSource="ribbon_images/xlsx.png" SmallImageSource="ribbon_images/xlsx.png" SnapsToDevicePixels="True" Click="ExpFees_Click" >
+                        <RibbonSplitMenuItem x:Name="ExpXlsxFees" ImageSource="ribbon_images\xlsx.png" Header="Export As .xlsx" KeyTip="XL" Click="ExpXlsxFees_Click"  />
+                        <RibbonSplitMenuItem x:Name="ExpCsvFees" ImageSource="ribbon_images\xlsx.png" Header="Export As .csv" KeyTip="CS" Click="ExpCsvFees_Click" />
+                    </RibbonSplitButton>
+                </RibbonGroup>
+            </RibbonTab>
+            <!-- Ribbon Last Tab: Admin -->
+            <RibbonTab x:Name="Admin" Header="Admin" KeyTip="A" >
+                <RibbonGroup x:Name="New" Header="New">
+                    <RibbonButton x:Name="NewUser" Label="New User" KeyTip="U" SmallImageSource="ribbon_images/Members.png" SnapsToDevicePixels="True" Click="NewUser_Click" >
+                    </RibbonButton>
+                    <RibbonButton x:Name="NewTerm" Label="New Term" KeyTip="T" SmallImageSource="ribbon_images/new_small.png" SnapsToDevicePixels="True" Click="NewTerm_Click"  >
+                    </RibbonButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="Purge" Header="Purge Old Members">
+                    <RibbonButton x:Name="Perger_Button" Label="Purge Old Members" KeyTip="P" SnapsToDevicePixels="True" Click="Perger_Button_Click" >
+                    </RibbonButton>
+                </RibbonGroup>
+                <RibbonGroup x:Name="ExportClubGroup" Header="Export">
+                    <RibbonButton x:Name="ExpClub" LargeImageSource="ribbon_images/xlsx.png" Label="Export Club" KeyTip="E" SmallImageSource="ribbon_images/xlsx.png"  SnapsToDevicePixels="True" Click="ExpClub_Click"  >
+                    </RibbonButton>
+                    <ProgressBar x:Name="Export_Status" Height="40" Width="200" VerticalContentAlignment="Stretch" Foreground="#FF009B77"/>
+                </RibbonGroup>
+                <RibbonGroup x:Name="ImportClubGroup" Header="Import">
+                    <RibbonButton x:Name="ImpClub" LargeImageSource="ribbon_images/xlsx.png" Label="Import Club" KeyTip="I" SmallImageSource="ribbon_images/xlsx.png"  SnapsToDevicePixels="True" Click="ImpClub_Click" >
+                    </RibbonButton>
+                </RibbonGroup>
+            </RibbonTab>
+            
+        </Ribbon>
+    </Grid>
+</UserControl>
