@@ -292,9 +292,6 @@ namespace Marimba
             aesInfo.GenerateIV();
             bw.Write(Convert.ToBase64String(aesInfo.IV));
 
-            //bw.Close();
-            //fs.Close();
-
             //In future, set key to whatever here
             //aesAlg.Key;
             //create encryptor
@@ -304,7 +301,6 @@ namespace Marimba
                 AesEncrypt.Key = aesInfo.Key;
                 AesEncrypt.IV = aesInfo.IV;
                 ICryptoTransform encryptor = AesEncrypt.CreateEncryptor(AesEncrypt.Key, AesEncrypt.IV);
-                //fs = new FileStream(this.strLocation, FileMode.Append);
                 using (MemoryStream ms = new MemoryStream())
                 {
                     using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
@@ -478,6 +474,7 @@ namespace Marimba
             return mainFile;
         }
 
+        // add this user with the given name, password and privilege level
         public bool addUser(string strName, string strPassword, string strPrivileges)
         {
             //see if a user with this name already exists
@@ -502,15 +499,16 @@ namespace Marimba
             Array.Copy(Encoding.UTF8.GetBytes(strPassword), 0, saltPlusPassword, saltLength, passwordLength);
 
             // Convert the input string to a byte array and compute the hash. 
-            byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(Encoding.UTF8.GetBytes(strPassword)));
+            byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(saltPlusPassword));
 
             this.strUsers[iUser, 1] = bytesToHex(salt) + "$" + bytesToHex(data);
             this.strUsers[iUser, 2] = strPrivileges;
-            this.strUsers[iUser, 3] = Convert.ToBase64String(clsStorage.byteXOR(aesInfo.Key, shaHash.ComputeHash(Encoding.UTF8.GetBytes(strPassword))));
+            this.strUsers[iUser, 3] = Convert.ToBase64String(clsStorage.byteXOR(aesInfo.Key, shaHash.ComputeHash(saltPlusPassword)));
             iUser++;
             return true;
         }
 
+        // get the index of the specified user
         public int findUser(string strName)
         {
             int i = 0;
@@ -524,6 +522,7 @@ namespace Marimba
             return -1;
         }
 
+        // returns true if the login was successful, false otherwise
         public bool loginUser(string strName, string strPassword)
         {
             int i = findUser(strName);
@@ -548,18 +547,14 @@ namespace Marimba
                 Array.Copy(salt, saltPlusPassword, saltLength);
                 Array.Copy(Encoding.UTF8.GetBytes(strPassword), 0, saltPlusPassword, saltLength, passwordLength);
 
-                //byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(Encoding.UTF8.GetBytes(strPassword)));
                 byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(saltPlusPassword));
-                //byte[] data = md5hash.ComputeHash(Encoding.UTF8.GetBytes(strPassword));
 
                 if (StringComparer.OrdinalIgnoreCase.Compare(hash, bytesToHex(data)) == 0)
-                //if (StringComparer.OrdinalIgnoreCase.Compare(strUsers[i, 1], bytesToHex(data)) == 0)
                 {
                     this.strUser = strName;
                     this.strPrivilege = this.strUsers[i, 2];
                     try
                     {
-                        //this.aesInfo.Key = clsStorage.byteXOR(Convert.FromBase64String(strUsers[i, 3]), shaHash.ComputeHash(Encoding.UTF8.GetBytes(strPassword)));
                         this.aesInfo.Key = clsStorage.byteXOR(Convert.FromBase64String(strUsers[i, 3]), shaHash.ComputeHash(saltPlusPassword));
                     }
                     catch
