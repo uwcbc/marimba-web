@@ -156,7 +156,7 @@ namespace Marimba
                 FName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
                 FName.Width = 350;
                 lvInstruments.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {FName});
-                lvInstruments.Font = new System.Drawing.Font("Quicksand Book", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                lvInstruments.Font = new System.Drawing.Font("Quicksand", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 lvInstruments.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
                 lvInstruments.Location = new System.Drawing.Point(49, 350);
                 lvInstruments.Name = "lvMembers";
@@ -264,11 +264,11 @@ namespace Marimba
             txtOtherInstrument = new TextBox();
             lblOtherInstrument = new Label();
             lblOtherInstrument.AutoSize = true;
-            lblOtherInstrument.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            lblOtherInstrument.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             lblOtherInstrument.Location = new System.Drawing.Point(lblEmail.Location.X, lblEmail.Location.Y);
             lblOtherInstrument.Size = new System.Drawing.Size(95, 18);
             lblOtherInstrument.Text = "Other Instrument";
-            txtOtherInstrument.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            txtOtherInstrument.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             txtOtherInstrument.Location = new Point(txtEmail.Location.X, txtEmail.Location.Y);
             txtOtherInstrument.Size = new System.Drawing.Size(263, 24);
             txtOtherInstrument.TabIndex = 8;

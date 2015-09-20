@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(changePassword));
             this.lblOld = new System.Windows.Forms.Label();
             this.txtOld = new System.Windows.Forms.TextBox();
             this.txtNew = new System.Windows.Forms.TextBox();
@@ -41,63 +40,63 @@
             // lblOld
             // 
             this.lblOld.AutoSize = true;
-            this.lblOld.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOld.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblOld.Location = new System.Drawing.Point(12, 25);
             this.lblOld.Name = "lblOld";
-            this.lblOld.Size = new System.Drawing.Size(119, 18);
+            this.lblOld.Size = new System.Drawing.Size(103, 16);
             this.lblOld.TabIndex = 0;
             this.lblOld.Text = "Old Password";
             // 
             // txtOld
             // 
-            this.txtOld.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtOld.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtOld.Location = new System.Drawing.Point(150, 22);
             this.txtOld.Name = "txtOld";
             this.txtOld.PasswordChar = '♪';
-            this.txtOld.Size = new System.Drawing.Size(170, 24);
+            this.txtOld.Size = new System.Drawing.Size(170, 23);
             this.txtOld.TabIndex = 1;
             // 
             // txtNew
             // 
-            this.txtNew.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNew.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtNew.Location = new System.Drawing.Point(150, 67);
             this.txtNew.Name = "txtNew";
             this.txtNew.PasswordChar = '♪';
-            this.txtNew.Size = new System.Drawing.Size(170, 24);
+            this.txtNew.Size = new System.Drawing.Size(170, 23);
             this.txtNew.TabIndex = 3;
             // 
             // lblNew
             // 
             this.lblNew.AutoSize = true;
-            this.lblNew.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNew.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNew.Location = new System.Drawing.Point(12, 70);
             this.lblNew.Name = "lblNew";
-            this.lblNew.Size = new System.Drawing.Size(126, 18);
+            this.lblNew.Size = new System.Drawing.Size(111, 16);
             this.lblNew.TabIndex = 2;
             this.lblNew.Text = "New Password";
             // 
             // txtConfirm
             // 
-            this.txtConfirm.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtConfirm.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtConfirm.Location = new System.Drawing.Point(150, 115);
             this.txtConfirm.Name = "txtConfirm";
             this.txtConfirm.PasswordChar = '♪';
-            this.txtConfirm.Size = new System.Drawing.Size(170, 24);
+            this.txtConfirm.Size = new System.Drawing.Size(170, 23);
             this.txtConfirm.TabIndex = 5;
             // 
             // lblConfirm
             // 
             this.lblConfirm.AutoSize = true;
-            this.lblConfirm.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblConfirm.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblConfirm.Location = new System.Drawing.Point(12, 118);
             this.lblConfirm.Name = "lblConfirm";
-            this.lblConfirm.Size = new System.Drawing.Size(113, 36);
+            this.lblConfirm.Size = new System.Drawing.Size(101, 32);
             this.lblConfirm.TabIndex = 4;
             this.lblConfirm.Text = "Confirm New\r\nPassword";
             // 
             // btnChange
             // 
-            this.btnChange.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChange.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChange.Location = new System.Drawing.Point(81, 184);
             this.btnChange.Name = "btnChange";
             this.btnChange.Size = new System.Drawing.Size(163, 30);
@@ -120,7 +119,7 @@
             this.Controls.Add(this.txtOld);
             this.Controls.Add(this.lblOld);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = Properties.Resources.Marimba_logo;
+            this.Icon = global::Marimba.Properties.Resources.Marimba_logo;
             this.MaximizeBox = false;
             this.Name = "changePassword";
             this.ShowInTaskbar = false;

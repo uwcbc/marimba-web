@@ -68,7 +68,7 @@
             this.tcMain.Controls.Add(this.tpPref);
             this.tcMain.Controls.Add(this.tpAdmin);
             this.tcMain.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tcMain.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tcMain.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tcMain.Location = new System.Drawing.Point(0, 0);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
@@ -109,7 +109,7 @@
             this.txtEmailPassword.Location = new System.Drawing.Point(167, 289);
             this.txtEmailPassword.Name = "txtEmailPassword";
             this.txtEmailPassword.PasswordChar = '♪';
-            this.txtEmailPassword.Size = new System.Drawing.Size(304, 22);
+            this.txtEmailPassword.Size = new System.Drawing.Size(304, 23);
             this.txtEmailPassword.TabIndex = 8;
             // 
             // lblPosition
@@ -134,14 +134,14 @@
             // 
             this.txtPosition.Location = new System.Drawing.Point(130, 242);
             this.txtPosition.Name = "txtPosition";
-            this.txtPosition.Size = new System.Drawing.Size(341, 22);
+            this.txtPosition.Size = new System.Drawing.Size(341, 23);
             this.txtPosition.TabIndex = 5;
             // 
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(130, 201);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(341, 22);
+            this.txtName.Size = new System.Drawing.Size(341, 23);
             this.txtName.TabIndex = 4;
             // 
             // cbAttachSignature
@@ -209,7 +209,7 @@
             // 
             // btnChangeKey
             // 
-            this.btnChangeKey.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChangeKey.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChangeKey.Location = new System.Drawing.Point(175, 43);
             this.btnChangeKey.Name = "btnChangeKey";
             this.btnChangeKey.Size = new System.Drawing.Size(133, 23);
@@ -253,7 +253,7 @@
             // 
             this.txtSMTPPort.Location = new System.Drawing.Point(146, 173);
             this.txtSMTPPort.Name = "txtSMTPPort";
-            this.txtSMTPPort.Size = new System.Drawing.Size(330, 22);
+            this.txtSMTPPort.Size = new System.Drawing.Size(330, 23);
             this.txtSMTPPort.TabIndex = 15;
             // 
             // lblSMTPPort
@@ -269,7 +269,7 @@
             // 
             this.txtSMTP.Location = new System.Drawing.Point(146, 134);
             this.txtSMTP.Name = "txtSMTP";
-            this.txtSMTP.Size = new System.Drawing.Size(330, 22);
+            this.txtSMTP.Size = new System.Drawing.Size(330, 23);
             this.txtSMTP.TabIndex = 13;
             // 
             // lblSMTP
@@ -297,7 +297,7 @@
             // 
             this.txtImap.Location = new System.Drawing.Point(146, 58);
             this.txtImap.Name = "txtImap";
-            this.txtImap.Size = new System.Drawing.Size(330, 22);
+            this.txtImap.Size = new System.Drawing.Size(330, 23);
             this.txtImap.TabIndex = 10;
             // 
             // lblImap
@@ -322,12 +322,12 @@
             // 
             this.txtEmail.Location = new System.Drawing.Point(146, 21);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(330, 22);
+            this.txtEmail.Size = new System.Drawing.Size(330, 23);
             this.txtEmail.TabIndex = 7;
             // 
             // btnOk
             // 
-            this.btnOk.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOk.Location = new System.Drawing.Point(134, 429);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
@@ -339,7 +339,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.Location = new System.Drawing.Point(274, 429);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);

@@ -41,7 +41,7 @@
             // btnExport
             // 
             this.btnExport.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btnExport.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExport.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExport.Location = new System.Drawing.Point(403, 23);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(84, 34);
@@ -54,7 +54,7 @@
             // 
             this.lblTerm.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblTerm.AutoSize = true;
-            this.lblTerm.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTerm.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTerm.Location = new System.Drawing.Point(3, 31);
             this.lblTerm.Name = "lblTerm";
             this.lblTerm.Size = new System.Drawing.Size(105, 18);
@@ -64,7 +64,7 @@
             // cbTerm
             // 
             this.cbTerm.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbTerm.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbTerm.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbTerm.FormattingEnabled = true;
             this.cbTerm.Location = new System.Drawing.Point(153, 27);
             this.cbTerm.Name = "cbTerm";
@@ -101,7 +101,7 @@
             this.columnHeader1});
             this.tlpMain.SetColumnSpan(this.lvAttendance, 3);
             this.lvAttendance.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvAttendance.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lvAttendance.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvAttendance.Location = new System.Drawing.Point(3, 83);
             this.lvAttendance.Name = "lvAttendance";
             this.lvAttendance.Size = new System.Drawing.Size(1024, 425);

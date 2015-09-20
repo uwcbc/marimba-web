@@ -42,7 +42,7 @@
             // 
             // btnSignIn
             // 
-            this.btnSignIn.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSignIn.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSignIn.Location = new System.Drawing.Point(29, 30);
             this.btnSignIn.Name = "btnSignIn";
             this.btnSignIn.Size = new System.Drawing.Size(151, 27);
@@ -53,7 +53,7 @@
             // 
             // btnAttendance
             // 
-            this.btnAttendance.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAttendance.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAttendance.Location = new System.Drawing.Point(29, 89);
             this.btnAttendance.Name = "btnAttendance";
             this.btnAttendance.Size = new System.Drawing.Size(151, 27);
@@ -64,7 +64,7 @@
             // 
             // btnProfile
             // 
-            this.btnProfile.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnProfile.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnProfile.Location = new System.Drawing.Point(29, 148);
             this.btnProfile.Name = "btnProfile";
             this.btnProfile.Size = new System.Drawing.Size(151, 27);
@@ -75,7 +75,7 @@
             // 
             // btnSignUp
             // 
-            this.btnSignUp.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSignUp.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSignUp.Location = new System.Drawing.Point(225, 30);
             this.btnSignUp.Name = "btnSignUp";
             this.btnSignUp.Size = new System.Drawing.Size(151, 27);
@@ -86,7 +86,7 @@
             // 
             // btnFees
             // 
-            this.btnFees.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFees.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFees.Location = new System.Drawing.Point(225, 207);
             this.btnFees.Name = "btnFees";
             this.btnFees.Size = new System.Drawing.Size(151, 27);
@@ -98,7 +98,7 @@
             // btnMassSignUp
             // 
             this.btnMassSignUp.Enabled = false;
-            this.btnMassSignUp.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMassSignUp.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMassSignUp.Location = new System.Drawing.Point(225, 89);
             this.btnMassSignUp.Name = "btnMassSignUp";
             this.btnMassSignUp.Size = new System.Drawing.Size(151, 27);
@@ -108,7 +108,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExport.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExport.Location = new System.Drawing.Point(29, 207);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(151, 27);
@@ -123,7 +123,7 @@
             // 
             // btnGoogleDoc
             // 
-            this.btnGoogleDoc.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGoogleDoc.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGoogleDoc.Location = new System.Drawing.Point(225, 148);
             this.btnGoogleDoc.Name = "btnGoogleDoc";
             this.btnGoogleDoc.Size = new System.Drawing.Size(151, 27);

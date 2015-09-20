@@ -58,7 +58,7 @@
             // 
             this.lblMember.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblMember.AutoSize = true;
-            this.lblMember.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMember.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMember.Location = new System.Drawing.Point(24, 184);
             this.lblMember.Name = "lblMember";
             this.lblMember.Size = new System.Drawing.Size(61, 15);
@@ -71,7 +71,7 @@
             this.lvCandidate.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Fname,
             this.email});
-            this.lvCandidate.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lvCandidate.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvCandidate.Location = new System.Drawing.Point(113, 170);
             this.lvCandidate.Name = "lvCandidate";
             this.lvCandidate.Size = new System.Drawing.Size(363, 44);
@@ -91,7 +91,7 @@
             // btnSubmit
             // 
             this.btnSubmit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnSubmit.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSubmit.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSubmit.Location = new System.Drawing.Point(257, 180);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(75, 23);
@@ -104,7 +104,7 @@
             // 
             this.lblBlurb.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblBlurb.AutoSize = true;
-            this.lblBlurb.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlurb.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlurb.Location = new System.Drawing.Point(24, 224);
             this.lblBlurb.Name = "lblBlurb";
             this.lblBlurb.Size = new System.Drawing.Size(41, 15);
@@ -114,7 +114,7 @@
             // txtBlurb
             // 
             this.txtBlurb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBlurb.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBlurb.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBlurb.Location = new System.Drawing.Point(93, 123);
             this.txtBlurb.Multiline = true;
             this.txtBlurb.Name = "txtBlurb";

@@ -52,7 +52,7 @@
             // lblElection
             // 
             this.lblElection.AutoSize = true;
-            this.lblElection.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblElection.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblElection.Location = new System.Drawing.Point(38, 24);
             this.lblElection.Name = "lblElection";
             this.lblElection.Size = new System.Drawing.Size(198, 16);
@@ -61,7 +61,7 @@
             // 
             // cbTerm
             // 
-            this.cbTerm.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbTerm.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbTerm.FormattingEnabled = true;
             this.cbTerm.Location = new System.Drawing.Point(272, 21);
             this.cbTerm.Name = "cbTerm";
@@ -71,7 +71,7 @@
             // btnReminder
             // 
             this.btnReminder.Enabled = false;
-            this.btnReminder.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnReminder.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReminder.Location = new System.Drawing.Point(385, 33);
             this.btnReminder.Name = "btnReminder";
             this.btnReminder.Size = new System.Drawing.Size(135, 47);
@@ -83,7 +83,7 @@
             // btnCode
             // 
             this.btnCode.Enabled = false;
-            this.btnCode.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCode.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCode.Location = new System.Drawing.Point(196, 30);
             this.btnCode.Name = "btnCode";
             this.btnCode.Size = new System.Drawing.Size(135, 47);
@@ -95,7 +95,7 @@
             // btnImport
             // 
             this.btnImport.Enabled = false;
-            this.btnImport.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnImport.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImport.Location = new System.Drawing.Point(196, 34);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(135, 47);
@@ -106,7 +106,7 @@
             // 
             // btnNew
             // 
-            this.btnNew.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNew.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNew.Location = new System.Drawing.Point(196, 30);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(135, 47);
@@ -118,7 +118,7 @@
             // btnList
             // 
             this.btnList.Enabled = false;
-            this.btnList.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnList.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnList.Location = new System.Drawing.Point(385, 31);
             this.btnList.Name = "btnList";
             this.btnList.Size = new System.Drawing.Size(135, 47);
@@ -134,7 +134,7 @@
             // btnAddCandidate
             // 
             this.btnAddCandidate.Enabled = false;
-            this.btnAddCandidate.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddCandidate.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddCandidate.Location = new System.Drawing.Point(196, 33);
             this.btnAddCandidate.Name = "btnAddCandidate";
             this.btnAddCandidate.Size = new System.Drawing.Size(135, 47);
@@ -146,7 +146,7 @@
             // btnExportBallot
             // 
             this.btnExportBallot.Enabled = false;
-            this.btnExportBallot.Font = new System.Drawing.Font("Quicksand Book", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExportBallot.Font = new System.Drawing.Font("Quicksand", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExportBallot.Location = new System.Drawing.Point(6, 30);
             this.btnExportBallot.Name = "btnExportBallot";
             this.btnExportBallot.Size = new System.Drawing.Size(135, 47);
@@ -163,7 +163,7 @@
             // gbStep1
             // 
             this.gbStep1.Controls.Add(this.btnNew);
-            this.gbStep1.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbStep1.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbStep1.Location = new System.Drawing.Point(12, 60);
             this.gbStep1.Name = "gbStep1";
             this.gbStep1.Size = new System.Drawing.Size(526, 100);
@@ -175,7 +175,7 @@
             // 
             this.gbStep2.Controls.Add(this.btnAddCandidate);
             this.gbStep2.Controls.Add(this.btnReminder);
-            this.gbStep2.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbStep2.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbStep2.Location = new System.Drawing.Point(12, 176);
             this.gbStep2.Name = "gbStep2";
             this.gbStep2.Size = new System.Drawing.Size(526, 100);
@@ -188,7 +188,7 @@
             this.gbStep3.Controls.Add(this.btnExportBallot);
             this.gbStep3.Controls.Add(this.btnCode);
             this.gbStep3.Controls.Add(this.btnList);
-            this.gbStep3.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbStep3.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbStep3.Location = new System.Drawing.Point(12, 298);
             this.gbStep3.Name = "gbStep3";
             this.gbStep3.Size = new System.Drawing.Size(526, 100);
@@ -199,7 +199,7 @@
             // gbStep4
             // 
             this.gbStep4.Controls.Add(this.btnImport);
-            this.gbStep4.Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbStep4.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbStep4.Location = new System.Drawing.Point(12, 404);
             this.gbStep4.Name = "gbStep4";
             this.gbStep4.Size = new System.Drawing.Size(526, 100);

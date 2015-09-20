@@ -49,7 +49,7 @@
             this.type,
             this.date});
             this.lvMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvMain.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lvMain.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvMain.FullRowSelect = true;
             this.lvMain.Location = new System.Drawing.Point(0, 0);
             this.lvMain.MultiSelect = false;

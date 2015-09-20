@@ -49,7 +49,7 @@
             this.columnHeader4});
             this.tableLayoutPanel1.SetColumnSpan(this.lvEmail, 3);
             this.lvEmail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvEmail.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lvEmail.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvEmail.FullRowSelect = true;
             this.lvEmail.Location = new System.Drawing.Point(3, 43);
             this.lvEmail.MultiSelect = false;
@@ -102,7 +102,7 @@
             // btnNew
             // 
             this.btnNew.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnNew.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNew.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNew.Location = new System.Drawing.Point(22, 8);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(95, 23);
@@ -114,7 +114,7 @@
             // btnLoadMore
             // 
             this.btnLoadMore.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnLoadMore.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLoadMore.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLoadMore.Location = new System.Drawing.Point(902, 8);
             this.btnLoadMore.Name = "btnLoadMore";
             this.btnLoadMore.Size = new System.Drawing.Size(95, 23);
@@ -126,7 +126,7 @@
             // cbTo
             // 
             this.cbTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbTo.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbTo.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbTo.FormattingEnabled = true;
             this.cbTo.Items.AddRange(new object[] {
             "To Individual Member(s)",

@@ -21,7 +21,7 @@ namespace Marimba
         SmtpClient sendClient;
         string strAddress, strPassword;
         public static System.Drawing.Font unseen = new System.Drawing.Font("Quicksand Bold", 9);
-        public static System.Drawing.Font seen = new System.Drawing.Font("Quicksand Book", 9);
+        public static System.Drawing.Font seen = new System.Drawing.Font("Quicksand", 9);
 
         public bool loggedIn;
         public email(string strAddress, string strPassword, string imapServer, bool bImapSSL, string smtpServer, int smtpPort, bool bSmtpSSL)

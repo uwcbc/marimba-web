@@ -30,6 +30,7 @@ namespace Marimba
         //strUsers [,4] stores the key xor'd with the single hash of the user's password
         public Int16 iUser, iMember;
         public string[,] strUsers = new string[40,4];
+        private static readonly int saltLength = 16;
         //currently, prepare for five thousand total members
         public member[] members = new member[5000];
         protected string strLocation;
@@ -489,16 +490,16 @@ namespace Marimba
             SHA256 shaHash = SHA256.Create();
 
             //salt
-            byte[] salt = new byte[16];
+            byte[] salt = new byte[saltLength];
             int passwordLength = Encoding.UTF8.GetBytes(strPassword).Length;
-            byte[] saltPlusPassword = new byte[16 + passwordLength];
+            byte[] saltPlusPassword = new byte[saltLength + passwordLength];
 
             //generate salt
             RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
             rngCsp.GetBytes(salt);
             //combine the salt and password
-            Array.Copy(salt, saltPlusPassword, 16);
-            Array.Copy(Encoding.UTF8.GetBytes(strPassword), 0, saltPlusPassword, 16, passwordLength);
+            Array.Copy(salt, saltPlusPassword, saltLength);
+            Array.Copy(Encoding.UTF8.GetBytes(strPassword), 0, saltPlusPassword, saltLength, passwordLength);
 
             // Convert the input string to a byte array and compute the hash. 
             byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(Encoding.UTF8.GetBytes(strPassword)));
@@ -543,9 +544,9 @@ namespace Marimba
 
                 //calculate hash of salt + password
                 int passwordLength = Encoding.UTF8.GetBytes(strPassword).Length;
-                byte[] saltPlusPassword = new byte[16 + passwordLength];
-                Array.Copy(salt, saltPlusPassword, 16);
-                Array.Copy(Encoding.UTF8.GetBytes(strPassword), 0, saltPlusPassword, 16, passwordLength);
+                byte[] saltPlusPassword = new byte[saltLength + passwordLength];
+                Array.Copy(salt, saltPlusPassword, saltLength);
+                Array.Copy(Encoding.UTF8.GetBytes(strPassword), 0, saltPlusPassword, saltLength, passwordLength);
 
                 //byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(Encoding.UTF8.GetBytes(strPassword)));
                 byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(saltPlusPassword));
@@ -584,16 +585,16 @@ namespace Marimba
                 //replace the old password with the new password
                 SHA256 shaHash = SHA256.Create();
                 //salt
-                byte[] salt = new byte[16];
+                byte[] salt = new byte[saltLength];
                 int passwordLength = Encoding.UTF8.GetBytes(strNewPassword).Length;
-                byte[] saltPlusPassword = new byte[16 + passwordLength];
+                byte[] saltPlusPassword = new byte[saltLength + passwordLength];
 
                 //generate salt
                 RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
                 rngCsp.GetBytes(salt);
                 //combine the salt and password
-                Array.Copy(salt, saltPlusPassword, 16);
-                Array.Copy(Encoding.UTF8.GetBytes(strNewPassword), 0, saltPlusPassword, 16, passwordLength);
+                Array.Copy(salt, saltPlusPassword, saltLength);
+                Array.Copy(Encoding.UTF8.GetBytes(strNewPassword), 0, saltPlusPassword, saltLength, passwordLength);
 
                 // Convert the input string to a byte array and compute the hash. 
                 byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(saltPlusPassword));
@@ -621,9 +622,9 @@ namespace Marimba
             //The key would be updated to prevent a person who previously had access from having access again
             SHA256 shaHash = SHA256.Create();
             byte[] data;
-            byte[] salt = new byte[16];
+            byte[] salt = new byte[saltLength];
             int passwordLength = Encoding.UTF8.GetBytes(strName).Length;
-            byte[] saltPlusPassword = new byte[16 + passwordLength];
+            byte[] saltPlusPassword = new byte[saltLength + passwordLength];
 
             RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
             for (int i = 0; i < iUser; i++)
@@ -631,8 +632,8 @@ namespace Marimba
                 //generate salt
                 rngCsp.GetBytes(salt);
                 //combine the salt and password
-                Array.Copy(salt, saltPlusPassword, 16);
-                Array.Copy(Encoding.UTF8.GetBytes(strName), 0, saltPlusPassword, 16, passwordLength);
+                Array.Copy(salt, saltPlusPassword, saltLength);
+                Array.Copy(Encoding.UTF8.GetBytes(strName), 0, saltPlusPassword, saltLength, passwordLength);
 
                 data = shaHash.ComputeHash(shaHash.ComputeHash(saltPlusPassword));
 

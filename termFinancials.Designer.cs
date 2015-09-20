@@ -66,7 +66,7 @@
             this.tcMain.Controls.Add(this.tpIncome);
             this.tcMain.Controls.Add(this.tpCash);
             this.tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tcMain.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tcMain.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tcMain.Location = new System.Drawing.Point(3, 73);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
@@ -218,7 +218,7 @@
             // cbTerm
             // 
             this.cbTerm.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbTerm.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbTerm.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbTerm.FormattingEnabled = true;
             this.cbTerm.Location = new System.Drawing.Point(128, 22);
             this.cbTerm.Name = "cbTerm";
@@ -230,7 +230,7 @@
             // 
             this.btnExport.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnExport.Enabled = false;
-            this.btnExport.Font = new System.Drawing.Font("Quicksand Book", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExport.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExport.Location = new System.Drawing.Point(442, 23);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(178, 23);
@@ -243,7 +243,7 @@
             // 
             this.lblSelect.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblSelect.AutoSize = true;
-            this.lblSelect.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSelect.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSelect.Location = new System.Drawing.Point(3, 26);
             this.lblSelect.Name = "lblSelect";
             this.lblSelect.Size = new System.Drawing.Size(105, 18);

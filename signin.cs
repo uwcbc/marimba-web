@@ -93,7 +93,7 @@ namespace Marimba
                 attendance[i] = new Label();
                 attendance[i].Dock = DockStyle.Fill;
                 attendance[i].Text = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].rehearsalDates[i].ToShortDateString();
-                attendance[i].Font = new System.Drawing.Font("Quicksand Book", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                attendance[i].Font = new System.Drawing.Font("Quicksand", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 attendance[i].TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
                 tlpAttendance.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100/tlpAttendance.ColumnCount));
                 tlpAttendance.Controls.Add(attendance[i], i, 0);

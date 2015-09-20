@@ -136,7 +136,7 @@ namespace Marimba
                 //cbAsset
                 cbAsset = new ComboBox();
                 cbAsset.DropDownStyle = ComboBoxStyle.DropDownList;
-                cbAsset.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                cbAsset.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 cbAsset.FormattingEnabled = true;
 
                 //create a list of assets for the combobox
@@ -155,7 +155,7 @@ namespace Marimba
                 //lblAsset
                 lblAsset = new Label();
                 lblAsset.AutoSize = true;
-                lblAsset.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                lblAsset.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 lblAsset.Location = lblCategory.Location;
                 lblAsset.Text = "Asset";
 

@@ -50,13 +50,13 @@ namespace Marimba
                 positionLabels[i] = new Label();
                 positionLabels[i].Anchor = System.Windows.Forms.AnchorStyles.Left;
                 positionLabels[i].AutoSize = true;
-                positionLabels[i].Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                positionLabels[i].Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 positionLabels[i].Text = strPositions[i];
 
                 positionRank[i] = new ComboBox();
                 positionRank[i].Anchor = System.Windows.Forms.AnchorStyles.None;
                 positionRank[i].AutoSize = true;
-                positionRank[i].Font = new System.Drawing.Font("Quicksand Book", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                positionRank[i].Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 positionRank[i].DropDownStyle = ComboBoxStyle.DropDownList;
 
                 positionRank[i].Items.AddRange(positionRankings);

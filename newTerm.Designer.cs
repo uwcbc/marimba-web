@@ -51,7 +51,7 @@
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblName.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblName.Location = new System.Drawing.Point(185, 72);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(123, 18);
@@ -60,7 +60,7 @@
             // 
             // btnCreate
             // 
-            this.btnCreate.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCreate.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCreate.Location = new System.Drawing.Point(339, 512);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(126, 27);
@@ -71,7 +71,7 @@
             // 
             // txtName
             // 
-            this.txtName.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtName.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtName.Location = new System.Drawing.Point(381, 69);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(241, 24);
@@ -90,7 +90,7 @@
             // lblRehearsalStart
             // 
             this.lblRehearsalStart.AutoSize = true;
-            this.lblRehearsalStart.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRehearsalStart.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblRehearsalStart.Location = new System.Drawing.Point(574, 111);
             this.lblRehearsalStart.Name = "lblRehearsalStart";
             this.lblRehearsalStart.Size = new System.Drawing.Size(175, 18);
@@ -99,7 +99,7 @@
             // 
             // mcRehearsalStart
             // 
-            this.mcRehearsalStart.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcRehearsalStart.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mcRehearsalStart.Location = new System.Drawing.Point(542, 138);
             this.mcRehearsalStart.MaxSelectionCount = 1;
             this.mcRehearsalStart.Name = "mcRehearsalStart";
@@ -107,7 +107,7 @@
             // 
             // updNumRehearsals
             // 
-            this.updNumRehearsals.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.updNumRehearsals.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.updNumRehearsals.Location = new System.Drawing.Point(381, 341);
             this.updNumRehearsals.Maximum = new decimal(new int[] {
             12,
@@ -131,7 +131,7 @@
             // lblNumRehearsals
             // 
             this.lblNumRehearsals.AutoSize = true;
-            this.lblNumRehearsals.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNumRehearsals.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNumRehearsals.Location = new System.Drawing.Point(185, 343);
             this.lblNumRehearsals.Name = "lblNumRehearsals";
             this.lblNumRehearsals.Size = new System.Drawing.Size(186, 18);
@@ -141,7 +141,7 @@
             // lblMembershipFee
             // 
             this.lblMembershipFee.AutoSize = true;
-            this.lblMembershipFee.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMembershipFee.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMembershipFee.Location = new System.Drawing.Point(185, 382);
             this.lblMembershipFee.Name = "lblMembershipFee";
             this.lblMembershipFee.Size = new System.Drawing.Size(143, 18);
@@ -150,7 +150,7 @@
             // 
             // txtMembershipFee
             // 
-            this.txtMembershipFee.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMembershipFee.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMembershipFee.Location = new System.Drawing.Point(381, 379);
             this.txtMembershipFee.Name = "txtMembershipFee";
             this.txtMembershipFee.Size = new System.Drawing.Size(241, 24);
@@ -160,7 +160,7 @@
             // lblOther
             // 
             this.lblOther.AutoSize = true;
-            this.lblOther.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOther.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblOther.Location = new System.Drawing.Point(185, 420);
             this.lblOther.Name = "lblOther";
             this.lblOther.Size = new System.Drawing.Size(189, 54);
@@ -169,7 +169,7 @@
             // 
             // txtOther
             // 
-            this.txtOther.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtOther.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtOther.Location = new System.Drawing.Point(381, 417);
             this.txtOther.Multiline = true;
             this.txtOther.Name = "txtOther";
@@ -180,7 +180,7 @@
             // lblTermStart
             // 
             this.lblTermStart.AutoSize = true;
-            this.lblTermStart.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTermStart.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTermStart.Location = new System.Drawing.Point(73, 111);
             this.lblTermStart.Name = "lblTermStart";
             this.lblTermStart.Size = new System.Drawing.Size(138, 18);
@@ -190,7 +190,7 @@
             // lblTermEnd
             // 
             this.lblTermEnd.AutoSize = true;
-            this.lblTermEnd.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTermEnd.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTermEnd.Location = new System.Drawing.Point(336, 111);
             this.lblTermEnd.Name = "lblTermEnd";
             this.lblTermEnd.Size = new System.Drawing.Size(128, 18);
@@ -199,7 +199,7 @@
             // 
             // mcTermStart
             // 
-            this.mcTermStart.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcTermStart.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mcTermStart.Location = new System.Drawing.Point(24, 138);
             this.mcTermStart.MaxSelectionCount = 1;
             this.mcTermStart.Name = "mcTermStart";
@@ -207,7 +207,7 @@
             // 
             // mcTermEnd
             // 
-            this.mcTermEnd.Font = new System.Drawing.Font("Quicksand Book", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcTermEnd.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mcTermEnd.Location = new System.Drawing.Point(283, 138);
             this.mcTermEnd.MaxSelectionCount = 1;
             this.mcTermEnd.Name = "mcTermEnd";
