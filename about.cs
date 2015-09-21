@@ -23,6 +23,7 @@ namespace Marimba
                 "\r\n\r\nNicholas Champion for his ideas for how to handle attendance, membership, and terms, as well as the atomized budget." +
                 "\r\n\r\nCathy Zhang and Cassandra Beaton for their work on presenting financial information." +
                 "\r\n\r\nLawrence Veregin for originally developing Marimba.";
+            // NOTE: as a courtesty, replicate any changes made here to the README.md file
         }
 
         #region Assembly Attribute Accessors
