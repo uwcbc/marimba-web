@@ -388,6 +388,8 @@
       <DependentUpon>viewHistory.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="fonts\Quicksand_Bold.otf" />
+    <None Include="fonts\Quicksand_Book.otf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -433,6 +435,7 @@
     <None Include="Resources\election.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fonts\SIL Open Font License.txt" />
     <Content Include="instruments\alto sax.ico" />
     <Content Include="instruments\altoclarinet.ico" />
     <Content Include="instruments\baritonesax.ico" />
