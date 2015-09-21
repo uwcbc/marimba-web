@@ -29,11 +29,6 @@ namespace Marimba
             }
         }
 
-        private void MergeButton_Click(object sender, RoutedEventArgs e)
-        {
-            Program.home.btnMerge_Click(sender, e);
-        }
-
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             Program.home.btnSave_Click(sender, e);
@@ -232,6 +227,11 @@ namespace Marimba
         private void Google_Button_Click(object sender, RoutedEventArgs e)
         {
             Program.home.memberMenu.btnGoogleDoc_Click(sender, e);
+        }
+
+        private void MainRibbon_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

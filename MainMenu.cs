@@ -184,14 +184,6 @@ namespace Marimba
             change.ShowDialog();
         }
 
-        public void btnMerge_Click(object sender, EventArgs e)
-        {
-            if (Properties.Settings.Default.playSounds)
-                sound.click.Play();
-            Form merger = new mergeMrb();
-            merger.ShowDialog();
-        }
-
         private void pbElection_Click(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.playSounds)

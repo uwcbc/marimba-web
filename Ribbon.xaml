@@ -8,7 +8,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Ribbon x:Name="MainRibbon" Background="#FFEBDEC1" BorderBrush="#FF00A1A5" ShowQuickAccessToolBarOnTop="False" SnapsToDevicePixels="True" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+        <Ribbon x:Name="MainRibbon" Background="#FFEBDEC1" BorderBrush="#FF00A1A5" ShowQuickAccessToolBarOnTop="False" SnapsToDevicePixels="True" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionChanged="MainRibbon_SelectionChanged">
             <!-- Application Menu, located at the left-hand side (down arrow) -->
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu KeyTip="F" Background="#FF00A18E" BorderBrush="#FF00A18E">
@@ -25,11 +25,6 @@
                     <RibbonSplitButton x:Name="SaveButton" LargeImageSource="ribbon_images\save.png" SmallImageSource="ribbon_images\save_small.png" Label="Save" KeyTip="S" Click="SaveButton_Click" SnapsToDevicePixels="True">
                         <RibbonSplitMenuItem x:Name="SaveAsButton" ImageSource="ribbon_images\save_small.png" Header="Save As..." KeyTip="A" Click="SaveAsButton_Click"/>
                     </RibbonSplitButton>
-                    <RibbonButton x:Name="MergeButton" Label="Merge" KeyTip="M" Click="MergeButton_Click" LargeImageSource="ribbon_images/merge.png" SnapsToDevicePixels="True" IsEnabled="False" >
-                        <RibbonButton.QuickAccessToolBarControlSizeDefinition>
-                            <RibbonControlSizeDefinition/>
-                        </RibbonButton.QuickAccessToolBarControlSizeDefinition>
-                    </RibbonButton>
                     <RibbonButton SmallImageSource="ribbon_images\settings.png" Label="Settings" KeyTip="S" Click="Settings_Click" />
                     <RibbonButton x:Name="PasswordButton" SmallImageSource="ribbon_images\password.png" Label="Change Password" KeyTip="P" Click="PasswordButton_Click">
                     </RibbonButton>
