@@ -228,10 +228,5 @@ namespace Marimba
         {
             Program.home.memberMenu.btnGoogleDoc_Click(sender, e);
         }
-
-        private void MainRibbon_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }

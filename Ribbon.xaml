@@ -8,7 +8,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Ribbon x:Name="MainRibbon" Background="#FFEBDEC1" BorderBrush="#FF00A1A5" ShowQuickAccessToolBarOnTop="False" SnapsToDevicePixels="True" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionChanged="MainRibbon_SelectionChanged">
+        <Ribbon x:Name="MainRibbon" Background="#FFEBDEC1" BorderBrush="#FF00A1A5" ShowQuickAccessToolBarOnTop="False" SnapsToDevicePixels="True" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
             <!-- Application Menu, located at the left-hand side (down arrow) -->
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu KeyTip="F" Background="#FF00A18E" BorderBrush="#FF00A18E">
