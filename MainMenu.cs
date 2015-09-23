@@ -144,14 +144,6 @@ namespace Marimba
             newUserForm.ShowDialog();
         }
 
-        private void pbMembers_Click(object sender, EventArgs e)
-        {
-            if (Properties.Settings.Default.playSounds)
-                sound.click.Play();
-            
-            memberMenu.ShowDialog();
-        }
-
         public void btnNewTerm_Click(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.playSounds)
@@ -160,36 +152,12 @@ namespace Marimba
             addTerm.ShowDialog();
         }
 
-        private void pbMail_Click(object sender, EventArgs e)
-        {
-            if (Properties.Settings.Default.playSounds)
-                sound.click.Play();
-            
-            sendemail.ShowDialog();
-        }
-
-        private void pbMoney_Click(object sender, EventArgs e)
-        {
-            if (Properties.Settings.Default.playSounds)
-                sound.click.Play();
-            
-            moneyMenu.ShowDialog();
-        }
-
         public void btnChangePassword_Click(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.playSounds)
                 sound.click.Play();
             Form change = new changePassword();
             change.ShowDialog();
-        }
-
-        private void pbElection_Click(object sender, EventArgs e)
-        {
-            if (Properties.Settings.Default.playSounds)
-                sound.click.Play();
-            
-            electionPlanner.ShowDialog();
         }
 
         public void btnRefresh_Click(object sender, EventArgs e)

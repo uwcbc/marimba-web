@@ -40,14 +40,15 @@ namespace Marimba
         public short sTerm;
         //terms stores the information about the terms
         public term[] terms;
+
+        public election currentElection;
+
         //budget stuff
         //we'll start with 20000 atomic entries for now
         //iBudget counts the number of items in the budget
         public int iBudget;
         public budgetItem[] budget = new budgetItem[20000];
-        //currentElection is self-explanatory
-        public election currentElection;
-        public bool electionSaved;
+
         //store the history 
         public int iHistory;
         public history[] historyList = new history[50000];
@@ -75,7 +76,6 @@ namespace Marimba
             }
             sTerm = 0;
             iBudget = 0;
-            electionSaved = false;
             iHistory = 0;
             aesInfo = aesKey;
         }
@@ -183,10 +183,17 @@ namespace Marimba
                                 budget[i].comment = clsStorage.reverseCleanNewLine(srDecrypt.ReadLine());
                                 budget[i].depOfAsset = Convert.ToInt32(srDecrypt.ReadLine());
                             }
+
                             //read election
-                            electionSaved = Convert.ToBoolean(srDecrypt.ReadLine());
-                            if (electionSaved)
-                                currentElection = new election(srDecrypt);
+                            if (fileVersion <= 2.1)
+                            {
+                                bool electionSaved = Convert.ToBoolean(srDecrypt.ReadLine());
+                                if (electionSaved)
+                                {
+                                    election currentElection = new election(srDecrypt);
+                                }
+                            }
+
                             iHistory = Convert.ToInt32(srDecrypt.ReadLine());
                             for (int i = 0; i < iHistory; i++)
                                 historyList[i] = new history(srDecrypt);
@@ -275,9 +282,9 @@ namespace Marimba
             fs = new FileStream(this.strLocation, FileMode.Create);
             bw = new BinaryWriter(fs);
 
-            //this line is the version number (currently 2)
+            //this line is the version number (currently 2.2)
             //this will be useful later on if .mrb files are siginificantly modified
-            bw.Write(Convert.ToDouble(2.1));
+            bw.Write(Convert.ToDouble(2.2));
             bw.Write(strName);
             bw.Write(iUser);
             //write the users (i.e. exec account information)
@@ -307,8 +314,6 @@ namespace Marimba
                     {
                         using (StreamWriter sw = new StreamWriter(cs))
                         {
-
-                            
                             //write the members (i.e. mailing/membership list)
                             sw.WriteLine(iMember);
                             for (int i = 0; i < iMember; i++)
@@ -339,7 +344,6 @@ namespace Marimba
                                 sw.WriteLine((int)members[i].size);
                             }
                             //write the terms
-                            //wish me luck in writing this
                             sw.WriteLine(sTerm);
                             //loop through the terms
                             for (int i = 0; i < sTerm; i++)
@@ -360,10 +364,7 @@ namespace Marimba
                                 sw.WriteLine(clsStorage.cleanNewLine(budget[i].comment));
                                 sw.WriteLine(budget[i].depOfAsset);
                             }
-                            //save the election
-                            sw.WriteLine(electionSaved);
-                            if (electionSaved)
-                                currentElection.saveElection(sw);
+
                             //save history
                             sw.WriteLine(iHistory);
                             for (int i = 0; i < iHistory; i++)

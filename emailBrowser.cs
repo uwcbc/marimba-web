@@ -24,7 +24,7 @@ namespace Marimba
         int messageIndex;
         IList<int> fromIndexList = new List<int>();
         bool fromMember = false;
-        election curElection;
+
         public emailBrowser(purpose use, int messageIndex = -1, IList<int> fromIndexList = null)
         {
             //set up this form so it's all ready to go for whatever purpose we need
@@ -70,27 +70,6 @@ namespace Marimba
             }
         }
 
-        /// <summary>
-        /// For sending out election codes to members
-        /// </summary>
-        /// <param name="curElection">The election containing the electors</param>
-        public emailBrowser(election curElection)
-        {
-            InitializeComponent();
-            this.curElection = curElection;
-            wbrView.Dispose();
-            btnForward.Dispose();
-            btnReply.Dispose();
-            rtbWrite.TabIndex--;
-            btnSend.TabIndex--;
-            tlpMain.SetColumn(rtbWrite, 0);
-            tlpMain.SetColumnSpan(rtbWrite, 3);
-            this.fromIndexList = curElection.electorListIndex();
-            lblFrom.Text = "BCC";
-            btnSend.Text = "Send";
-            use = purpose.election;
-        }
-
         private void emailBrowser_Load(object sender, EventArgs e)
         {
             lvFromTo.LargeImageList = Program.home.instrumentSmall;
@@ -131,7 +110,7 @@ namespace Marimba
                 if (wbrView.Document.Body != null)
                     wbrView.Document.Body.SetAttribute("scroll", "auto");
             }
-            else if (use == purpose.send || use == purpose.reply || use == purpose.forward || use == purpose.bcc || use == purpose.mass_email || use == purpose.election)
+            else if (use == purpose.send || use == purpose.reply || use == purpose.forward || use == purpose.bcc || use == purpose.mass_email)
             {
                 //load the from/to list
                 lvFromTo.BeginUpdate();
@@ -171,13 +150,6 @@ namespace Marimba
                     ImapX.Message temp = clsStorage.currentClub.clubEmail.returnMessage(messageIndex);
                     txtSubject.Text = Marimba.email.replySubject(temp.Subject, use);                   
                 }
-                //also add subject if for election email codes
-                else if (use == purpose.election)
-                {
-                    txtSubject.Text = String.Format("{0} - {1} Election Code", clsStorage.currentClub.strName, clsStorage.currentClub.terms[curElection.iTermIndex].strName);
-                    rtbWrite.Text = election.codeNotification;
-                }
-                    
             }
         }
 
@@ -185,47 +157,8 @@ namespace Marimba
         {
             ImapX.Message temp;
             //if we are viewing a message, this button closes the view
-            if (use == purpose.receive)
+            if (use == purpose.receive) {
                 this.Close();
-            else if (use == purpose.election)
-            {
-                bool allSentSuccessfully = true;
-                //here, we need to send out individual emails
-                //one by one
-                foreach(election.elector eleMember in curElection.electorList)
-                {
-                    //first, take the rich text
-                    //then, run the code to turn it into HTML
-                    string strHTML = rtbWrite.Rtf;
-                    strHTML = RTFtoHTML.ConvertRtfToHtml(strHTML);
-
-                    //attach the member's code
-                    strHTML += "<br><b>Code for election: " + eleMember.strCode + "</b>";
-
-                    //attach a signature if the user wants us to
-                    if (Properties.Settings.Default.attachSig)
-                        strHTML += "<br>" + clsStorage.currentClub.clubEmail.createSignature();
-
-                    //send the message
-                    //if any fail, notify us
-                    if (!clsStorage.currentClub.clubEmail.sendMessage(new string[] { eleMember.strEmail }, new string[] { eleMember.strName }, txtSubject.Text, strHTML, purpose.send))
-                        allSentSuccessfully = false;
-                }
-
-                //report success or failure
-                if(allSentSuccessfully)
-                {
-                    if (Properties.Settings.Default.playSounds)
-                        sound.success.Play();
-                    MessageBox.Show("Election codes successfully sent.", "E-Mail Sent");
-                    this.Close();
-                }
-                else
-                {
-                    if (Properties.Settings.Default.playSounds)
-                        sound.error.Play();
-                    MessageBox.Show("Error encountered sending election codes. At least one was not sent.", "Error Sending E-Mail");
-                }
             }
             else
             {
