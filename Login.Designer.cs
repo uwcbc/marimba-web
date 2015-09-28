@@ -48,7 +48,7 @@
             this.lblName.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblName.Location = new System.Drawing.Point(160, 277);
             this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(51, 15);
+            this.lblName.Size = new System.Drawing.Size(55, 14);
             this.lblName.TabIndex = 0;
             this.lblName.Text = "User ID:";
             // 
@@ -77,7 +77,7 @@
             this.lblPassword.Font = new System.Drawing.Font("Quicksand", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPassword.Location = new System.Drawing.Point(160, 330);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(64, 15);
+            this.lblPassword.Size = new System.Drawing.Size(67, 14);
             this.lblPassword.TabIndex = 2;
             this.lblPassword.Text = "Password:";
             // 
@@ -99,7 +99,7 @@
             // 
             this.lblFile.AutoSize = true;
             this.lblFile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFile.Font = new System.Drawing.Font("Quicksand", 8.150943F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFile.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFile.Location = new System.Drawing.Point(3, 0);
             this.lblFile.Name = "lblFile";
             this.lblFile.Size = new System.Drawing.Size(567, 52);
