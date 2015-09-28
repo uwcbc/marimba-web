@@ -31,14 +31,6 @@ namespace Marimba
             this.time = dtTime;
         }
 
-        public history(BinaryReader br)
-        {
-            this.user = br.ReadString();
-            this.type = (changeType)br.ReadInt32();
-            this.otherInfo = br.ReadString();
-            this.time = new DateTime(br.ReadInt64());
-        }
-
         public history(StreamReader sr)
         {
             this.user = sr.ReadLine();

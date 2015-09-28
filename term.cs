@@ -104,49 +104,6 @@ namespace Marimba
             checkLimbo();
         }
 
-        public term(BinaryReader br)
-        {
-            strName = br.ReadString();
-            sMembers = br.ReadInt16();
-            sNumber = br.ReadInt16();
-            for (int i = 0; i < 120; i++)
-                members[i] = br.ReadInt16();
-            startDate = new DateTime(br.ReadInt64());
-            endDate = new DateTime(br.ReadInt64());
-            sRehearsals = br.ReadInt16();
-            rehearsalDates = new DateTime[sRehearsals];
-            for (int i = 0; i < sRehearsals; i++)
-                this.rehearsalDates[i] = new DateTime(br.ReadInt64());
-            membershipFees = br.ReadDouble();
-            iOtherFees = br.ReadInt32();
-            dOtherFees = new double[iOtherFees];
-            strOtherFees = new string[iOtherFees];
-            for (int i = 0; i < iOtherFees; i++)
-            {
-                dOtherFees[i] = br.ReadDouble();
-                strOtherFees[i] = br.ReadString();
-            }
-            attendance = new bool[120, sRehearsals];
-            for (int i = 0; i < 120; i++)
-            {
-                for (int j = 0; j < sRehearsals; j++)
-                {
-                    attendance[i, j] = br.ReadBoolean();
-                }
-            }
-            feesPaid = new double[120, 1 + iOtherFees];
-            feesPaidDate = new DateTime[120, 1 + iOtherFees];
-            for (int i = 0; i < 120; i++)
-            {
-                for (int j = 0; j < 1 + iOtherFees; j++)
-                {
-                    feesPaid[i, j] = br.ReadDouble();
-                    feesPaidDate[i, j] = new DateTime(br.ReadInt64());
-                }
-            }
-            checkLimbo();
-        }
-
         public term(StreamReader sr)
         {
             strName = sr.ReadLine();

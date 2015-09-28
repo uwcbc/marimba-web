@@ -44,35 +44,7 @@ namespace Marimba
             this.size = (shirtSize)iShirt;
             this.bMultipleInstruments = false;
         }
-        public member(BinaryReader br)
-        {
-            strFName = br.ReadString();
-            strLName = br.ReadString();
-            type = (membertype)br.ReadInt32();
-            uiStudentNumber = br.ReadUInt32();
-            memberFaculty = (faculty)br.ReadInt32();
 
-            strOtherInstrument = br.ReadString();
-            curInstrument = (instrument)br.ReadInt32();
-
-            bMultipleInstruments = br.ReadBoolean();
-
-            //write if the member plays multiple instruments
-            //write any other instruments that the member plays (or does not play)
-            int numberOfInstruments = Enum.GetValues(typeof(member.instrument)).Length;
-            if (bMultipleInstruments)
-            {
-                playsInstrument = new bool[Enum.GetValues(typeof(member.instrument)).Length];
-                for (int j = 0; j < numberOfInstruments; j++)
-                    playsInstrument[j] = br.ReadBoolean();
-            }
-
-            strEmail = br.ReadString();
-            strOther = br.ReadString();
-            sID = br.ReadInt16();
-            signupTime = new DateTime(br.ReadInt64());
-            size = (shirtSize)br.ReadInt32();
-        }
         public member(StreamReader sr)
         {
             strFName = sr.ReadLine();

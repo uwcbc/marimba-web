@@ -20,10 +20,6 @@ namespace Marimba
     /// </summary>
     public class CsvFileWriter : StreamWriter
     {
-        public CsvFileWriter(Stream stream)
-            : base(stream)
-        {
-        }
 
         public CsvFileWriter(string filename)
             : base(filename)
@@ -61,10 +57,6 @@ namespace Marimba
     /// </summary>
     public class CsvFileReader : StreamReader
     {
-        public CsvFileReader(Stream stream)
-            : base(stream)
-        {
-        }
 
         public CsvFileReader(string filename)
             : base(filename)

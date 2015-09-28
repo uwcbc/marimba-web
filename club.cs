@@ -216,63 +216,6 @@ namespace Marimba
                 cipherText = null;
             }
 
-            /*
-            //read the membership list
-            iMember = br.ReadInt16();
-            if (fileVersion < 2)
-            {
-                for (int i = 0; i < iMember; i++)
-                {
-                    members[i] = new member(br.ReadString(), br.ReadString(), br.ReadInt32(), br.ReadUInt32(), br.ReadInt32(),
-                        br.ReadString(), br.ReadString(), br.ReadString(), br.ReadInt16(), new DateTime(br.ReadInt64()), br.ReadInt32());
-                }
-            }
-            else 
-            {
-                for (int i = 0; i < iMember; i++)
-                    members[i] = new member(br);
-            }
-            sTerm = br.ReadInt16();
-            terms = new term[sTerm];
-            for (int i = 0; i < sTerm; i++)
-                terms[i] = new term(br);
-            //read the budget stuff
-            this.iBudget = br.ReadInt32();
-            for (int i = 0; i < iBudget; i++)
-            {
-                budget[i].value = br.ReadDouble();
-                budget[i].name = br.ReadString();
-                budget[i].dateOccur = new DateTime(br.ReadInt64());
-                budget[i].dateAccount = new DateTime(br.ReadInt64());
-                budget[i].cat = br.ReadString();
-                budget[i].type = br.ReadInt32();
-                budget[i].term = br.ReadInt32();
-                budget[i].comment = br.ReadString();
-
-                if (fileVersion < 2)
-                    budget[i].depOfAsset = -1;
-                else
-                    budget[i].depOfAsset = br.ReadInt32();
-            }
-            //read election
-            electionSaved = br.ReadBoolean();
-            if (electionSaved)
-                currentElection = new election(br);
-            iHistory = br.ReadInt32();
-            for (int i = 0; i < iHistory; i++)
-                historyList[i] = new history(br);
-
-            //read email
-            if (fileVersion >= 2)
-            {
-                strEmail = br.ReadString();
-                strImap = br.ReadString();
-                bImap = br.ReadBoolean();
-                strSmtp = br.ReadString();
-                iSmtp = br.ReadInt32();
-                bSmtp = br.ReadBoolean();
-            }*/
-
             clubEmail = new email(strEmail, Properties.Settings.Default.emailPassword, strImap, bImap, strSmtp, iSmtp, bSmtp);
         }
         public void saveClub()
@@ -766,29 +709,6 @@ namespace Marimba
         public string firstAndLastName(int index)
         {
             return String.Format("{0} {1}", this.members[index].strFName, this.members[index].strLName);
-        }
-
-        /// <summary>
-        /// Creates a mailing list of email addresses
-        /// </summary>
-        /// <param name="iTerm">Term index. Enter -1 for all terms.</param>
-        /// <returns>A string array contianing email addresses</returns>
-        public string[] mailingList(int iTerm)
-        {
-            string[] output;
-            if (iTerm == -1)
-            {
-                output = new string[this.iMember];
-                for (int i = 0; i < this.iMember; i++)
-                    output[i] = members[i].strEmail;
-            }
-            else
-            {
-                output = new string[terms[iTerm].sMembers];
-                for (int i = 0; i < terms[iTerm].sMembers; i++)
-                    output[i] = members[terms[iTerm].members[i]].strEmail;
-            }
-            return output;
         }
 
         /// <summary>
