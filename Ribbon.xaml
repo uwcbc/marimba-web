@@ -79,6 +79,8 @@
                     </RibbonButton>
                     <RibbonButton x:Name="TermSummary" Label="Term Summary" KeyTip="S" LargeImageSource="ribbon_images/term summary_48x48.png" SmallImageSource="ribbon_images/term summary_48x48.png" SnapsToDevicePixels="True" Click="TermSummary_Click" >
                     </RibbonButton>
+                    <RibbonButton x:Name="AssetList" Label="Asset List" KeyTip="L" LargeImageSource="ribbon_images/merge.png" SmallImageSource="ribbon_images/merge.png" SnapsToDevicePixels="True" Click="AssetList_Click" >
+                    </RibbonButton>
                     <RibbonSplitButton x:Name="ExpAccount" Label="Export Account" KeyTip="X" LargeImageSource="ribbon_images/xlsx.png" SmallImageSource="ribbon_images/xlsx.png" SnapsToDevicePixels="True" Click="ExpAccount_Click" >
                         <RibbonSplitMenuItem x:Name="ExpXlsxAccount" ImageSource="ribbon_images\xlsx.png" Header="Export As .xlsx" KeyTip="XL" Click="ExpXlsxAccount_Click"  />
                         <RibbonSplitMenuItem x:Name="ExpCsvAccount" ImageSource="ribbon_images\xlsx.png" Header="Export As .csv" KeyTip="CS" Click="ExpCsvAccount_Click" />

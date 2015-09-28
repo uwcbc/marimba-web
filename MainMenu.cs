@@ -21,6 +21,7 @@ namespace Marimba
         public moneyMenu moneyMenu = new moneyMenu();
         public electionForm electionPlanner = new electionForm();
         public editSettings settings = new editSettings();
+        public viewAssetList assetListViewer = new viewAssetList();
 
         public MainMenu(string[] args)
         {

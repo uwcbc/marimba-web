@@ -133,6 +133,13 @@ namespace Marimba
             Program.home.moneyMenu.btnTermSummary_Click(sender, e);
         }
 
+        private void AssetList_Click(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.playSounds)
+                sound.click.Play();
+            Program.home.assetListViewer.ShowDialog();
+        }
+
         private void ExpAccount_Click(object sender, RoutedEventArgs e)
         {
             Program.home.moneyMenu.btnExport_Click(sender, e);
