@@ -70,7 +70,7 @@
             this.lblTitle.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblTitle.AutoSize = true;
             this.tlpMain.SetColumnSpan(this.lblTitle, 4);
-            this.lblTitle.Font = new System.Drawing.Font("Quicksand Bold", 12.22641F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.Font = new System.Drawing.Font("Quicksand", 12.22641F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(153, 13);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(46, 19);
@@ -109,7 +109,7 @@
             this.lblDate.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblDate.AutoSize = true;
             this.tlpMain.SetColumnSpan(this.lblDate, 4);
-            this.lblDate.Font = new System.Drawing.Font("Quicksand Bold", 12.22641F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDate.Font = new System.Drawing.Font("Quicksand", 12.22641F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDate.Location = new System.Drawing.Point(153, 58);
             this.lblDate.Name = "lblDate";
             this.lblDate.Size = new System.Drawing.Size(49, 19);
@@ -279,7 +279,7 @@
             // 
             this.btnSignIn.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tlpMain.SetColumnSpan(this.btnSignIn, 5);
-            this.btnSignIn.Font = new System.Drawing.Font("Quicksand Bold", 12.22641F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSignIn.Font = new System.Drawing.Font("Quicksand", 12.22641F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSignIn.Location = new System.Drawing.Point(536, 663);
             this.btnSignIn.Name = "btnSignIn";
             this.btnSignIn.Size = new System.Drawing.Size(100, 30);
@@ -444,7 +444,7 @@
             this.StudentID});
             this.tlpMain.SetColumnSpan(this.lvSearch, 5);
             this.lvSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvSearch.Font = new System.Drawing.Font("Quicksand Bold", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lvSearch.Font = new System.Drawing.Font("Quicksand", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvSearch.Location = new System.Drawing.Point(3, 133);
             this.lvSearch.Name = "lvSearch";
             this.tlpMain.SetRowSpan(this.lvSearch, 3);

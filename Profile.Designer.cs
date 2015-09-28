@@ -79,7 +79,7 @@
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
-            this.lblTitle.Font = new System.Drawing.Font("Quicksand Bold", 12.22641F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.Font = new System.Drawing.Font("Quicksand", 12.22641F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(21, 17);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(59, 19);
@@ -260,7 +260,7 @@
             this.tcMain.Controls.Add(this.tpHistory);
             this.tcMain.Controls.Add(this.tpUnsubscribe);
             this.tcMain.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tcMain.Font = new System.Drawing.Font("Quicksand Bold", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tcMain.Font = new System.Drawing.Font("Quicksand", 10.86792F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tcMain.Location = new System.Drawing.Point(0, 55);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;

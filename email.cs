@@ -20,7 +20,7 @@ namespace Marimba
         ImapClient client;
         SmtpClient sendClient;
         string strAddress, strPassword;
-        public static System.Drawing.Font unseen = new System.Drawing.Font("Quicksand Bold", 9);
+        public static System.Drawing.Font unseen = new System.Drawing.Font("Quicksand", 9, System.Drawing.FontStyle.Bold);
         public static System.Drawing.Font seen = new System.Drawing.Font("Quicksand", 9);
 
         public bool loggedIn;
