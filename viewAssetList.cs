@@ -23,6 +23,7 @@ namespace Marimba
         private void viewAssetList_Load(object sender, EventArgs e)
         {
             assetListView.BeginUpdate();
+            assetListView.Items.Clear();
             
             // reset sorting
             lvmColumnSorter = new ListViewColumnSorter();
