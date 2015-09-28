@@ -50,6 +50,7 @@
             this.assetListView.UseCompatibleStateImageBehavior = false;
             this.assetListView.View = System.Windows.Forms.View.Details;
             this.assetListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.viewAssetList_ColumnClick);
+            this.assetListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.viewAssetList_MouseDoubleClick);
             // 
             // name
             // 

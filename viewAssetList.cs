@@ -23,7 +23,7 @@ namespace Marimba
         private void viewAssetList_Load(object sender, EventArgs e)
         {
             assetListView.BeginUpdate();
-
+            
             // reset sorting
             lvmColumnSorter = new ListViewColumnSorter();
             this.assetListView.ListViewItemSorter = lvmColumnSorter;
@@ -39,10 +39,11 @@ namespace Marimba
                 budgetItem currentBudgetItem = clsStorage.currentClub.budget[assetIndexes[i]];
 
                 // get the fields that will eb displayed
-                string[] itemText = new string[3];
+                string[] itemText = new string[4];
                 itemText[0] = currentBudgetItem.name;
                 itemText[1] = clsStorage.currentClub.valueAfterDepreciation(assetIndexes[i]).ToString("C");
                 itemText[2] = currentBudgetItem.value.ToString("C");
+                itemText[3] = Convert.ToString(assetIndexes[i]);
 
                 // add the current item to the list to be displayed
                 item = new ListViewItem(itemText);
@@ -79,6 +80,18 @@ namespace Marimba
             this.assetListView.Sort();
             if (Properties.Settings.Default.playSounds)
                 sound.click.Play();
+        }
+
+        private void viewAssetList_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.assetListView.SelectedIndices[0] != -1)
+            {
+                if (Properties.Settings.Default.playSounds)
+                    sound.click.Play();
+                Form edit = new addBudgetItem(Convert.ToInt32(assetListView.SelectedItems[0].SubItems[3].Text));
+                edit.ShowDialog();
+                edit.Dispose();
+            }
         }
     }
 }
