@@ -302,23 +302,6 @@ namespace Marimba
             return "Unknown";
         }
 
-        public static membertype stringToMemberType (string strType)
-        {
-            switch (strType)
-            {
-                case ("UW Undergrad Student"):
-                    return membertype.UWUnderGrad;
-                case ("UW Grad Student"):
-                    return membertype.UWGrad;
-                case ("UW Alumni"):
-                    return membertype.UWAlumni;
-                case ("Other"):
-                    return membertype.Other;
-            }
-            //this is why I like the name other
-            return membertype.Other;
-        }
-
         public static int stringToFaculty(string strFaculty)
         {
             switch (strFaculty.ToLower())
@@ -342,90 +325,6 @@ namespace Marimba
             }
             //we didn't find anything, so return -1 otherwise
             return -1;
-        }
-
-        /// <summary>
-        /// Given an instrument, returns its icon index
-        /// </summary>
-        /// <param name="strInstrument">Name of instrument</param>
-        /// <returns>Icon index of instrument. Returns 15 (music stand) if not found.</returns>
-        public static int instrumentIconIndex(string strInstrument)
-        {
-            strInstrument = strInstrument.ToLower();
-            switch(strInstrument)
-            {
-                case("alto saxophone"):
-                    return 0;
-                case ("alto sax"):
-                    return 0;
-                case ("alto clarinet"):
-                    return 1;
-                case ("baritone saxophone"):
-                    return 2;
-                case ("baritone sax"):
-                    return 2;
-                case ("bari sax"):
-                    return 2;
-                case ("bass clarinet"):
-                    return 3;
-                case ("bassoon"):
-                    return 4;
-                case ("baton"):
-                    return 5;
-                case ("cornet"):
-                    return 23;
-                case ("guitar"):
-                    return 6;
-                case ("clarinet"):
-                    return 7;
-                case ("bass"):
-                    return 8;
-                case ("electric bass"):
-                    return 24;
-                case ("string bass"):
-                    return 8;
-                case ("bass guitar"):
-                    return 24;
-                case ("drum kit"):
-                    return 9;
-                case ("percussion"):
-                    return 10;
-                case ("euphonium"):
-                    return 11;
-                case ("flute"):
-                    return 12;
-                case ("horn"):
-                    return 13;
-                case ("french horn"):
-                    return 13;
-                case ("mallet percussion"):
-                    return 14;
-                case ("oboe"):
-                    return 16;
-                case ("piano"):
-                    return 17;
-                case ("piccolo"):
-                    return 18;
-                case ("soprano saxophone"):
-                    return 19;
-                case ("soprano sax"):
-                    return 19;
-                case ("tenor saxophone"):
-                    return 20;
-                case ("tenor sax"):
-                    return 20;
-                case ("timpani"):
-                    return 21;
-                case ("trombone"):
-                    return 22;
-                case ("bass_trombone"):
-                    return 22;
-                case ("trumpet"):
-                    return 23;
-                case ("tuba"):
-                    return 11;
-            }
-            return 15;
         }
 
         /// <summary>
