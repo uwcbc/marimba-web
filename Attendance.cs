@@ -122,6 +122,8 @@ namespace Marimba
             }
             lvAttendance.Items.AddRange(attendanceList.ToArray());
             lvAttendance.EndUpdate();
+
+            this.lblTotalRehearsals.Text = "Total Rehearsals: " + clsStorage.currentClub.terms[iTerm].sRehearsals.ToString();
         }
 
         public void ClickMember(Object sender, System.EventArgs e)
