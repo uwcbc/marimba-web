@@ -30,7 +30,14 @@ namespace Marimba
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.error.Play();
-                MessageBox.Show("Changing password was unsuccessful. Please confirm old password is correct.");
+                string errorMessage = "Changing password was unsuccessful. ";
+                if (txtConfirm.Text != txtNew.Text)
+                {
+                    errorMessage += "Please confirm that you have typed in your new password correctly.";
+                } else {
+                    errorMessage += "Please confirm that Please confirm old password is correct.";
+                }
+                MessageBox.Show(errorMessage);
             }
         }
     }

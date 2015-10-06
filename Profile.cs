@@ -26,13 +26,20 @@ namespace Marimba
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(txtStudentNumber.Text))
+            {
                 txtStudentNumber.Text = "0";
-            if(bOtherInstrument)
+            }
+
+            if (bOtherInstrument) {
                 clsStorage.currentClub.members[iID].editMember(txtFirstName.Text, txtLastName.Text, cbClass.SelectedIndex, Convert.ToUInt32(txtStudentNumber.Text),
                 cbFaculty.SelectedIndex, cbInstrument.Text, txtOtherInstrument.Text, txtEmail.Text, txtOther.Text, clsStorage.currentClub.members[iID].signupTime, cbShirtSize.SelectedIndex);
+            }
             else
-            clsStorage.currentClub.members[iID].editMember(txtFirstName.Text, txtLastName.Text, cbClass.SelectedIndex, Convert.ToUInt32(txtStudentNumber.Text),
-                cbFaculty.SelectedIndex, cbInstrument.Text, txtEmail.Text, txtOther.Text, clsStorage.currentClub.members[iID].signupTime, cbShirtSize.SelectedIndex);
+            {
+                clsStorage.currentClub.members[iID].editMember(txtFirstName.Text, txtLastName.Text, cbClass.SelectedIndex, Convert.ToUInt32(txtStudentNumber.Text),
+                    cbFaculty.SelectedIndex, cbInstrument.Text, txtEmail.Text, txtOther.Text, clsStorage.currentClub.members[iID].signupTime, cbShirtSize.SelectedIndex);
+            }
+
             if (Properties.Settings.Default.playSounds)
                 sound.success.Play();
             MessageBox.Show("Member successfully edited");
