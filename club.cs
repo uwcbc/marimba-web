@@ -225,7 +225,7 @@ namespace Marimba
             fs = new FileStream(this.strLocation, FileMode.Create);
             bw = new BinaryWriter(fs);
 
-            //this line is the version number (currently 2.2)
+            //this line is the file version number (currently 2.2)
             //this will be useful later on if .mrb files are siginificantly modified
             bw.Write(Convert.ToDouble(2.2));
             bw.Write(strName);
@@ -608,8 +608,10 @@ namespace Marimba
             {
                 attendedOneRehearsal = false;
                 //check each term to confirm they are not in any of them
-                for (int j = 0; j < sTerm; j++)
+                for (int j = 0; j < sTerm && !attendedOneRehearsal; j++)
+                {
                     attendedOneRehearsal = attendedOneRehearsal || terms[j].memberSearch((short)i) != -1;
+                }
 
                 //if they haven't attended any rehearsals, next check if they have been on the list for four years (1461 days)
                 //just keep using the same attendedOneRehearsal variable
@@ -701,9 +703,9 @@ namespace Marimba
         public string formatedName(int index)
         {
             if(this.members[index].curInstrument != member.instrument.other)
-                return String.Format("{0} {1}, {2}", this.members[index].strFName, this.members[index].strLName, member.instrumentToString(this.members[index].curInstrument));
+                return String.Format("{0}, {1}", firstAndLastName(index), member.instrumentToString(this.members[index].curInstrument));
             else
-                return String.Format("{0} {1}, {2}", this.members[index].strFName, this.members[index].strLName, this.members[index].strOtherInstrument);
+                return String.Format("{0}, {1}", firstAndLastName(index), this.members[index].strOtherInstrument);
         }
 
         public string firstAndLastName(int index)

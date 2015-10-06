@@ -26,18 +26,28 @@ namespace Marimba
             List<ListViewItem> budgetList = new List<ListViewItem>();
             for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
             {
-                //credit items
+                string[] budgetText = new string[8];
+                budgetText[0] = clsStorage.currentClub.terms[clsStorage.currentClub.budget[i].term].strName;
+                budgetText[1] = clsStorage.currentClub.budget[i].name;
+                budgetText[2] = ""; // debit amount
+                budgetText[3] = ""; // credit amount
+                budgetText[4] = clsStorage.currentClub.budget[i].cat;
+                budgetText[5] = clsStorage.moneyTypeToString(clsStorage.currentClub.budget[i].type);
+                budgetText[6] = clsStorage.currentClub.budget[i].dateOccur.ToShortDateString();
+                budgetText[7] = Convert.ToString(i);
+
+                // credit amounts
                 if (clsStorage.currentClub.budget[i].type == (int)club.money.Revenue)
-                budgetList.Add(new ListViewItem(new string[8]{clsStorage.currentClub.terms[clsStorage.currentClub.budget[i].term].strName,
-                    clsStorage.currentClub.budget[i].name, "", clsStorage.currentClub.budget[i].value.ToString("C"), clsStorage.currentClub.budget[i].cat,
-                    clsStorage.moneyTypeToString(clsStorage.currentClub.budget[i].type), clsStorage.currentClub.budget[i].dateOccur.ToShortDateString(),
-                    Convert.ToString(i)}));
+                {
+                    budgetText[3] = clsStorage.currentClub.budget[i].value.ToString("C");
+                    budgetList.Add(new ListViewItem(budgetText));
+                }
                 //debit items
                 else
-                    budgetList.Add(new ListViewItem(new string[8]{clsStorage.currentClub.terms[clsStorage.currentClub.budget[i].term].strName,
-                    clsStorage.currentClub.budget[i].name, clsStorage.currentClub.budget[i].value.ToString("C"), "", clsStorage.currentClub.budget[i].cat,
-                    clsStorage.moneyTypeToString(clsStorage.currentClub.budget[i].type), clsStorage.currentClub.budget[i].dateOccur.ToShortDateString(),
-                    Convert.ToString(i)}));
+                {
+                    budgetText[2] = clsStorage.currentClub.budget[i].value.ToString("C");
+                    budgetList.Add(new ListViewItem(budgetText));
+                }
             }
             lvMain.Items.AddRange(budgetList.ToArray());
             lvMain.EndUpdate();
