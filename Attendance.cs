@@ -47,8 +47,8 @@ namespace Marimba
                 lvColumns[i].Text = "";
                 lvColumns[i].Width = 100;
             }
-            lvColumns[0].Width = 300;
-            lvColumns[1].Width = 20;
+            lvColumns[0].Width = 300; // Name of attendee
+            lvColumns[1].Width = 30; // Total number of rehearsals attended
             this.lvAttendance.Columns.AddRange(lvColumns);
         }
 
