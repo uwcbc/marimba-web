@@ -27,14 +27,14 @@ namespace Marimba
             for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
             {
                 string[] budgetText = new string[8];
-                budgetText[0] = clsStorage.currentClub.terms[clsStorage.currentClub.budget[i].term].strName;
-                budgetText[1] = clsStorage.currentClub.budget[i].name;
+                budgetText[0] = clsStorage.currentClub.terms[clsStorage.currentClub.budget[i].term].strName; // name of term
+                budgetText[1] = clsStorage.currentClub.budget[i].name; // name of financial transaction
                 budgetText[2] = ""; // debit amount
                 budgetText[3] = ""; // credit amount
-                budgetText[4] = clsStorage.currentClub.budget[i].cat;
-                budgetText[5] = clsStorage.moneyTypeToString(clsStorage.currentClub.budget[i].type);
-                budgetText[6] = clsStorage.currentClub.budget[i].dateOccur.ToShortDateString();
-                budgetText[7] = Convert.ToString(i);
+                budgetText[4] = clsStorage.currentClub.budget[i].cat; // the type of thing being credited or debited
+                budgetText[5] = clsStorage.moneyTypeToString(clsStorage.currentClub.budget[i].type); // "Asset", "Depreciation", "Revenue" or "Expense"
+                budgetText[6] = clsStorage.currentClub.budget[i].dateOccur.ToShortDateString(); // date of transaction
+                budgetText[7] = Convert.ToString(i); // internal index for this item and is not displayed; used so that we can double-click an item to open up its edit item window
 
                 // credit amounts
                 if (clsStorage.currentClub.budget[i].type == (int)club.money.Revenue)
