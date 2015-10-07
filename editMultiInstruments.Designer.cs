@@ -72,7 +72,7 @@
             this.lvPlays.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader2});
             this.lvPlays.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvPlays.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lvPlays.Font = new System.Drawing.Font("Quicksand", 9.749999F);
             this.lvPlays.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.lvPlays.Location = new System.Drawing.Point(387, 43);
             this.lvPlays.Name = "lvPlays";
@@ -118,7 +118,7 @@
             this.lvAvailable.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.lvAvailable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lvAvailable.Font = new System.Drawing.Font("Quicksand", 9.749999F);
             this.lvAvailable.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.lvAvailable.Location = new System.Drawing.Point(3, 43);
             this.lvAvailable.Name = "lvAvailable";
