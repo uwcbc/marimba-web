@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Marimba")]
-[assembly: AssemblyDescription("An information management program written by Lawrence Veregin.")]
+[assembly: AssemblyDescription("An club information management program originally developed by Lawrence Veregin.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("UW Concert Band Club")]
 [assembly: AssemblyProduct("Marimba")]
-[assembly: AssemblyCopyright("Copyright ©  2013-2015 Lawrence Veregin and Victor Zhou")]
+[assembly: AssemblyCopyright("Copyright ©  2013-2015 UW Concert Band Club")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.3.0.0")]
+[assembly: AssemblyVersion("2.2.1.0")]
 [assembly: AssemblyFileVersion("2.2.0.0")]
