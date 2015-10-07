@@ -14,6 +14,7 @@ namespace Marimba
     public partial class addFees : Form
     {
         List<ListViewItem> memberlist;
+
         public addFees()
         {
             InitializeComponent();            
@@ -98,21 +99,27 @@ namespace Marimba
                         if (Properties.Settings.Default.attachSig)
                             strBody += "<br>" + clsStorage.currentClub.clubEmail.createSignature();
 
-                        if (clsStorage.currentClub.clubEmail.sendMessage(memberEmails, memberNames, clsStorage.currentClub.strName + " " + clsStorage.receiptSubject, strBody, emailBrowser.purpose.bcc))
-                            MessageBox.Show("Digital receipts sent.");
-                        else
-                            MessageBox.Show("Sending digital receipts failed.");
+                        bool success = true;
+                        while (!clsStorage.currentClub.clubEmail.sendMessage(memberEmails, memberNames, clsStorage.currentClub.strName + " " + clsStorage.receiptSubject, strBody, emailBrowser.purpose.bcc))
+                        {
+                            DialogResult result = MessageBox.Show("Sending digital receipts failed. Would you like to try again?", "Failed to send digital receipts", MessageBoxButtons.YesNo);
+                            
+                            // don't try again and we didn't suceed
+                            if (result == DialogResult.No)
+                            {
+                                success = false;
+                                break;
+                            }
+                            else // try again
+                            {
+                                continue;
+                            }
+                        }
 
-                        //this is the magic line
-                        //it will try to send the messages
-                        //only once successful will it proceed
-                        /*if (signInInfo.DialogResult == DialogResult.OK && sendEmail.sendMail(memberEmails, memberNames, new MailAddress(signInInfo.txtEmail.Text, clsStorage.currentClub.strName), signInInfo.txtPassword.Text, clsStorage.receiptSubject, strBody))
+                        if (success)
                         {
                             MessageBox.Show("Digital receipts sent.");
-                            break;
                         }
-                        else if (signInInfo.DialogResult == DialogResult.OK)
-                            MessageBox.Show("Sending digital receipts failed. Please confirm the password entered is correct.");*/
                     }
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
