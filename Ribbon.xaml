@@ -84,7 +84,7 @@
             <RibbonTab x:Name="Admin" Header="Admin" KeyTip="A" >
                 <RibbonGroup x:Name="Terms" Header="Terms">
                     <RibbonButton x:Name="NewTerm" Label="New Term" KeyTip="T" SmallImageSource="ribbon_images/new_small.png" SnapsToDevicePixels="True" Click="NewTerm_Click"  />
-                    <RibbonButton x:Name="EditTerm" Label="Edit Term" SmallImageSource="ribbon_images/term summary_48x48.png" KeyTip="ET" Click="EditTerm_Click"/>
+                    <RibbonButton x:Name="EditTerm" Label="Edit Terms" SmallImageSource="ribbon_images/term summary_48x48.png" KeyTip="ET" Click="EditTerm_Click"/>
                 </RibbonGroup>
                 <RibbonGroup x:Name="Purge" Header="Purge Old Members">
                     <RibbonButton x:Name="Perger_Button" Label="Purge Old Members" KeyTip="P" SnapsToDevicePixels="True" Click="Perger_Button_Click" />

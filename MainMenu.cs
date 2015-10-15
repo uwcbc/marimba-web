@@ -23,7 +23,7 @@ namespace Marimba
         public editSettings settings = new editSettings();
         public viewAssetList assetListViewer = new viewAssetList();
         public editTerm termEditor = new editTerm();
-        public editUser userEditor = new editUser();
+        public frmEditUser userEditor = new frmEditUser();
 
         public MainMenu(string[] args)
         {

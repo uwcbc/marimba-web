@@ -25,13 +25,17 @@ namespace Marimba
         //fileVersion contains the version of the file currently loaded
         double fileVersion;
         //iUsers stores the number of users
+
+        private static readonly int MAX_USERS = 40;
+        private static readonly int USER_FIELDS_TO_STORE = 4;
         //strUsers [,1] stores Name
         //strUsers [,2] stores password (note: encrypted, but not that well)
         //I do not recommend publicly releasing any .mrb files and use a unique password for Marimba
         //strUsers [,3] stores type of user
         //strUsers [,4] stores the key xor'd with the single hash of the user's password
         public Int16 iUser, iMember;
-        public string[,] strUsers = new string[40,4];
+        public string[,] strUsers = new string[MAX_USERS, USER_FIELDS_TO_STORE];
+
         private static readonly int saltLength = 16;
         //currently, prepare for five thousand total members
         public member[] members = new member[5000];
@@ -388,6 +392,38 @@ namespace Marimba
             return true;
         }
 
+        // remove the user with the given name from Marimba
+        public bool deleteUser(string strName)
+        {
+            int index = findUser(strName);
+            if (index < 0)
+            {
+                return false;
+            }
+
+            // shift everything back
+            for (int i = index; i < iUser; i++)
+            {
+                if (i == iUser - 1)
+                {
+                    break;
+                }
+                this.strUsers[i, 0] = this.strUsers[i + 1, 0];
+                this.strUsers[i, 1] = this.strUsers[i + 1, 1];
+                this.strUsers[i, 2] = this.strUsers[i + 1, 2];
+                this.strUsers[i, 3] = this.strUsers[i + 1, 3];
+            }
+
+            // get rid of extra entry at the end
+            this.strUsers[iUser - 1, 0] = "";
+            this.strUsers[iUser - 1, 1] = "";
+            this.strUsers[iUser - 1, 2] = "";
+            this.strUsers[iUser - 1, 3] = "";
+            iUser--;
+
+            return true;
+        }
+
         // get the index of the specified user
         public int findUser(string strName)
         {
@@ -484,6 +520,18 @@ namespace Marimba
             }
             else
                 return false;
+        }
+
+        public bool editUserPrivilege(string strName, string strNewPrivilege)
+        {
+            int userIndex = findUser(strName);
+            if (userIndex < 0)
+            {
+                return false;
+            }
+
+            this.strUsers[userIndex, 2] = strNewPrivilege;
+            return true;
         }
 
         public void updateKey()

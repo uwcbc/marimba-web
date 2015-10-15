@@ -18,7 +18,6 @@ namespace Marimba
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            //Note to self: Add functionality to check if user ID is already in use
             if (txtUserID.Text == "")
                 MessageBox.Show("Please enter a User ID");
             else if (txtPassword.Text == "" || txtConfirm.Text == "")

@@ -13,10 +13,13 @@ namespace Marimba
         public DateTime time;
         
         /// <summary>
-        /// The type of change made, for the purpose of recording history of changes
+        /// The type of change made, for the purpose of recording history of changes.
+        /// NOTE: You need to always add new types to the end, since we store to file using ints.
         /// </summary>
         public enum changeType{signup, signin, editMember, unsubscribe, deactivate, addUser, sentEmail, addFees, 
-            addBudget, editBudget, deleteBudget, setupElection, newTerm, importMembers, editAttendance, removeFromTerm, purgeMembers}
+            addBudget, editBudget, deleteBudget, setupElection, newTerm, importMembers, editAttendance, removeFromTerm, purgeMembers,
+            editUser, deleteUser
+        }
 
         //Our goal here is to minimize the number of strings stored
         //Strings take up a lot of disk space
@@ -56,6 +59,12 @@ namespace Marimba
                     break;
                 case(changeType.addUser):
                     output += " created a new user account in Marimba for " + otherInfo + " - ";
+                    break;
+                case(changeType.editUser):
+                    output += " edited the user account in Marimba for " + otherInfo + " - ";
+                    break;
+                case(changeType.deleteUser):
+                    output += " deleted the user account in Marimba for " + otherInfo + " - ";
                     break;
                 case(changeType.deactivate):
                     output += " deactivated " + otherInfo + "'s membership record - ";
