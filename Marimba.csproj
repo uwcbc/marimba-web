@@ -114,6 +114,18 @@
     <Compile Include="addFees.Designer.cs">
       <DependentUpon>addFees.cs</DependentUpon>
     </Compile>
+    <Compile Include="editTerm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="editTerm.Designer.cs">
+      <DependentUpon>editTerm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="editUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="editUser.Designer.cs">
+      <DependentUpon>editUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="viewAssetList.cs">
       <SubType>Form</SubType>
     </Compile>

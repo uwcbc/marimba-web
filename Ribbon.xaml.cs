@@ -234,6 +234,22 @@ namespace Marimba
         private void Google_Button_Click(object sender, RoutedEventArgs e)
         {
             Program.home.memberMenu.btnGoogleDoc_Click(sender, e);
+            if (Properties.Settings.Default.playSounds)
+                sound.success.Play();
+        }
+
+        private void EditUser_Click(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.playSounds)
+                sound.click.Play();
+            Program.home.userEditor.ShowDialog();
+        }
+
+        private void EditTerm_Click(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.playSounds)
+                sound.click.Play();
+            Program.home.termEditor.ShowDialog();
         }
     }
 }
