@@ -187,7 +187,7 @@ namespace Marimba
             int row = 9;
             object[,] data = new object[9 + clsStorage.currentClub.iUser, 4];
             data[0, 0] = "File Version";
-            data[0, 1] = 2.1;
+            data[0, 1] = Marimba.club.FILE_VERSION;
             data[1, 0] = "Club Name";
             data[1, 1] = clsStorage.currentClub.strName;
             data[2, 0] = "Number of Users";
@@ -327,8 +327,8 @@ namespace Marimba
                 data[row+1, 1] = clsStorage.currentClub.terms[i].membershipFees;
                 for (int j = 0; j < clsStorage.currentClub.terms[i].iOtherFees; j++ )
                 {
-                    data[row, j*2+3] = clsStorage.currentClub.terms[i].strOtherFees[j];
-                    data[row + 1, j*2 + 3] = clsStorage.currentClub.terms[i].dOtherFees[j];
+                    data[row, j * 2 + 3] = clsStorage.currentClub.terms[i].strOtherFees[j];
+                    data[row + 1, j * 2 + 3] = clsStorage.currentClub.terms[i].dOtherFees[j];
                 }
                 row += 2;
 
@@ -341,8 +341,8 @@ namespace Marimba
                             data[row, k] = clsStorage.currentClub.terms[i].members[j];
                         else
                         {
-                            data[row, k*2-1] = clsStorage.currentClub.terms[i].feesPaid[j, k - 1];
-                            data[row, k*2] = clsStorage.currentClub.terms[i].feesPaidDate[j, k - 1];
+                            data[row, k * 2 - 1] = clsStorage.currentClub.terms[i].feesPaid[j, k - 1];
+                            data[row, k * 2] = clsStorage.currentClub.terms[i].feesPaidDate[j, k - 1];
                         }     
                     }
                     row++;
@@ -466,7 +466,7 @@ namespace Marimba
                     if(!(bool)valueArray[i+3,12])
                         output.members[i] = new member((string)valueArray[i + 3, 1], (string)valueArray[i + 3, 2], Convert.ToInt32(valueArray[i + 3, 3]), Convert.ToUInt32(valueArray[i + 3, 4]),
                             Convert.ToInt32(valueArray[i + 3, 5]), (string)valueArray[i + 3, 6], (string)valueArray[i + 3, 7], (string)valueArray[i + 3, 8],
-                            Convert.ToInt16(valueArray[i + 3, 9]), (DateTime)valueArray[i +3, 10], Convert.ToInt32(valueArray[i + 3, 11]));
+                            Convert.ToInt16(valueArray[i + 3, 9]), (DateTime)valueArray[i + 3, 10], Convert.ToInt32(valueArray[i + 3, 11]));
                     else
                     {
                         //the member plays multiple instruments
@@ -513,7 +513,7 @@ namespace Marimba
                     //load rehearsal dates
                     output.terms[i].rehearsalDates = new DateTime[output.terms[i].sRehearsals];
                     for (int j = 0; j < output.terms[i].sRehearsals; j++)
-                        output.terms[i].rehearsalDates[j]= (DateTime)valueArray[row, j + 2];
+                        output.terms[i].rehearsalDates[j] = (DateTime)valueArray[row, j + 2];
                     row++;
 
 

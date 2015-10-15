@@ -9,6 +9,8 @@ namespace Marimba
 {
     class club
     {
+        // the latest file version, and the version used to save
+        public static readonly double FILE_VERSION = 2.2;
         //br and bw are for writing the main files
         public BinaryReader br;
         public static BinaryWriter bw;
@@ -20,7 +22,7 @@ namespace Marimba
         //strName is the name of the club
         //strLocation is the location of the file
         public string strName;
-        //fileVersion contains the version of the file
+        //fileVersion contains the version of the file currently loaded
         double fileVersion;
         //iUsers stores the number of users
         //strUsers [,1] stores Name
@@ -227,7 +229,7 @@ namespace Marimba
 
             //this line is the file version number (currently 2.2)
             //this will be useful later on if .mrb files are siginificantly modified
-            bw.Write(Convert.ToDouble(2.2));
+            bw.Write(FILE_VERSION);
             bw.Write(strName);
             bw.Write(iUser);
             //write the users (i.e. exec account information)
