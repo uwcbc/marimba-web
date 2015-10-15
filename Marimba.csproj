@@ -278,6 +278,9 @@
       <DependentUpon>addFees.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="editUser.resx">
+      <DependentUpon>editUser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="viewAssetList.resx">
       <DependentUpon>viewAssetList.cs</DependentUpon>
     </EmbeddedResource>
