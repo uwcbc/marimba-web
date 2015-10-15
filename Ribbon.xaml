@@ -82,9 +82,9 @@
             </RibbonTab>
             <!-- Ribbon Last Tab: Admin -->
             <RibbonTab x:Name="Admin" Header="Admin" KeyTip="A" >
-                <RibbonGroup x:Name="New" Header="New">
-                    <RibbonButton x:Name="NewUser" Label="New User" KeyTip="U" SmallImageSource="ribbon_images/Members.png" SnapsToDevicePixels="True" Click="NewUser_Click" />
+                <RibbonGroup x:Name="Terms" Header="Terms">
                     <RibbonButton x:Name="NewTerm" Label="New Term" KeyTip="T" SmallImageSource="ribbon_images/new_small.png" SnapsToDevicePixels="True" Click="NewTerm_Click"  />
+                    <RibbonButton Label="Edit Term" SmallImageSource="ribbon_images/term summary_48x48.png"/>
                 </RibbonGroup>
                 <RibbonGroup x:Name="Purge" Header="Purge Old Members">
                     <RibbonButton x:Name="Perger_Button" Label="Purge Old Members" KeyTip="P" SnapsToDevicePixels="True" Click="Perger_Button_Click" />
@@ -95,6 +95,10 @@
                 </RibbonGroup>
                 <RibbonGroup x:Name="ImportClubGroup" Header="Import">
                     <RibbonButton x:Name="ImpClub" LargeImageSource="ribbon_images/xlsx.png" Label="Import Club" KeyTip="I" SmallImageSource="ribbon_images/xlsx.png"  SnapsToDevicePixels="True" Click="ImpClub_Click" />
+                </RibbonGroup>
+                <RibbonGroup x:Name="Users" Header="Users">
+                    <RibbonButton x:Name="NewUser_Copy" Label="New User" KeyTip="U" SmallImageSource="ribbon_images/Members.png" SnapsToDevicePixels="True" Click="NewUser_Click" />
+                    <RibbonButton Label="Edit Users" SmallImageSource="ribbon_images/Elections.png"/>
                 </RibbonGroup>
             </RibbonTab>
 
