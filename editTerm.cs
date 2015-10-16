@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Marimba
 {
-    public partial class editTerm : Form
+    public partial class frmEditTerm : Form
     {
-        public editTerm()
+        public frmEditTerm()
         {
             InitializeComponent();
         }
