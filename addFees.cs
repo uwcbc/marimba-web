@@ -23,6 +23,8 @@ namespace Marimba
         private void cbTerm_SelectedIndexChanged(object sender, EventArgs e)
         {
             lvMembers.Items.Clear();
+            cbFee.Text = "";
+            cbFee.SelectedIndex = -1;
             cbFee.Items.Clear();
             if (cbTerm.SelectedIndex >= 0) {
                 cbFee.Items.Add("Membership Fee");
