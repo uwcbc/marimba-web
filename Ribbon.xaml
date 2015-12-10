@@ -30,6 +30,7 @@
                 </RibbonGroup>
                 <RibbonGroup x:Name="MailGroup" Header="Mail">
                     <RibbonButton x:Name="Mail" LargeImageSource="ribbon_images/new_mail.png" Label="Send Mail" KeyTip="M" SmallImageSource="ribbon_images/new_mail.png"  SnapsToDevicePixels="True" Click="Mail_Click" />
+                    <RibbonButton x:Name="RefreshEmail"  LargeImageSource="ribbon_images\Refresh.png" Label="Refresh Email" KeyTip="E" SmallImageSource="ribbon_images/Refresh_small.png" SnapsToDevicePixels="True" Click="RefreshEmailButton_Click"/>
                 </RibbonGroup>
                 <RibbonGroup x:Name="HistoryGroup" Header="History">
                     <RibbonButton x:Name="HistoryButton" LargeImageSource="ribbon_images\history.png" Label="History" KeyTip="H" SmallImageSource="ribbon_images/history.png" Click="HistoryButton_Click" SnapsToDevicePixels="True" />
@@ -40,7 +41,7 @@
                 </RibbonGroup>
             </RibbonTab>
             <!-- Ribbon Tab #2: Membership -->
-            <RibbonTab Header="Membership" KeyTip="M" >
+            <RibbonTab x:Name="Membership" Header="Membership" KeyTip="M" >
                 <RibbonGroup x:Name="RehearsalGroup" Header="Rehearsal">
                     <RibbonButton x:Name="SignInButton" LargeImageSource="ribbon_images/signin.png" Label="Sign In" KeyTip="I" SmallImageSource="ribbon_images/signin.png" SnapsToDevicePixels="True" Click="SignInButton_Click" />
                     <RibbonButton x:Name="Attendance" LargeImageSource="ribbon_images/attendance.ico" Label="Attendance" KeyTip="A" SmallImageSource="ribbon_images/attendance.ico" SnapsToDevicePixels="True" Click="Attendance_Click"  />

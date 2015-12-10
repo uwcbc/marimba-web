@@ -49,6 +49,11 @@ namespace Marimba
             Program.home.btnRefresh_Click(sender, e);
         }
 
+        private void RefreshEmailButton_Click(object sender, RoutedEventArgs e)
+        {
+            Program.home.attemptLogin();
+        }
+
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
             Program.home.btnAbout_Click(sender, e);

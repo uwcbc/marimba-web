@@ -92,12 +92,7 @@ namespace Marimba
             {
                 lblWelcome.Text += clsStorage.currentClub.strUser;
                 populateHistory();
-                //I think this should be removed... I'll confirm later
-                if (clsStorage.currentClub.strPrivilege == "Admin")
-                {
-                    //btnNewTerm.Enabled = true;
-                    //btnNewUser.Enabled = true;
-                }
+
                 //load email
                 //use a bit of threading so that loading the email doesn't interfere with loading the entire main menu
                 Thread t = new Thread(emailLogin);
@@ -134,6 +129,7 @@ namespace Marimba
 
         void addEmailToListView()
         {
+            lvEmail.Items.Clear();
             lvEmail.Items.AddRange(emailList);
             lvEmail.UseWaitCursor = false;
         }
@@ -250,6 +246,16 @@ namespace Marimba
         {
             ribbon1.Export_Status.Value = 0;
             ribbon1.ExpClub.IsEnabled = true;
+        }
+
+        public void attemptLogin()
+        {
+            if (Properties.Settings.Default.playSounds)
+                sound.click.Play();
+            //load email
+            //use a bit of threading so that loading the email doesn't interfere with loading the entire main menu
+            Thread t = new Thread(emailLogin);
+            t.Start();
         }
     }
 }
