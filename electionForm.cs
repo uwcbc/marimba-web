@@ -16,20 +16,6 @@ namespace Marimba
             InitializeComponent();
         }
 
-        private void btnNew_Click(object sender, EventArgs e)
-        {
-            if (cbTerm.SelectedIndex != -1 && (clsStorage.currentClub.currentElection == null || MessageBox.Show(
-                "This will overwrite the last election created. All codes will be lost. This cannot be undone. Are you sure you want to create a new election?",
-                "Create New Election", MessageBoxButtons.YesNo) == DialogResult.Yes))
-            {
-                clsStorage.currentClub.currentElection = new election(clsStorage.currentClub, cbTerm.SelectedIndex);
-                btnList.Enabled = true;
-
-                if (Properties.Settings.Default.playSounds)
-                    sound.click.Play();
-            }
-        }
-
         private void electionForm_Load(object sender, EventArgs e)
         {
             cbTerm.Items.AddRange(clsStorage.currentClub.termNames());
@@ -44,8 +30,11 @@ namespace Marimba
 
         private void btnList_Click(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.playSounds)
+                sound.click.Play();
             if (svdSave.ShowDialog() == DialogResult.OK)
             {
+                clsStorage.currentClub.currentElection = new election(clsStorage.currentClub, cbTerm.SelectedIndex);
                 //1 = excel file
                 if (svdSave.FilterIndex == 1)
                 {

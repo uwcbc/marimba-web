@@ -14,24 +14,8 @@ namespace Marimba
         public int iAlmostElectors;
         public List<elector> electorList;
         public List<elector> almostElector;
-        Random rnd;
-
-        //these variables are for the candidates and voting
-        public List<candidate> listOfCandidates = new List<candidate>();
-        public int iPositions;
-        public string[] strPositions;
 
         public int iTermIndex;
-
-        public int totalBallots, rejectBallots;
-
-        public struct candidate
-        {
-            public int index;
-            public int[] preferences;
-            public string strBlurb;
-            public bool bElected;
-        }
 
         public election(club mainClub, int iTermIndex)
         {
@@ -46,12 +30,8 @@ namespace Marimba
             almostElector = new List<elector>();
             iElectors = 0;
             iAlmostElectors = 0;
-            rnd = new Random();
             this.iTermIndex = iTermIndex;
-            updateElectorList(mainClub, true);
-
-            totalBallots = 0;
-            rejectBallots = 0;
+            updateElectorList(mainClub);
         }
 
         public election(StreamReader sr)
@@ -60,8 +40,9 @@ namespace Marimba
             elector nextElector = new elector();
             electorList = new List<elector>();
             almostElector = new List<elector>();
-            totalBallots = 0;
-            rejectBallots = 0;
+
+            /* don't keep track of this anymore */
+
             iAlmostElectors = Convert.ToInt32(sr.ReadLine());
             for (int i = 0; i < iAlmostElectors; i++)
             {
@@ -69,7 +50,6 @@ namespace Marimba
                 nextElector.strName = sr.ReadLine();
                 nextElector.strEmail = sr.ReadLine();
                 almostElector.Add(nextElector);
-                //note to self: add id's here
             }
             iElectors = Convert.ToInt32(sr.ReadLine());
             for (int i = 0; i < iElectors; i++)
@@ -77,31 +57,34 @@ namespace Marimba
                 nextElector.id = Convert.ToInt32(sr.ReadLine());
                 nextElector.strName = sr.ReadLine();
                 nextElector.strEmail = sr.ReadLine();
-                nextElector.strCode = sr.ReadLine();
+
+                /* don't keep track of this anymore */
+                string dummy_strCode = sr.ReadLine();
+
                 electorList.Add(nextElector);
                 //note to self: add id's here
             }
-            iPositions = Convert.ToInt32(sr.ReadLine());
-            strPositions = new string[iPositions];
+
+            /* don't keep track of this anymore */
+            int iPositions = Convert.ToInt32(sr.ReadLine());
+            string[] strPositions = new string[iPositions];
             for (int i = 0; i < iPositions; i++)
                 strPositions[i] = sr.ReadLine();
+
             int numCandidates = Convert.ToInt32(sr.ReadLine());
             for (int i = 0; i < numCandidates; i++)
             {
-                candidate nextCandidate = new candidate();
-                nextCandidate.index = Convert.ToInt32(sr.ReadLine());
-                nextCandidate.preferences = new int[iPositions];
+                int dummy_index = Convert.ToInt32(sr.ReadLine());
+                int[] dummy_preferences = new int[iPositions];
                 for (int j = 0; j < iPositions; j++)
-                    nextCandidate.preferences[j] = Convert.ToInt32(sr.ReadLine());
-                nextCandidate.strBlurb = sr.ReadLine();
-                nextCandidate.bElected = Convert.ToBoolean(sr.ReadLine());
-                listOfCandidates.Add(nextCandidate);
+                    dummy_preferences[j] = Convert.ToInt32(sr.ReadLine());
+                string dummy_strBlurb = sr.ReadLine();
+                bool dummy_bElected = Convert.ToBoolean(sr.ReadLine());
             }
         }
 
-        public void updateElectorList(club mainClub, bool newCode)
+        public void updateElectorList(club mainClub)
         {
-            //Note to self: This will have to be fixed for adding new users without creating new codes
             int term1index, term2index;
             bool term1okay, term2okay;
             for (short i = 0; i < mainClub.iMember; i++)
@@ -127,10 +110,6 @@ namespace Marimba
                     temp.strEmail = mainClub.members[i].strEmail;
                     temp.id = i;
 
-                    //if we are looking for a new code for the user
-                    if (newCode)
-                        temp.strCode = codeGenerator(rnd);
-
                     electorList.Add(temp);
                     iElectors++;
                 }
@@ -147,27 +126,12 @@ namespace Marimba
                 }
             }
         }
-        public static string codeGenerator(Random rnd)
-        {
-            char[] cCode = new char[16];
-            //avoid the = since it messes up Excel
-            cCode[0] = (char)rnd.Next(62, 126);
-            for (int i = 1; i < 16; i++)
-            {
-                int iGen = rnd.Next(32, 126);
-                cCode[i] = (char)iGen;
-            }
-            return String.Concat(cCode);
-        }
 
-        public struct elector
+        public class elector
         {
             public int id;
             public string strName;
             public string strEmail;
-            //I don't like having the code stored alongside the elector information
-            //This should eventually be changed
-            public string strCode;
         }
     }
 }

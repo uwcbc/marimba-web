@@ -30,7 +30,6 @@
         {
             this.lblElection = new System.Windows.Forms.Label();
             this.cbTerm = new System.Windows.Forms.ComboBox();
-            this.btnNew = new System.Windows.Forms.Button();
             this.svdSave = new System.Windows.Forms.SaveFileDialog();
             this.ofdOpen = new System.Windows.Forms.OpenFileDialog();
             this.gbStep1 = new System.Windows.Forms.GroupBox();
@@ -42,7 +41,7 @@
             // 
             this.lblElection.AutoSize = true;
             this.lblElection.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblElection.Location = new System.Drawing.Point(38, 24);
+            this.lblElection.Location = new System.Drawing.Point(27, 24);
             this.lblElection.Name = "lblElection";
             this.lblElection.Size = new System.Drawing.Size(198, 16);
             this.lblElection.TabIndex = 0;
@@ -52,21 +51,10 @@
             // 
             this.cbTerm.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbTerm.FormattingEnabled = true;
-            this.cbTerm.Location = new System.Drawing.Point(272, 21);
+            this.cbTerm.Location = new System.Drawing.Point(257, 21);
             this.cbTerm.Name = "cbTerm";
             this.cbTerm.Size = new System.Drawing.Size(188, 24);
             this.cbTerm.TabIndex = 1;
-            // 
-            // btnNew
-            // 
-            this.btnNew.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNew.Location = new System.Drawing.Point(89, 30);
-            this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(135, 47);
-            this.btnNew.TabIndex = 5;
-            this.btnNew.Text = "Start New Election";
-            this.btnNew.UseVisualStyleBackColor = true;
-            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
             // svdSave
             // 
@@ -80,11 +68,10 @@
             // gbStep1
             // 
             this.gbStep1.Controls.Add(this.btnList);
-            this.gbStep1.Controls.Add(this.btnNew);
             this.gbStep1.Font = new System.Drawing.Font("Quicksand", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbStep1.Location = new System.Drawing.Point(12, 60);
             this.gbStep1.Name = "gbStep1";
-            this.gbStep1.Size = new System.Drawing.Size(526, 100);
+            this.gbStep1.Size = new System.Drawing.Size(452, 100);
             this.gbStep1.TabIndex = 9;
             this.gbStep1.TabStop = false;
             this.gbStep1.Text = "Setup an Election";
@@ -93,11 +80,11 @@
             // 
             this.btnList.Enabled = false;
             this.btnList.Font = new System.Drawing.Font("Quicksand", 10.18868F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnList.Location = new System.Drawing.Point(313, 30);
+            this.btnList.Location = new System.Drawing.Point(170, 30);
             this.btnList.Name = "btnList";
             this.btnList.Size = new System.Drawing.Size(135, 47);
             this.btnList.TabIndex = 6;
-            this.btnList.Text = "Export Elector List";
+            this.btnList.Text = "Generate Elector List";
             this.btnList.UseVisualStyleBackColor = true;
             this.btnList.Click += new System.EventHandler(this.btnList_Click);
             // 
@@ -105,7 +92,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(550, 180);
+            this.ClientSize = new System.Drawing.Size(476, 180);
             this.Controls.Add(this.gbStep1);
             this.Controls.Add(this.cbTerm);
             this.Controls.Add(this.lblElection);
@@ -126,7 +113,6 @@
 
         private System.Windows.Forms.Label lblElection;
         private System.Windows.Forms.ComboBox cbTerm;
-        private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.SaveFileDialog svdSave;
         private System.Windows.Forms.OpenFileDialog ofdOpen;
         private System.Windows.Forms.GroupBox gbStep1;
