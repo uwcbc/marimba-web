@@ -24,19 +24,27 @@ namespace Marimba
         {
             lvMembers.Items.Clear();
             cbFee.Items.Clear();
-            cbFee.Items.Add("Membership Fee");
-            if(clsStorage.currentClub.terms[cbTerm.SelectedIndex].iOtherFees >0)
-                cbFee.Items.AddRange(clsStorage.currentClub.terms[cbTerm.SelectedIndex].strOtherFees);
-            //bold rehearsal dates on the calendar
-            mcDate.RemoveAllBoldedDates();
-            mcDate.BoldedDates = clsStorage.currentClub.terms[cbTerm.SelectedIndex].rehearsalDates;
-            //allow exporting
-            btnExport.Enabled = true;
+            if (cbTerm.SelectedIndex >= 0) {
+                cbFee.Items.Add("Membership Fee");
+                if(clsStorage.currentClub.terms[cbTerm.SelectedIndex].iOtherFees > 0)
+                    cbFee.Items.AddRange(clsStorage.currentClub.terms[cbTerm.SelectedIndex].strOtherFees);
+                //bold rehearsal dates on the calendar
+                mcDate.RemoveAllBoldedDates();
+                mcDate.BoldedDates = clsStorage.currentClub.terms[cbTerm.SelectedIndex].rehearsalDates;
+                //allow exporting
+                btnExport.Enabled = true;
+            }
+            btnExport.Enabled = false;
         }
 
         private void addFees_Load(object sender, EventArgs e)
         {
+            cbTerm.Text = "";
+            cbTerm.SelectedIndex = -1;
             cbTerm.Items.Clear();
+            cbFee.Text = "";
+            cbFee.SelectedIndex = -1;
+            cbFee.Items.Clear();
             cbTerm.Items.AddRange(clsStorage.currentClub.termNames());
             memberlist = new List<ListViewItem>();
             lvMembers.SmallImageList = Program.home.instrumentSmall;
@@ -225,7 +233,12 @@ namespace Marimba
         private void cbFee_SelectedIndexChanged(object sender, EventArgs e)
         {
             //membership fee
-            if(cbFee.SelectedIndex == 0)
+            if (cbFee.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            if (cbFee.SelectedIndex == 0)
                 txtAmount.Text = Convert.ToString(clsStorage.currentClub.terms[cbTerm.SelectedIndex].membershipFees);
             //other fee
             else
