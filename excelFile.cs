@@ -15,7 +15,7 @@ namespace Marimba
         /// <param name="data">Array of data corresponding to Excel cells</param>
         /// <param name="location">Location where file is to be saved</param>
         /// <param name="autofit">Whether or not to autofit the cell sizes</param>
-        public static void saveExcel(object[,] data, string location, bool autofit = false)
+        public static void saveExcel(object[,] data, string location, bool autofit = false, string dateColumns = null, string dateFormat = null)
         {
 
             //first, set it up
@@ -30,6 +30,10 @@ namespace Marimba
                 int column = data.GetLength(1);
                 Excel.Range rng = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[row, column]];
                 rng.set_Value(null, data);
+                if (dateColumns != null)
+                {
+                    ExcelWorksheet.Columns[dateColumns].NumberFormat = dateFormat;
+                }
 
                 if (autofit)
                     ExcelWorksheet.Columns.AutoFit();
@@ -290,10 +294,10 @@ namespace Marimba
                     data[row, j] = clsStorage.currentClub.terms[i].members[j];
                 row++;
                 data[row, 0] = "Start Date";
-                data[row, 1] = clsStorage.currentClub.terms[i].startDate;
+                data[row, 1] = clsStorage.currentClub.terms[i].startDate.ToOADate();
                 row++;
                 data[row, 0] = "End Date";
-                data[row, 1] = clsStorage.currentClub.terms[i].endDate;
+                data[row, 1] = clsStorage.currentClub.terms[i].endDate.ToOADate();
                 row++;
                 data[row, 0] = "Number of Rehearsals";
                 data[row, 1] = clsStorage.currentClub.terms[i].sRehearsals;
@@ -303,7 +307,7 @@ namespace Marimba
 
                 //rehearsal dates headers
                 for (int j = 0; j < clsStorage.currentClub.terms[i].sRehearsals; j++)
-                    data[row, j + 1] = clsStorage.currentClub.terms[i].rehearsalDates[j];
+                    data[row, j + 1] = clsStorage.currentClub.terms[i].rehearsalDates[j].ToOADate();
                 row++;
 
                 //the actual attendance, along with the member's indexes
@@ -342,7 +346,7 @@ namespace Marimba
                         else
                         {
                             data[row, k * 2 - 1] = clsStorage.currentClub.terms[i].feesPaid[j, k - 1];
-                            data[row, k * 2] = clsStorage.currentClub.terms[i].feesPaidDate[j, k - 1];
+                            data[row, k * 2] = clsStorage.currentClub.terms[i].feesPaidDate[j, k - 1].ToOADate();
                         }     
                     }
                     row++;
@@ -377,8 +381,8 @@ namespace Marimba
             {
                 data[row, 0] = item.name;
                 data[row, 1] = item.value;
-                data[row, 2] = item.dateOccur;
-                data[row, 3] = item.dateAccount;
+                data[row, 2] = item.dateOccur.ToOADate();
+                data[row, 3] = item.dateAccount.ToOADate();
                 data[row, 4] = item.cat;
                 data[row, 5] = item.type;
                 data[row, 6] = item.term;
@@ -466,7 +470,7 @@ namespace Marimba
                     if(!(bool)valueArray[i+3,12])
                         output.members[i] = new member((string)valueArray[i + 3, 1], (string)valueArray[i + 3, 2], Convert.ToInt32(valueArray[i + 3, 3]), Convert.ToUInt32(valueArray[i + 3, 4]),
                             Convert.ToInt32(valueArray[i + 3, 5]), (string)valueArray[i + 3, 6], (string)valueArray[i + 3, 7], (string)valueArray[i + 3, 8],
-                            Convert.ToInt16(valueArray[i + 3, 9]), (DateTime)valueArray[i + 3, 10], Convert.ToInt32(valueArray[i + 3, 11]));
+                            Convert.ToInt16(valueArray[i + 3, 9]), DateTime.FromOADate((double)valueArray[i + 3, 10]), Convert.ToInt32(valueArray[i + 3, 11]));
                     else
                     {
                         //the member plays multiple instruments
@@ -476,7 +480,7 @@ namespace Marimba
                             tempMultipleInstruments[j] = Convert.ToBoolean(valueArray[i + 3, 13 + j]);
                         output.members[i] = new member((string)valueArray[i + 3, 1], (string)valueArray[i + 3, 2], Convert.ToInt32(valueArray[i + 3, 3]), Convert.ToUInt32(valueArray[i + 3, 4]),
                             Convert.ToInt32(valueArray[i + 3, 5]), (string)valueArray[i + 3, 6], (string)valueArray[i + 3, 7], (string)valueArray[i + 3, 8],
-                            Convert.ToInt16(valueArray[i + 3, 9]), (DateTime)valueArray[i + 3, 10], Convert.ToInt32(valueArray[i + 3, 11]), tempMultipleInstruments);
+                            Convert.ToInt16(valueArray[i + 3, 9]), DateTime.FromOADate((double)valueArray[i + 3, 10]), Convert.ToInt32(valueArray[i + 3, 11]), tempMultipleInstruments);
                     }
                 }
 
@@ -504,22 +508,22 @@ namespace Marimba
                     for (int j = 0; j < output.terms[i].sMembers; j++)
                         output.terms[i].members[j] = Convert.ToInt16(valueArray[row, j + 1]);
                     row++;
-                    output.terms[i].startDate = (DateTime)valueArray[row, 2];
+                    output.terms[i].startDate = DateTime.FromOADate((double)valueArray[row, 2]);
                     row++;
-                    output.terms[i].endDate = (DateTime)valueArray[row, 2];
+                    output.terms[i].endDate = DateTime.FromOADate((double)valueArray[row, 2]);
                     row++;
                     output.terms[i].sRehearsals = Convert.ToInt16(valueArray[row, 2]);
                     row+=2;
                     //load rehearsal dates
                     output.terms[i].rehearsalDates = new DateTime[output.terms[i].sRehearsals];
                     for (int j = 0; j < output.terms[i].sRehearsals; j++)
-                        output.terms[i].rehearsalDates[j] = (DateTime)valueArray[row, j + 2];
+                        output.terms[i].rehearsalDates[j] = DateTime.FromOADate((double)valueArray[row, j + 2]);
                     row++;
 
 
                     //load attendance
                     output.terms[i].attendance = new bool[120, output.terms[i].sRehearsals];
-                    for(int j = 0; j<output.terms[i].sMembers;j++)
+                    for(int j = 0; j  <output.terms[i].sMembers;j++)
                     {
                         for (int k = 0; k < output.terms[i].sRehearsals; k++)
                             output.terms[i].attendance[j, k] = (bool)valueArray[row, k + 2];
@@ -551,7 +555,7 @@ namespace Marimba
                         {
                             output.terms[i].feesPaid[j, k] = (double)valueArray[row, 2 + k * 2];
                             if (output.terms[i].feesPaid[j, k] != 0)
-                                output.terms[i].feesPaidDate[j, k] = Convert.ToDateTime(valueArray[row, 3 + k * 2]);
+                                output.terms[i].feesPaidDate[j, k] = DateTime.FromOADate((double)valueArray[row, 3 + k * 2]);
                         }
                         row++;
                     }
@@ -566,6 +570,7 @@ namespace Marimba
                 valueArray = replaceNulls(valueArray);
 
                 int iBudget = Convert.ToInt32(valueArray[1, 2]);
+                output.budget = new List<budgetItem>(iBudget);
                 List<int> indicesOfDepreciators = new List<int>(iBudget);
                 List<int> indicesOfDepreciatedAssets = new List<int>(iBudget);
 
@@ -574,8 +579,8 @@ namespace Marimba
                     budgetItem newItem = new budgetItem();
                     newItem.value = (double)valueArray[i + 3, 2];
                     newItem.name = (string)valueArray[i + 3, 1];
-                    newItem.dateOccur = (DateTime)valueArray[i + 3, 3];
-                    newItem.dateAccount = (DateTime)valueArray[i + 3, 4];
+                    newItem.dateOccur = DateTime.FromOADate((double)valueArray[i + 3, 3]);
+                    newItem.dateAccount = DateTime.FromOADate((double)valueArray[i + 3, 4]);
                     newItem.cat = (string)valueArray[i + 3, 5];
                     newItem.type = Convert.ToInt32(valueArray[i + 3, 6]);
                     newItem.term = Convert.ToInt32(valueArray[i + 3, 7]);

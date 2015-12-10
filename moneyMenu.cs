@@ -61,6 +61,10 @@ namespace Marimba
                     output[0, 6] = "Date of Occurrence";
                     output[0, 7] = "Date in Account";
                     output[0, 8] = "Comments";
+
+                    // setup date columns
+                    string dateColumns = "G:H";
+
                     int i = 0;
                     foreach (budgetItem item in clsStorage.currentClub.budget)
                     {
@@ -77,7 +81,7 @@ namespace Marimba
                         output[i + 1, 8] = item.comment;
                         i++;
                     }
-                    excelFile.saveExcel(output, svdSave.FileName);
+                    excelFile.saveExcel(output, svdSave.FileName, false, "G:H", "dd/mm/yy");
                 }
                 //2 = CSV file
                 else if (svdSave.FilterIndex == 2)

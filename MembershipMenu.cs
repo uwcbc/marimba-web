@@ -67,7 +67,7 @@ namespace Marimba
                         }
                     }
                     //now that the string array is set up, save it
-                    excelFile.saveExcel(output, svdSave.FileName);
+                    excelFile.saveExcel(output, svdSave.FileName, false, "J", "dd/mm/yy hh:mm:ss AM/PM");
                 }
                 //2 = CSV file
                 else if (svdSave.FilterIndex == 2)

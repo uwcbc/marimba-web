@@ -258,7 +258,7 @@ namespace Marimba
             output.Add(strEmail);
             output.Add(strOther);
             output.Add(sID);
-            output.Add(signupTime);
+            output.Add(signupTime.ToOADate());
             output.Add((int)size);
             output.Add(bMultipleInstruments);
             if (bMultipleInstruments)

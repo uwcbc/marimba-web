@@ -46,12 +46,10 @@ namespace Marimba
                     string[,] output = new string[4 + clsStorage.currentClub.currentElection.iElectors + clsStorage.currentClub.currentElection.iAlmostElectors, 3];
                     output[0, 0] = "Name";
                     output[0, 1] = "E-Mail Address";
-                    //output[0, 2] = "Identifier Code";
                     for (int i = 0; i < clsStorage.currentClub.currentElection.iElectors; i++)
                     {
                         output[i+1,0] = clsStorage.currentClub.currentElection.electorList[i].strName;
                         output[i+1,1] = clsStorage.currentClub.currentElection.electorList[i].strEmail;
-                        //output[i+1,2] = clsStorage.currentClub.currentElection.electorList[i].strCode;
                     }
                     output[clsStorage.currentClub.currentElection.iElectors+2, 0] = "Members Owing Club Membership Fees";
                     output[clsStorage.currentClub.currentElection.iElectors + 3, 0] = "Name";
