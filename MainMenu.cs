@@ -22,7 +22,6 @@ namespace Marimba
         public electionForm electionPlanner = new electionForm();
         public editSettings settings = new editSettings();
         public viewAssetList assetListViewer = new viewAssetList();
-        public frmEditTerm termEditor = new frmEditTerm();
         public frmEditUser userEditor = new frmEditUser();
 
         public MainMenu(string[] args)

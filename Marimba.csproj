@@ -114,12 +114,6 @@
     <Compile Include="addFees.Designer.cs">
       <DependentUpon>addFees.cs</DependentUpon>
     </Compile>
-    <Compile Include="editTerm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="editTerm.Designer.cs">
-      <DependentUpon>editTerm.cs</DependentUpon>
-    </Compile>
     <Compile Include="editUser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -277,9 +271,6 @@
     <EmbeddedResource Include="addFees.resx">
       <DependentUpon>addFees.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="editTerm.resx">
-      <DependentUpon>editTerm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="editUser.resx">
       <DependentUpon>editUser.cs</DependentUpon>

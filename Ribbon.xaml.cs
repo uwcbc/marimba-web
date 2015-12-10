@@ -244,12 +244,5 @@ namespace Marimba
                 sound.click.Play();
             Program.home.userEditor.ShowDialog();
         }
-
-        private void EditTerm_Click(object sender, RoutedEventArgs e)
-        {
-            if (Properties.Settings.Default.playSounds)
-                sound.click.Play();
-            Program.home.termEditor.ShowDialog();
-        }
     }
 }
