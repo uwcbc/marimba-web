@@ -51,7 +51,6 @@ namespace Marimba
 
         //budget stuff
         //iBudget counts the number of items in the budget
-        public int iBudget;
         public IList<budgetItem> budget;
         private static readonly int BUDGET_BUFFER = 50;
 
@@ -81,7 +80,6 @@ namespace Marimba
                 strUsers[i, 3] = "";
             }
             sTerm = 0;
-            iBudget = 0;
             iHistory = 0;
             aesInfo = aesKey;
         }
@@ -175,21 +173,32 @@ namespace Marimba
                             terms = new term[sTerm];
                             for (int i = 0; i < sTerm; i++)
                                 terms[i] = new term(srDecrypt);
+                            
                             //read the budget stuff
-                            this.iBudget = Convert.ToInt32(srDecrypt.ReadLine());
+                            int iBudget = Convert.ToInt32(srDecrypt.ReadLine());
                             budget = new List<budgetItem>(iBudget + BUDGET_BUFFER);
+                            List<int> assetToDepIndices = new List<int>(iBudget);
                             for (int i = 0; i < iBudget; i++)
                             {
-                                budget.Add(new budgetItem());
-                                budget.ElementAt(i).value = Convert.ToDouble(srDecrypt.ReadLine());
-                                budget.ElementAt(i).name = srDecrypt.ReadLine();
-                                budget.ElementAt(i).dateOccur = new DateTime(Convert.ToInt64(srDecrypt.ReadLine()));
-                                budget.ElementAt(i).dateAccount = new DateTime(Convert.ToInt64(srDecrypt.ReadLine()));
-                                budget.ElementAt(i).cat = srDecrypt.ReadLine();
-                                budget.ElementAt(i).type = Convert.ToInt32(srDecrypt.ReadLine());
-                                budget.ElementAt(i).term = Convert.ToInt32(srDecrypt.ReadLine());
-                                budget.ElementAt(i).comment = clsStorage.reverseCleanNewLine(srDecrypt.ReadLine());
-                                budget.ElementAt(i).depOfAsset = Convert.ToInt32(srDecrypt.ReadLine());
+                                budgetItem newItem = new budgetItem();
+                                newItem.value = Convert.ToDouble(srDecrypt.ReadLine());
+                                newItem.name = srDecrypt.ReadLine();
+                                newItem.dateOccur = new DateTime(Convert.ToInt64(srDecrypt.ReadLine()));
+                                newItem.dateAccount = new DateTime(Convert.ToInt64(srDecrypt.ReadLine()));
+                                newItem.cat = srDecrypt.ReadLine();
+                                newItem.type = Convert.ToInt32(srDecrypt.ReadLine());
+                                newItem.term = Convert.ToInt32(srDecrypt.ReadLine());
+                                newItem.comment = clsStorage.reverseCleanNewLine(srDecrypt.ReadLine());
+                                budget.Add(newItem);
+
+                                assetToDepIndices.Add(Convert.ToInt32(srDecrypt.ReadLine()));
+                            }
+                            int k = 0;
+                            foreach (budgetItem item in budget)
+                            {
+                                int assetToDepIndex = assetToDepIndices[k];
+                                item.depOfAsset = (assetToDepIndex == -1) ? null : budget[assetToDepIndex];
+                                k++;
                             }
 
                             //read election
@@ -233,7 +242,7 @@ namespace Marimba
             fs = new FileStream(this.strLocation, FileMode.Create);
             bw = new BinaryWriter(fs);
 
-            //this line is the file version number (currently 2.2)
+            //this line is the file version number
             //this will be useful later on if .mrb files are siginificantly modified
             bw.Write(FILE_VERSION);
             bw.Write(strName);
@@ -302,18 +311,18 @@ namespace Marimba
                                 terms[i].saveTerm(sw);
                             }
                             //save the budget
-                            sw.WriteLine(iBudget);
-                            for (int i = 0; i < iBudget; i++)
+                            sw.WriteLine(budget.Count);
+                            foreach (budgetItem item in budget)
                             {
-                                sw.WriteLine(budget.ElementAt(i).value);
-                                sw.WriteLine(budget.ElementAt(i).name);
-                                sw.WriteLine(budget.ElementAt(i).dateOccur.Ticks);
-                                sw.WriteLine(budget.ElementAt(i).dateAccount.Ticks);
-                                sw.WriteLine(budget.ElementAt(i).cat);
-                                sw.WriteLine(budget.ElementAt(i).type);
-                                sw.WriteLine(budget.ElementAt(i).term);
-                                sw.WriteLine(clsStorage.cleanNewLine(budget.ElementAt(i).comment));
-                                sw.WriteLine(budget.ElementAt(i).depOfAsset);
+                                sw.WriteLine(item.value);
+                                sw.WriteLine(item.name);
+                                sw.WriteLine(item.dateOccur.Ticks);
+                                sw.WriteLine(item.dateAccount.Ticks);
+                                sw.WriteLine(item.cat);
+                                sw.WriteLine(item.type);
+                                sw.WriteLine(item.term);
+                                sw.WriteLine(clsStorage.cleanNewLine(item.comment));
+                                sw.WriteLine(budget.IndexOf(item.depOfAsset));
                             }
 
                             //save history
@@ -821,36 +830,26 @@ namespace Marimba
         /// <param name="iTerm">Index of relevant term</param>
         /// <param name="strComment">Any comments from the user</param>
         /// <param name="assetIndex">Index of the asset</param>
-        public void addBudget(double val, string strName, DateTime dtDateOccur, DateTime dtDateAccount, string strCategory, int iType, int iTerm, string strComment, int assetIndex = -1)
+        public void addBudget(double val, string strName, DateTime dtDateOccur, DateTime dtDateAccount, string strCategory, int iType, int iTerm, string strComment, budgetItem asset = null)
         {
-            budget.ElementAt(iBudget).value = val;
-            budget.ElementAt(iBudget).name = strName;
-            budget.ElementAt(iBudget).dateOccur = dtDateOccur;
-            budget.ElementAt(iBudget).dateAccount = dtDateAccount;
-            budget.ElementAt(iBudget).cat = strCategory;
-            budget.ElementAt(iBudget).type = iType;
-            budget.ElementAt(iBudget).term = iTerm;
-            budget.ElementAt(iBudget).comment = strComment;
+            budgetItem newItem = new budgetItem();
+            newItem.value = val;
+            newItem.name = strName;
+            newItem.dateOccur = dtDateOccur;
+            newItem.dateAccount = dtDateAccount;
+            newItem.cat = strCategory;
+            newItem.type = iType;
+            newItem.term = iTerm;
+            newItem.comment = strComment;
             //if depreciation
             if (iType == 1)
-                budget.ElementAt(iBudget).depOfAsset = assetIndex;
-            iBudget++;
+                newItem.depOfAsset = asset;
+            budget.Add(newItem);
         }
 
         public void deleteBudget(int index)
         {
-            iBudget--;
-            for(int i = index; i < iBudget; i++)
-            {
-                budget.ElementAt(i).value = budget.ElementAt(i + 1).value;
-                budget.ElementAt(i).name = budget.ElementAt(i + 1).name;
-                budget.ElementAt(i).dateOccur = budget.ElementAt(i + 1).dateOccur;
-                budget.ElementAt(i).dateAccount = budget.ElementAt(i + 1).dateAccount;
-                budget.ElementAt(i).cat = budget.ElementAt(i + 1).cat;
-                budget.ElementAt(i).type = budget.ElementAt(i + 1).type;
-                budget.ElementAt(i).term = budget.ElementAt(i + 1).term;
-                budget.ElementAt(i).comment = budget.ElementAt(i + 1).comment;
-            }
+            budget.RemoveAt(index);
         }
 
         /// <summary>
@@ -858,33 +857,25 @@ namespace Marimba
         /// </summary>
         /// <param name="withDepAssets">Whether to include assets that are depreciated</param>
         /// <returns></returns>
-        public int[] assetList(bool withDepAssets)
+        public budgetItem[] assetList(bool withDepAssets)
         {
-            List<int> output = new List<int>();
-            for(int i = 0; i < iBudget; i++)
+            List<budgetItem> output = new List<budgetItem>();
+            foreach (budgetItem item in budget)
                 //if asset and not fully depreciated
-                if (budget.ElementAt(i).type == 0 && (withDepAssets || !fullyDepreciatedAsset(i)))
-                    output.Add(i);
+                if (item.type == 0 && (withDepAssets || !fullyDepreciatedAsset(item)))
+                    output.Add(item);
             return output.ToArray();
         }
 
         /// <summary>
         /// Determines if asset has any value after depreciation
         /// </summary>
-        /// <param name="index">Index of the asset</param>
+        /// <param name="asset">the asset to check</param>
+        /// <param name="beforeDate">Only include depreciation before this date</param>
         /// <returns>Returns true is the depreciation on the asset is at least the value of the asset</returns>
-        public bool fullyDepreciatedAsset(int index)
+        public bool fullyDepreciatedAsset(budgetItem asset, DateTime? beforeDate = null)
         {
-            //don't even tr guess if the asset being depreciated hasn't been marked
-            if (index == -1)
-                return false;
-            double dDep = 0;
-            //sum up all of the depreciation against this asset
-            for (int i = 0; i < iBudget; i++)
-                if (budget.ElementAt(i).type == 1 && budget.ElementAt(i).depOfAsset == index)
-                    dDep += budget.ElementAt(i).value;
-            //return true if the depreciation completely depreciates the asset
-            return dDep >= budget.ElementAt(index).value;
+            return fullyDepreciatedAsset(clsStorage.currentClub.budget.IndexOf(asset), beforeDate);
         }
 
         /// <summary>
@@ -893,33 +884,32 @@ namespace Marimba
         /// <param name="index">Index of the asset</param>
         /// <param name="beforeDate">Only include depreciation before this date</param>
         /// <returns>Returns true is the depreciation on the asset is at least the value of the asset</returns>
-        public bool fullyDepreciatedAsset(int index, DateTime beforeDate)
+        public bool fullyDepreciatedAsset(int index, DateTime? beforeDate = null)
         {
+            if (beforeDate == null)
+            {
+                beforeDate = DateTime.MaxValue;
+            }
             //don't even tr guess if the asset being depreciated hasn't been marked
             if (index == -1)
                 return false;
             double dDep = 0;
             //sum up all of the depreciation against this asset
-            for (int i = 0; i < iBudget; i++)
-                if (budget.ElementAt(i).type == 1 && budget.ElementAt(i).depOfAsset == index && budget.ElementAt(i).dateOccur<=beforeDate)
-                    dDep += budget.ElementAt(i).value;
+            foreach (budgetItem item in budget)
+                if (item.type == 1 && item.depOfAsset == budget[index] && item.dateOccur <= beforeDate)
+                    dDep += item.value;
             //return true if the depreciation completely depreciates the asset
-            return dDep >= budget.ElementAt(index).value;
+            return dDep >= budget[index].value;
         }
 
-        /// <summary>
-        /// Determines if asset has any value after depreciation
-        /// </summary>
-        /// <param name="index">Index of the asset</param>
-        /// <returns>Returns the value of the asset after depreciation</returns>
-        public double valueAfterDepreciation(int index)
+        public double valueAfterDepreciation(budgetItem asset)
         {
             double dDep = 0;
             //sum up all of the depreciation against this asset
-            for (int i = 0; i < iBudget; i++)
-                if (budget.ElementAt(i).type == 1 && budget.ElementAt(i).depOfAsset == index)
-                    dDep += budget.ElementAt(i).value;
-            return budget.ElementAt(index).value - dDep;
+            foreach (budgetItem itemIterator in budget)
+                if (itemIterator.type == 1 && itemIterator.depOfAsset == asset)
+                    dDep += itemIterator.value;
+            return asset.value - dDep;
         }
 
         public void addHistory(string additionalInfo, history.changeType type)
@@ -954,8 +944,8 @@ namespace Marimba
         //record any additional information about the item
         public string comment;
         /// <summary>
-        /// If depreciation, stores the index of the asset it depreciates
+        /// If depreciation, stores a reference to the asset it depreciates
         /// </summary>
-        public int depOfAsset;
+        public budgetItem depOfAsset;
     }
 }

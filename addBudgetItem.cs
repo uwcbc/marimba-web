@@ -14,7 +14,7 @@ namespace Marimba
         int iIndex;
         private Label lblAsset;
         private ComboBox cbAsset;
-        int[] assetIndexes;
+        budgetItem[] assets;
         bool depSelected = false;
 
         public addBudgetItem(int iEdit)
@@ -44,7 +44,7 @@ namespace Marimba
                 {
                     if(depSelected)
                         clsStorage.currentClub.addBudget(Convert.ToDouble(txtValue.Text), txtDescription.Text, mcDateOccurred.SelectionStart,
-                            mcDateAccount.SelectionStart, cbCat.Text, cbType.SelectedIndex, cbTerm.SelectedIndex, txtOther.Text, assetIndexes[cbAsset.SelectedIndex]);
+                            mcDateAccount.SelectionStart, cbCat.Text, cbType.SelectedIndex, cbTerm.SelectedIndex, txtOther.Text, assets[cbAsset.SelectedIndex]);
                     else
                         clsStorage.currentClub.addBudget(Convert.ToDouble(txtValue.Text), txtDescription.Text, mcDateOccurred.SelectionStart,
                             mcDateAccount.SelectionStart, cbCat.Text, cbType.SelectedIndex, cbTerm.SelectedIndex, txtOther.Text);
@@ -56,17 +56,18 @@ namespace Marimba
                 }
                 else //editing a budget item
                 {
-                    clsStorage.currentClub.budget.ElementAt(iIndex).name = txtDescription.Text;
-                    clsStorage.currentClub.budget.ElementAt(iIndex).value = Convert.ToDouble(txtValue.Text);
-                    clsStorage.currentClub.budget.ElementAt(iIndex).type = cbType.SelectedIndex;
-                    clsStorage.currentClub.budget.ElementAt(iIndex).term = cbTerm.SelectedIndex;
-                    clsStorage.currentClub.budget.ElementAt(iIndex).cat = cbCat.Text;
-                    clsStorage.currentClub.budget.ElementAt(iIndex).comment = txtOther.Text;
-                    clsStorage.currentClub.budget.ElementAt(iIndex).dateOccur = mcDateOccurred.SelectionStart;
-                    clsStorage.currentClub.budget.ElementAt(iIndex).dateAccount = mcDateAccount.SelectionStart;
+                    budgetItem currentItem = clsStorage.currentClub.budget[iIndex];
+                    currentItem.name = txtDescription.Text;
+                    currentItem.value = Convert.ToDouble(txtValue.Text);
+                    currentItem.type = cbType.SelectedIndex;
+                    currentItem.term = cbTerm.SelectedIndex;
+                    currentItem.cat = cbCat.Text;
+                    currentItem.comment = txtOther.Text;
+                    currentItem.dateOccur = mcDateOccurred.SelectionStart;
+                    currentItem.dateAccount = mcDateAccount.SelectionStart;
                     //if there is depreciation, record the asset
                     if (depSelected)
-                        clsStorage.currentClub.budget.ElementAt(iIndex).depOfAsset = assetIndexes[cbAsset.SelectedIndex];
+                        currentItem.depOfAsset = assets[cbAsset.SelectedIndex];
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
                     MessageBox.Show("Item edited successfully.");
@@ -89,7 +90,7 @@ namespace Marimba
             if(iIndex != -1)
             {
                 btnAdd.Text = "Edit";
-                budgetItem currentItem = clsStorage.currentClub.budget.ElementAt(iIndex);
+                budgetItem currentItem = clsStorage.currentClub.budget[iIndex];
                 txtDescription.Text = currentItem.name;
                 txtValue.Text = Convert.ToString(currentItem.value);
                 txtOther.Text = currentItem.comment;
@@ -100,9 +101,8 @@ namespace Marimba
                 if (depSelected)
                     //first, search the array index for the location of the asset
                     //then, point the combobox to it
-                    for(int i = 0; i < assetIndexes.Length; i++)
-                        //if we found it
-                        if(assetIndexes[i] == currentItem.depOfAsset)
+                    for (int i = 0; i < assets.Length; i++)
+                        if (assets[i] == currentItem.depOfAsset)
                         {
                             cbAsset.SelectedIndex = i;
                             break;
@@ -141,10 +141,10 @@ namespace Marimba
                 cbAsset.FormattingEnabled = true;
 
                 //create a list of assets for the combobox
-                assetIndexes = clsStorage.currentClub.assetList(iIndex != -1);
-                string[] strAssets = new string[assetIndexes.Length];
-                for (int i = 0; i < assetIndexes.Length; i++)
-                    strAssets[i] = String.Format("{0} - ({1} Remaining)", clsStorage.currentClub.budget[assetIndexes[i]].name, clsStorage.currentClub.valueAfterDepreciation(assetIndexes[i]).ToString("C"));
+                assets = clsStorage.currentClub.assetList(iIndex != -1);
+                string[] strAssets = new string[assets.Length];
+                for (int i = 0; i < assets.Length; i++)
+                    strAssets[i] = String.Format("{0} - ({1} Remaining)", assets[i].name, clsStorage.currentClub.valueAfterDepreciation(assets[i]).ToString("C"));
 
                 cbAsset.Items.AddRange(strAssets);
 

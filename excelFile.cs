@@ -170,7 +170,7 @@ namespace Marimba
         /// <param name="location">The file location to save to</param>
         public static void exportMrb(string location)
         {
-            int iTotal = clsStorage.currentClub.iUser + clsStorage.currentClub.iMember + clsStorage.currentClub.sTerm*60 + clsStorage.currentClub.iBudget + 1;
+            int iTotal = clsStorage.currentClub.iUser + clsStorage.currentClub.iMember + clsStorage.currentClub.sTerm*60 + clsStorage.currentClub.budget.Count + 1;
             int iCurrent = 0;
 
             string[] writableList;
@@ -362,10 +362,10 @@ namespace Marimba
             //reset row for new tab
             row = 0;
             //reset data for new tab
-            data = new object[2+clsStorage.currentClub.iBudget, 9];
+            data = new object[2+clsStorage.currentClub.budget.Count, 9];
 
             data[row, 0] = "Number of Budget Items";
-            data[row, 1] = clsStorage.currentClub.iBudget;
+            data[row, 1] = clsStorage.currentClub.budget.Count;
             row++;
 
             writableList = new string[] {"Name", "Value", "Date Occur","Date Account", "Category", "Type", "Term", "Comment", "Asset for Depreciation"};
@@ -373,25 +373,25 @@ namespace Marimba
                 data[row, i] = writableList[i];
             row++;
 
-            for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
+            foreach (budgetItem item in clsStorage.currentClub.budget)
             {
-                data[row, 0] = clsStorage.currentClub.budget.ElementAt(i).name;
-                data[row, 1] = clsStorage.currentClub.budget.ElementAt(i).value;
-                data[row, 2] = clsStorage.currentClub.budget.ElementAt(i).dateOccur;
-                data[row, 3] = clsStorage.currentClub.budget.ElementAt(i).dateAccount;
-                data[row, 4] = clsStorage.currentClub.budget.ElementAt(i).cat;
-                data[row, 5] = clsStorage.currentClub.budget.ElementAt(i).type;
-                data[row, 6] = clsStorage.currentClub.budget.ElementAt(i).term;
-                data[row, 7] = clsStorage.currentClub.budget.ElementAt(i).comment;
+                data[row, 0] = item.name;
+                data[row, 1] = item.value;
+                data[row, 2] = item.dateOccur;
+                data[row, 3] = item.dateAccount;
+                data[row, 4] = item.cat;
+                data[row, 5] = item.type;
+                data[row, 6] = item.term;
+                data[row, 7] = item.comment;
                 //only include for depreciation assets
-                if(clsStorage.currentClub.budget.ElementAt(i).type == 1)
-                    data[row, 8] = clsStorage.currentClub.budget.ElementAt(i).depOfAsset;
+                if (item.type == 1)
+                    data[row, 8] = clsStorage.currentClub.budget.IndexOf(item.depOfAsset);
                 row++;
                 iCurrent++;
                 Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
             }
 
-            updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[2 + clsStorage.currentClub.iBudget, 9]];
+            updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[2 + clsStorage.currentClub.budget.Count, 9]];
             updateRange.set_Value(null, data);
 
             //for integrity purposes, election and history will not be allowed to be edited this way
@@ -565,20 +565,37 @@ namespace Marimba
                 valueArray = (object[,])excelRange.get_Value(Excel.XlRangeValueDataType.xlRangeValueDefault);
                 valueArray = replaceNulls(valueArray);
 
-                output.iBudget = Convert.ToInt32(valueArray[1, 2]);
-                for (int i = 0; i < output.iBudget; i++)
+                int iBudget = Convert.ToInt32(valueArray[1, 2]);
+                List<int> indicesOfDepreciators = new List<int>(iBudget);
+                List<int> indicesOfDepreciatedAssets = new List<int>(iBudget);
+
+                for (int i = 0; i < iBudget; i++)
                 {
-                    output.budget.ElementAt(i).value = (double)valueArray[i + 3, 2];
-                    output.budget.ElementAt(i).name = (string)valueArray[i + 3, 1];
-                    output.budget.ElementAt(i).dateOccur = (DateTime)valueArray[i + 3, 3];
-                    output.budget.ElementAt(i).dateAccount = (DateTime)valueArray[i + 3, 4];
-                    output.budget.ElementAt(i).cat = (string)valueArray[i + 3,5];
-                    output.budget.ElementAt(i).type = Convert.ToInt32(valueArray[i + 3, 6]);
-                    output.budget.ElementAt(i).term = Convert.ToInt32(valueArray[i + 3, 7]);
-                    output.budget.ElementAt(i).comment = (string)valueArray[i + 3, 8];
-                    //if depreciation
-                    if(output.budget.ElementAt(i).type==1)
-                        output.budget.ElementAt(i).depOfAsset = Convert.ToInt32(valueArray[i + 3, 9]);
+                    budgetItem newItem = new budgetItem();
+                    newItem.value = (double)valueArray[i + 3, 2];
+                    newItem.name = (string)valueArray[i + 3, 1];
+                    newItem.dateOccur = (DateTime)valueArray[i + 3, 3];
+                    newItem.dateAccount = (DateTime)valueArray[i + 3, 4];
+                    newItem.cat = (string)valueArray[i + 3, 5];
+                    newItem.type = Convert.ToInt32(valueArray[i + 3, 6]);
+                    newItem.term = Convert.ToInt32(valueArray[i + 3, 7]);
+                    newItem.comment = (string)valueArray[i + 3, 8];
+                    newItem.depOfAsset = null;
+                    output.budget.Add(newItem);
+
+                    // if depreciation
+                    if (output.budget[i].type == 1)
+                    {
+                        indicesOfDepreciators.Add(i);
+                        indicesOfDepreciatedAssets.Add(Convert.ToInt32(valueArray[i + 3, 9]));
+                    }
+                }
+
+                for (int i = 0; i < indicesOfDepreciators.Count; i++)
+                {
+                    int index = indicesOfDepreciators[i];
+                    budgetItem depreciatedAsset = output.budget[indicesOfDepreciatedAssets[i]];
+                    output.budget[index].depOfAsset = depreciatedAsset;
                 }
 
                 //copy the history from the current club file

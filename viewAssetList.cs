@@ -14,6 +14,7 @@ namespace Marimba
     {
 
         public ListViewColumnSorter lvmColumnSorter;
+        Dictionary<int, budgetItem> budgetItemDictionary;
 
         public viewAssetList()
         {
@@ -30,21 +31,23 @@ namespace Marimba
             this.assetListView.ListViewItemSorter = lvmColumnSorter;
 
             // get the indices of all assets in the budget
-            int[] assetIndexes = clsStorage.currentClub.assetList(true);
+            budgetItem[] assets = clsStorage.currentClub.assetList(true);
+            budgetItemDictionary = new Dictionary<int, budgetItem>(assets.Length);
 
             List<ListViewItem> assetList = new List<ListViewItem>();
             ListViewItem item;
-            for (int i = 0; i < assetIndexes.Length; i++)
+            for (int i = 0; i < assets.Length; i++)
             {
                 // get the current budget item
-                budgetItem currentBudgetItem = clsStorage.currentClub.budget[assetIndexes[i]];
+                budgetItem currentBudgetItem = assets[i];
 
                 // get the fields that will eb displayed
                 string[] itemText = new string[4];
                 itemText[0] = currentBudgetItem.name;
-                itemText[1] = clsStorage.currentClub.valueAfterDepreciation(assetIndexes[i]).ToString("C");
+                itemText[1] = clsStorage.currentClub.valueAfterDepreciation(currentBudgetItem).ToString("C");
                 itemText[2] = currentBudgetItem.value.ToString("C");
-                itemText[3] = Convert.ToString(assetIndexes[i]);
+                itemText[3] = Convert.ToString(i);
+                budgetItemDictionary.Add(i, assets[i]);
 
                 // add the current item to the list to be displayed
                 item = new ListViewItem(itemText);
@@ -89,10 +92,17 @@ namespace Marimba
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.click.Play();
-                Form edit = new addBudgetItem(Convert.ToInt32(assetListView.SelectedItems[0].SubItems[3].Text));
+                int key = Convert.ToInt32(assetListView.SelectedItems[0].SubItems[3].Text);
+                budgetItem toEdit = budgetItemDictionary[key];
+                Form edit = new addBudgetItem(clsStorage.currentClub.budget.IndexOf(toEdit));
                 edit.ShowDialog();
                 edit.Dispose();
             }
+        }
+
+        private void viewAssetList_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            budgetItemDictionary = null;
         }
     }
 }

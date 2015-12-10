@@ -107,6 +107,7 @@
             this.Name = "budgetView";
             this.ShowInTaskbar = false;
             this.Text = "Marimba";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.budgetView_FormClosed);
             this.Load += new System.EventHandler(this.budgetView_Load);
             this.ResumeLayout(false);
 

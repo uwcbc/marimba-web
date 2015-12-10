@@ -13,6 +13,8 @@ namespace Marimba
     public partial class budgetView : Form
     {
         public ListViewColumnSorter lvmColumnSorter;
+        Dictionary<int, budgetItem> budgetItemDictionary;
+
         public budgetView()
         {
             InitializeComponent();
@@ -24,28 +26,32 @@ namespace Marimba
             lvmColumnSorter = new ListViewColumnSorter();
             this.lvMain.ListViewItemSorter = lvmColumnSorter;
             List<ListViewItem> budgetList = new List<ListViewItem>();
-            for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
+            budgetItemDictionary = new Dictionary<int, budgetItem>(clsStorage.currentClub.budget.Count);
+            int i = 0;
+            foreach (budgetItem item in clsStorage.currentClub.budget)
             {
                 string[] budgetText = new string[8];
-                budgetText[0] = clsStorage.currentClub.terms[clsStorage.currentClub.budget.ElementAt(i).term].strName; // name of term
-                budgetText[1] = clsStorage.currentClub.budget.ElementAt(i).name; // name of financial transaction
+                budgetText[0] = clsStorage.currentClub.terms[item.term].strName; // name of term
+                budgetText[1] = item.name; // name of financial transaction
                 budgetText[2] = ""; // debit amount
                 budgetText[3] = ""; // credit amount
-                budgetText[4] = clsStorage.currentClub.budget.ElementAt(i).cat; // the type of thing being credited or debited
-                budgetText[5] = clsStorage.moneyTypeToString(clsStorage.currentClub.budget.ElementAt(i).type); // "Asset", "Depreciation", "Revenue" or "Expense"
-                budgetText[6] = clsStorage.currentClub.budget.ElementAt(i).dateOccur.ToShortDateString(); // date of transaction
+                budgetText[4] = item.cat; // the type of thing being credited or debited
+                budgetText[5] = clsStorage.moneyTypeToString(item.type); // "Asset", "Depreciation", "Revenue" or "Expense"
+                budgetText[6] = item.dateOccur.ToShortDateString(); // date of transaction
                 budgetText[7] = Convert.ToString(i); // internal index for this item and is not displayed; used so that we can double-click an item to open up its edit item window
+                budgetItemDictionary.Add(i, item);
+                i++;
 
                 // credit amounts
-                if (clsStorage.currentClub.budget.ElementAt(i).type == (int)club.money.Revenue)
+                if (item.type == (int)club.money.Revenue)
                 {
-                    budgetText[3] = clsStorage.currentClub.budget.ElementAt(i).value.ToString("C");
+                    budgetText[3] = item.value.ToString("C");
                     budgetList.Add(new ListViewItem(budgetText));
                 }
                 //debit items
                 else
                 {
-                    budgetText[2] = clsStorage.currentClub.budget.ElementAt(i).value.ToString("C");
+                    budgetText[2] = item.value.ToString("C");
                     budgetList.Add(new ListViewItem(budgetText));
                 }
             }
@@ -87,7 +93,9 @@ namespace Marimba
                 if (Properties.Settings.Default.playSounds)
                     sound.click.Play();
                 //open edit budget item dialog box
-                Form edit = new addBudgetItem(Convert.ToInt32(lvMain.SelectedItems[0].SubItems[7].Text));
+                int key = Convert.ToInt32(lvMain.SelectedItems[0].SubItems[7].Text);
+                budgetItem toEdit = budgetItemDictionary[key];
+                Form edit = new addBudgetItem(clsStorage.currentClub.budget.IndexOf(toEdit));
                 edit.ShowDialog();
                 edit.Dispose();
             }
@@ -109,6 +117,11 @@ namespace Marimba
                     lvMain.EndUpdate();
                 }
             }
+        }
+
+        private void budgetView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            budgetItemDictionary = null;
         }
     }
 }

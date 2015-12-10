@@ -61,19 +61,21 @@ namespace Marimba
                     output[0, 6] = "Date of Occurrence";
                     output[0, 7] = "Date in Account";
                     output[0, 8] = "Comments";
-                    for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
+                    int i = 0;
+                    foreach (budgetItem item in clsStorage.currentClub.budget)
                     {
-                        output[i + 1, 0] = clsStorage.currentClub.terms[clsStorage.currentClub.budget.ElementAt(i).term].strName;
-                        output[i + 1, 1] = clsStorage.currentClub.budget.ElementAt(i).name;
-                        if (clsStorage.currentClub.budget.ElementAt(i).type == (int)club.money.Revenue)
-                            output[i + 1, 3] = clsStorage.currentClub.budget.ElementAt(i).value.ToString("C");
+                        output[i + 1, 0] = clsStorage.currentClub.terms[item.term].strName;
+                        output[i + 1, 1] = item.name;
+                        if (item.type == (int)club.money.Revenue)
+                            output[i + 1, 3] = item.value.ToString("C");
                         else
-                            output[i + 1, 2] = clsStorage.currentClub.budget.ElementAt(i).value.ToString("C");
-                        output[i + 1, 4] = clsStorage.currentClub.budget.ElementAt(i).cat;
-                        output[i + 1, 5] = Convert.ToString((club.money)clsStorage.currentClub.budget.ElementAt(i).type);
-                        output[i + 1, 6] = clsStorage.currentClub.budget.ElementAt(i).dateOccur;
-                        output[i + 1, 7] = clsStorage.currentClub.budget.ElementAt(i).dateAccount;
-                        output[i + 1, 8] = clsStorage.currentClub.budget.ElementAt(i).comment;
+                            output[i + 1, 2] = item.value.ToString("C");
+                        output[i + 1, 4] = item.cat;
+                        output[i + 1, 5] = Convert.ToString((club.money)item.type);
+                        output[i + 1, 6] = item.dateOccur;
+                        output[i + 1, 7] = item.dateAccount;
+                        output[i + 1, 8] = item.comment;
+                        i++;
                     }
                     excelFile.saveExcel(output, svdSave.FileName);
                 }
@@ -93,26 +95,26 @@ namespace Marimba
                         firstrow.Add("Date in Account");
                         firstrow.Add("Comments");
                         writer.WriteRow(firstrow);
-                        for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
+                        foreach (budgetItem item in clsStorage.currentClub.budget)
                         {
                             CsvRow row = new CsvRow();
-                            row.Add(clsStorage.currentClub.terms[clsStorage.currentClub.budget.ElementAt(i).term].strName);
-                            row.Add(clsStorage.currentClub.budget.ElementAt(i).name);
-                            if (clsStorage.currentClub.budget.ElementAt(i).type == (int)club.money.Revenue)
+                            row.Add(clsStorage.currentClub.terms[item.term].strName);
+                            row.Add(item.name);
+                            if (item.type == (int)club.money.Revenue)
                             {
                                 row.Add("");
-                                row.Add(String.Format("${0}", clsStorage.currentClub.budget.ElementAt(i).value));
+                                row.Add(String.Format("${0}", item.value));
                             }
                             else
                             {
-                                row.Add(String.Format("${0}", clsStorage.currentClub.budget.ElementAt(i).value));
+                                row.Add(String.Format("${0}", item.value));
                                 row.Add("");
                             }
-                            row.Add(clsStorage.currentClub.budget.ElementAt(i).cat);
-                            row.Add(Convert.ToString((club.money)clsStorage.currentClub.budget.ElementAt(i).type));
-                            row.Add(clsStorage.currentClub.budget.ElementAt(i).dateOccur.ToShortDateString());
-                            row.Add(clsStorage.currentClub.budget.ElementAt(i).dateAccount.ToShortDateString());
-                            row.Add(clsStorage.currentClub.budget.ElementAt(i).comment);
+                            row.Add(item.cat);
+                            row.Add(Convert.ToString((club.money)item.type));
+                            row.Add(item.dateOccur.ToShortDateString());
+                            row.Add(item.dateAccount.ToShortDateString());
+                            row.Add(item.comment);
                             writer.WriteRow(row);
                         }
                     }

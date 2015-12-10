@@ -35,67 +35,67 @@ namespace Marimba
             double[] dDep = new double[12];
             string[] strAsset = new string[12];
 
-            for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
+            foreach (budgetItem item in clsStorage.currentClub.budget)
             {
 
                 //ignore all budget items that take effect after the last date of the term
-                if (clsStorage.currentClub.budget.ElementAt(i).dateAccount <
+                if (item.dateAccount <
                         clsStorage.currentClub.terms[cbTerm.SelectedIndex].endDate.AddDays(1))
                 {
                     //cash
-                    if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Revenue)
+                    if ((club.money)item.type == club.money.Revenue)
                     {
-                        dCash += clsStorage.currentClub.budget.ElementAt(i).value;
-                        dAssets += clsStorage.currentClub.budget.ElementAt(i).value;
+                        dCash += item.value;
+                        dAssets += item.value;
                     }
-                    else if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Asset)
+                    else if ((club.money)item.type == club.money.Asset)
                     {
-                        dCash -= clsStorage.currentClub.budget.ElementAt(i).value;
+                        dCash -= item.value;
                     }
-                    else if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Expense)
+                    else if ((club.money)item.type == club.money.Expense)
                     {
-                        dCash -= clsStorage.currentClub.budget.ElementAt(i).value;
-                        dAssets -= clsStorage.currentClub.budget.ElementAt(i).value;
+                        dCash -= item.value;
+                        dAssets -= item.value;
                     }
                     //depreciation is not cash, so ignore it for cash
                     else
                     {
-                        dAssets -= clsStorage.currentClub.budget.ElementAt(i).value;
+                        dAssets -= item.value;
                     }
                     //capital assets & depreciation
                     //ignore fully depreciated assets up to this date
-                    if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Asset && !clsStorage.currentClub.fullyDepreciatedAsset(i, clsStorage.currentClub.terms[cbTerm.SelectedIndex].endDate.AddDays(1))
-                        || (club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Depreciation
-                        && !clsStorage.currentClub.fullyDepreciatedAsset(clsStorage.currentClub.budget.ElementAt(i).depOfAsset, clsStorage.currentClub.terms[cbTerm.SelectedIndex].endDate.AddDays(1)))
+                    if ((club.money)item.type == club.money.Asset && !clsStorage.currentClub.fullyDepreciatedAsset(item, clsStorage.currentClub.terms[cbTerm.SelectedIndex].endDate.AddDays(1))
+                        || (club.money)item.type == club.money.Depreciation
+                        && !clsStorage.currentClub.fullyDepreciatedAsset(item.depOfAsset, clsStorage.currentClub.terms[cbTerm.SelectedIndex].endDate.AddDays(1)))
                     {
-                        int iIndex = iRevenueSearch(0, 11, clsStorage.currentClub.budget.ElementAt(i).cat, strAsset, true);
+                        int iIndex = iRevenueSearch(0, 11, item.cat, strAsset, true);
                         if (iIndex == -1) //asset category does not exist
                         {
                             //find the spot where it SHOULD be
-                            iIndex = iRevenueSearch(0, 11, clsStorage.currentClub.budget.ElementAt(i).cat, strAsset, false);
+                            iIndex = iRevenueSearch(0, 11, item.cat, strAsset, false);
                             //move everything else in the array over
                             for (int j = 9; j > iIndex; j--)
                             {
                                 strAsset[j] = strAsset[j - 1];
-                                if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Asset)
+                                if ((club.money)item.type == club.money.Asset)
                                     dAsset[j] = dAsset[j - 1];
                                 else
                                     dDep[j] = dDep[j - 1];
 
 
                             }
-                            strAsset[iIndex] = clsStorage.currentClub.budget.ElementAt(i).cat;
-                            if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Asset)
-                                dAsset[iIndex] = clsStorage.currentClub.budget.ElementAt(i).value;
+                            strAsset[iIndex] = item.cat;
+                            if ((club.money)item.type == club.money.Asset)
+                                dAsset[iIndex] = item.value;
                             else
-                                dDep[iIndex] = clsStorage.currentClub.budget.ElementAt(i).value;
+                                dDep[iIndex] = item.value;
                         }
                         else //asset category already exists
                         {
-                            if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Asset)
-                                dAsset[iIndex] += clsStorage.currentClub.budget.ElementAt(i).value;
+                            if ((club.money)item.type == club.money.Asset)
+                                dAsset[iIndex] += item.value;
                             else
-                                dDep[iIndex] += clsStorage.currentClub.budget.ElementAt(i).value;
+                                dDep[iIndex] += item.value;
                         }
                     }
                 }
@@ -172,57 +172,57 @@ namespace Marimba
                 for (int j = 0; j < clsStorage.currentClub.terms[cbTerm.SelectedIndex].iOtherFees; j++)
                     dOther[j] += clsStorage.currentClub.terms[cbTerm.SelectedIndex].feesPaid[i, j + 1];
             }
-            for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
+            foreach (budgetItem item in clsStorage.currentClub.budget)
             {              
                 //income statement, so ignore anything not affecting term
-                if (clsStorage.currentClub.budget.ElementAt(i).term == cbTerm.SelectedIndex)
+                if (item.term == cbTerm.SelectedIndex)
                 {
-                    if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Revenue)
+                    if ((club.money)item.type == club.money.Revenue)
                     {
-                        int iIndex = iRevenueSearch(0, 9, clsStorage.currentClub.budget.ElementAt(i).cat, strRev, true);
+                        int iIndex = iRevenueSearch(0, 9, item.cat, strRev, true);
                         if (iIndex == -1) //revenue category does not exist
                         {
                             //find the spot where it SHOULD be
-                            iIndex = iRevenueSearch(0, 9, clsStorage.currentClub.budget.ElementAt(i).cat, strRev, false);
+                            iIndex = iRevenueSearch(0, 9, item.cat, strRev, false);
                             //move everything else in the array over
                             for (int j = 9; j > iIndex; j--)
                             {
                                 strRev[j] = strRev[j - 1];
                                 dRev[j] = dRev[j - 1];
                             }
-                            strRev[iIndex] = clsStorage.currentClub.budget.ElementAt(i).cat;
-                            dRev[iIndex] = clsStorage.currentClub.budget.ElementAt(i).value;
+                            strRev[iIndex] = item.cat;
+                            dRev[iIndex] = item.value;
                         }
                         else //revenue category already exists
-                            dRev[iIndex] += clsStorage.currentClub.budget.ElementAt(i).value;
+                            dRev[iIndex] += item.value;
                     }
-                    else if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type != club.money.Asset)
+                    else if ((club.money)item.type != club.money.Asset)
                     {
-                        if (clsStorage.currentClub.budget.ElementAt(i).cat == "Waived Membership Fee")
+                        if (item.cat == "Waived Membership Fee")
                         {
                             //this is a tricky case
                             //we never actually collected a waived membership fee
                             //BUT, it was recorded in revenue as being recorded
                             //so we remove it here
-                            dDiscounts += clsStorage.currentClub.budget.ElementAt(i).value;
+                            dDiscounts += item.value;
                         }
                         //copied from revenue method
-                        int iIndex = iRevenueSearch(0, 29, clsStorage.currentClub.budget.ElementAt(i).cat, strExp, true);
+                        int iIndex = iRevenueSearch(0, 29, item.cat, strExp, true);
                         if (iIndex == -1) //expense category does not exist
                         {
                             //find the spot where it SHOULD be
-                            iIndex = iRevenueSearch(0, 29, clsStorage.currentClub.budget.ElementAt(i).cat, strExp, false);
+                            iIndex = iRevenueSearch(0, 29, item.cat, strExp, false);
                             //move everything else in the array over
                             for (int j = 29; j > iIndex; j--)
                             {
                                 strExp[j] = strExp[j - 1];
                                 dExp[j] = dExp[j - 1];
                             }
-                            strExp[iIndex] = clsStorage.currentClub.budget.ElementAt(i).cat;
-                            dExp[iIndex] = clsStorage.currentClub.budget.ElementAt(i).value;
+                            strExp[iIndex] = item.cat;
+                            dExp[iIndex] = item.value;
                         }
                         else //revenue category already exists
-                            dExp[iIndex] += clsStorage.currentClub.budget.ElementAt(i).value;
+                            dExp[iIndex] += item.value;
                     }
                 }
             }
@@ -300,61 +300,61 @@ namespace Marimba
 
             //dValue is a temporary variable to help calculate cash flow for an individual item
             double dValue = 0;
-            for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
+            foreach (budgetItem item in clsStorage.currentClub.budget)
             {
                 //if occured before the start of the term
-                if (clsStorage.currentClub.budget.ElementAt(i).dateAccount <
+                if (item.dateAccount <
                     clsStorage.currentClub.terms[cbTerm.SelectedIndex].startDate)
                 {
-                    if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Revenue)
-                        dBegCash += clsStorage.currentClub.budget.ElementAt(i).value;
-                    else if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Asset ||
-                        (club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Expense)
-                        dBegCash -= clsStorage.currentClub.budget.ElementAt(i).value;
+                    if ((club.money)item.type == club.money.Revenue)
+                        dBegCash += item.value;
+                    else if ((club.money)item.type == club.money.Asset ||
+                        (club.money)item.type == club.money.Expense)
+                        dBegCash -= item.value;
                 }
                 //occured in this term
-                else if (clsStorage.currentClub.budget.ElementAt(i).dateAccount <
+                else if (item.dateAccount <
                     clsStorage.currentClub.terms[cbTerm.SelectedIndex].endDate.AddDays(1))
                 {
-                    dValue = clsStorage.currentClub.budget.ElementAt(i).value;
+                    dValue = item.value;
                     //ignore depreciation
-                    if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Depreciation)
+                    if ((club.money)item.type == club.money.Depreciation)
                         dValue = 0;
                     //note to self: this section could be improved with arrays
                     //I decided against arrays here because the categories aren't yet final
                     //And the types for each category are also not yet final
                     //And it would cause a lot of headache if I had to add a category later and did not use this less efficient method
 
-                    else if ((club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Expense ||
-                        (club.money)clsStorage.currentClub.budget.ElementAt(i).type == club.money.Asset)
+                    else if ((club.money)item.type == club.money.Expense ||
+                        (club.money)item.type == club.money.Asset)
                     {
-                        if (clsStorage.currentClub.budget.ElementAt(i).cat == "Waived Membership Fee")
+                        if (item.cat == "Waived Membership Fee")
                         {
                             //this is a tricky case
                             //we never actually collected a waived membership fee
                             //BUT, it was recorded in revenue as being recorded
                             //so we remove it here
-                            dRev[iRevenueSearch(0, 9, "Membership Fee", strRev, true)] -= clsStorage.currentClub.budget.ElementAt(i).value;
+                            dRev[iRevenueSearch(0, 9, "Membership Fee", strRev, true)] -= item.value;
                         }
                         else
                         {
                             //copied from revenue method
-                            int iIndex = iRevenueSearch(0, 29, clsStorage.currentClub.budget.ElementAt(i).cat, strExp, true);
+                            int iIndex = iRevenueSearch(0, 29, item.cat, strExp, true);
                             if (iIndex == -1) //revenue category does not exist
                             {
                                 //find the spot where it SHOULD be
-                                iIndex = iRevenueSearch(0, 29, clsStorage.currentClub.budget.ElementAt(i).cat, strExp, false);
+                                iIndex = iRevenueSearch(0, 29, item.cat, strExp, false);
                                 //move everything else in the array over
                                 for (int j = 29; j > iIndex; j--)
                                 {
                                     strExp[j] = strExp[j - 1];
                                     dExp[j] = dExp[j - 1];
                                 }
-                                strExp[iIndex] = clsStorage.currentClub.budget.ElementAt(i).cat;
-                                dExp[iIndex] = clsStorage.currentClub.budget.ElementAt(i).value;
+                                strExp[iIndex] = item.cat;
+                                dExp[iIndex] = item.value;
                             }
                             else //revenue category already exists
-                                dExp[iIndex] += clsStorage.currentClub.budget.ElementAt(i).value;
+                                dExp[iIndex] += item.value;
                         }
                     }
                     else //revenue
@@ -362,22 +362,22 @@ namespace Marimba
                         //see if revenue category already exists
                         //NOTE TO SELF: this section is a model for how other sections could be modified to be
                         //more flexible
-                        int iIndex = iRevenueSearch(0, 9, clsStorage.currentClub.budget.ElementAt(i).cat, strRev, true);
+                        int iIndex = iRevenueSearch(0, 9, item.cat, strRev, true);
                         if (iIndex == -1) //revenue category does not exist
                         {
                             //find the spot where it SHOULD be
-                            iIndex = iRevenueSearch(0, 9, clsStorage.currentClub.budget.ElementAt(i).cat, strRev, false);
+                            iIndex = iRevenueSearch(0, 9, item.cat, strRev, false);
                             //move everything else in the array over
                             for (int j = 9; j > iIndex; j--)
                             {
                                 strRev[j] = strRev[j - 1];
                                 dRev[j] = dRev[j - 1];
                             }
-                            strRev[iIndex] = clsStorage.currentClub.budget.ElementAt(i).cat;
-                            dRev[iIndex] = clsStorage.currentClub.budget.ElementAt(i).value;
+                            strRev[iIndex] = item.cat;
+                            dRev[iIndex] = item.value;
                         }
                         else //revenue category already exists
-                            dRev[iIndex] += clsStorage.currentClub.budget.ElementAt(i).value;
+                            dRev[iIndex] += item.value;
                     }
                 }
 

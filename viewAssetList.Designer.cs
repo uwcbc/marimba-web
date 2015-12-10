@@ -78,6 +78,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "viewAssetList";
             this.Text = "Marimba";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.viewAssetList_FormClosed);
             this.Load += new System.EventHandler(this.viewAssetList_Load);
             this.ResumeLayout(false);
 
