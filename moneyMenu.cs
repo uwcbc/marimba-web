@@ -62,9 +62,6 @@ namespace Marimba
                     output[0, 7] = "Date in Account";
                     output[0, 8] = "Comments";
 
-                    // setup date columns
-                    string dateColumns = "G:H";
-
                     int i = 0;
                     foreach (budgetItem item in clsStorage.currentClub.budget)
                     {
