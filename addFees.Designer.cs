@@ -266,7 +266,7 @@
             this.MaximizeBox = false;
             this.Name = "addFees";
             this.ShowInTaskbar = false;
-            this.Text = "Add Fees";
+            this.Text = "Marimba";
             this.Load += new System.EventHandler(this.addFees_Load);
             this.tlpAddFees.ResumeLayout(false);
             this.tlpAddFees.PerformLayout();
