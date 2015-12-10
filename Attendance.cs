@@ -15,6 +15,7 @@ namespace Marimba
         int oldTermIndex = -1;
         ColumnHeader[] lvColumns;
         public ListViewColumnSorter lvmColumnSorter;
+
         public Attendance()
         {
             InitializeComponent();
@@ -52,6 +53,48 @@ namespace Marimba
             this.lvAttendance.Columns.AddRange(lvColumns);
         }
 
+        /*
+         * Call this function to create a ListViewItem for club member "memberTermID" of term "iTerm" to "list"
+         * Use "lastRehearsal" in order to determine formatting
+         */
+        private void loadMemberToAttendanceList(List<ListViewItem> list, int iTerm, int memberTermID, int lastRehearsal)
+        {
+
+            /* load information about the member into a string array */
+            string[] attendance = new string[clsStorage.currentClub.terms[iTerm].sRehearsals + 3];
+            attendance[0] = clsStorage.currentClub.formatedName(clsStorage.currentClub.terms[iTerm].members[memberTermID]);
+            attendance[1] = Convert.ToString(clsStorage.currentClub.terms[iTerm].iMemberAttendance(memberTermID));
+            attendance[clsStorage.currentClub.terms[iTerm].sRehearsals + 2] = Convert.ToString(memberTermID);
+            bool[] memberAttendance = clsStorage.currentClub.terms[iTerm].memberAttendance(memberTermID);
+            for (int i = 0; i < clsStorage.currentClub.terms[iTerm].sRehearsals; i++)
+            {
+                if (memberAttendance[i])
+                {
+                    attendance[i + 2] = "Y";
+                }
+                else
+                {
+                    attendance[i + 2] = "N";
+                }
+            }
+
+            /* actually add it to the list, and format it */
+            list.Add(new ListViewItem(attendance, member.instrumentIconIndex(clsStorage.currentClub.members[clsStorage.currentClub.terms[iTerm].members[memberTermID]].curInstrument)));
+            list.Last().UseItemStyleForSubItems = false;
+            for (int i = 2; i <= clsStorage.currentClub.terms[iTerm].sRehearsals + 1; i++)
+            {
+                if (memberAttendance[i - 2]) //member was here
+                    list.Last().SubItems[i].BackColor = Color.Green;
+                else if (i - 2 <= lastRehearsal) //member was not here
+                    list.Last().SubItems[i].BackColor = Color.Red;
+                else //rehearsal has not happened yet
+                    list.Last().SubItems[i].BackColor = SystemColors.Control;
+            }
+
+            /* hide term index from view */
+            list.Last().SubItems[clsStorage.currentClub.terms[iTerm].sRehearsals + 2].ForeColor = SystemColors.Window;
+        }
+
         private void cbTerm_SelectedIndexChanged(object sender, EventArgs e)
         {
             //if attendance changes were made, record them
@@ -87,38 +130,12 @@ namespace Marimba
                 attendance[i+2] = Convert.ToString(clsStorage.currentClub.terms[iTerm].iRehearsalAttendance(i));
 
             attendanceList.Add(new ListViewItem(attendance));
+
             //now do the main attendance record
             int lastRehearsal = clsStorage.currentClub.terms[iTerm].recentRehearsal(DateTime.Today);
-            bool[] memberrecord = new bool[clsStorage.currentClub.terms[iTerm].sRehearsals];
             for (int i = 0; i < clsStorage.currentClub.terms[iTerm].sMembers; i++)
             {
-                attendance[0] = clsStorage.currentClub.formatedName(clsStorage.currentClub.terms[iTerm].members[i]);
-                attendance[1] = Convert.ToString(clsStorage.currentClub.terms[iTerm].iMemberAttendance(i));
-                //store the member's term index
-                attendance[clsStorage.currentClub.terms[iTerm].sRehearsals + 2] = Convert.ToString(i);
-                memberrecord = clsStorage.currentClub.terms[iTerm].memberAttendance(i);
-                //convert the attendance record to something to show to the user
-                for (int j = 0; j < clsStorage.currentClub.terms[iTerm].sRehearsals; j++)
-                {
-                    if (memberrecord[j])
-                        attendance[j+2] = "Y";
-                    else
-                        attendance[j+2] = "N";
-                }
-                //add it to the list
-                attendanceList.Add(new ListViewItem(attendance, member.instrumentIconIndex(clsStorage.currentClub.members[clsStorage.currentClub.terms[iTerm].members[i]].curInstrument)));
-                attendanceList.Last().UseItemStyleForSubItems = false;
-                for (int j = 2; j <= clsStorage.currentClub.terms[iTerm].sRehearsals + 1; j++)
-                {
-                    if (memberrecord[j - 2]) //member was here
-                        attendanceList.Last().SubItems[j].BackColor = Color.Green;
-                    else if (j - 2 <= lastRehearsal) //member was not here
-                        attendanceList.Last().SubItems[j].BackColor = Color.Red;
-                    else //rehearsal has not happened yet
-                        attendanceList.Last().SubItems[j].BackColor = SystemColors.Control;
-                }
-                //hide the term index from view
-                attendanceList.Last().SubItems[clsStorage.currentClub.terms[iTerm].sRehearsals + 2].ForeColor = SystemColors.Window;
+                loadMemberToAttendanceList(attendanceList, iTerm, i, lastRehearsal);
             }
             lvAttendance.Items.AddRange(attendanceList.ToArray());
             lvAttendance.EndUpdate();
@@ -137,7 +154,13 @@ namespace Marimba
         private void btnExport_Click(object sender, EventArgs e)
         {
             int iTerm = cbTerm.SelectedIndex;
-            if (iTerm != -1 && svdSave.ShowDialog() == DialogResult.OK)
+            if (iTerm == -1)
+            {
+                if (Properties.Settings.Default.playSounds)
+                    sound.error.Play();
+                MessageBox.Show("Please select a term to export.");
+            }
+            else if (iTerm != -1 && svdSave.ShowDialog() == DialogResult.OK)
             {
                 //1 = excel file
                 if (svdSave.FilterIndex == 1)
@@ -359,6 +382,64 @@ namespace Marimba
                         MessageBox.Show("Removing member failed. Please confirm the member has no attendance this term.");
 
                 }
+            }
+        }
+
+        private void btnAddMembers_Click(object sender, EventArgs e)
+        {
+            int iTerm = cbTerm.SelectedIndex;
+            if (iTerm == -1)
+            {
+                if (Properties.Settings.Default.playSounds)
+                    sound.error.Play();
+                MessageBox.Show("Please select a term to add members to.");
+            }
+            else
+            {
+                if (Properties.Settings.Default.playSounds)
+                    sound.click.Play();
+
+                clsStorage.selectedMembersList.Clear();
+
+                /* this gets a bunch of member indices into clsStorage.selectedMembersList */
+                /* the MemberList load function clears selectedMembersList for us, so we don't need to worry about it */
+                MemberList tmp = new MemberList(true);
+                tmp.ShowDialog();
+                tmp.Dispose();
+
+                IList<int> addedList = new List<int>();
+                foreach (int i in clsStorage.selectedMembersList)
+                {
+                    if (!clsStorage.currentClub.terms[iTerm].addMember((short)i))
+                    {
+                        MessageBox.Show("Too many members in the given term. Please add fewer members.");
+                        MessageBox.Show("Now reverting...");
+                        foreach (int j in addedList)
+                        {
+                            clsStorage.currentClub.terms[iTerm].removeMember((short)j);
+                        }
+                        MessageBox.Show("Finished reverting...");
+                        return;
+                    }
+                    addedList.Add(i);
+                }
+
+                /* display our additions on the form */
+                lvAttendance.BeginUpdate();
+
+                List<ListViewItem> attendanceList = new List<ListViewItem>();
+                int lastRehearsal = clsStorage.currentClub.terms[iTerm].recentRehearsal(DateTime.Today);
+                foreach (int i in clsStorage.selectedMembersList) {
+                    int memberTermID = clsStorage.currentClub.terms[iTerm].memberSearch((short)i);
+                    loadMemberToAttendanceList(attendanceList, iTerm, memberTermID, lastRehearsal);
+                }
+                lvAttendance.Items.AddRange(attendanceList.ToArray());
+                lvAttendance.EndUpdate();
+
+                /* flag changes */
+                attendancechanges = true;
+                if (Properties.Settings.Default.playSounds)
+                    sound.success.Play();
             }
         }
     }
