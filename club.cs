@@ -755,7 +755,16 @@ namespace Marimba
             if(this.members[index].curInstrument != member.instrument.other)
                 return String.Format("{0}, {1}", firstAndLastName(index), member.instrumentToString(this.members[index].curInstrument));
             else
-                return String.Format("{0}, {1}", firstAndLastName(index), this.members[index].strOtherInstrument);
+            {
+                if (this.members[index].strOtherInstrument == null || this.members[index].strOtherInstrument == "")
+                {
+                    return String.Format("{0}", firstAndLastName(index));
+                }
+                else
+                {
+                    return String.Format("{0}, {1}", firstAndLastName(index), this.members[index].strOtherInstrument);
+                }
+            }
         }
 
         public string firstAndLastName(int index)

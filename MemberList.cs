@@ -15,19 +15,19 @@ namespace Marimba
     {
         //this form has one of two purposes:
         //1) for profile access
-        //2) to select who to send an email to
+        //2) to select a group of people (for email or adding to the attendance)
         //false means profile
         //true means email
-        bool email;
+        bool selectGroup;
         string lastSearch;
         public ListViewColumnSorter lvmColumnSorter;
         List<ListViewItem> memberlist;
-        public MemberList(bool email)
+        public MemberList(bool selectGroup)
         {
-            this.email = email;
+            this.selectGroup = selectGroup;
             InitializeComponent();
-            lvMain.MultiSelect = email;
-            btnSelect.Visible = email;
+            lvMain.MultiSelect = selectGroup;
+            btnSelect.Visible = selectGroup;
         }
 
         private void MemberList_Load(object sender, EventArgs e)
@@ -62,7 +62,7 @@ namespace Marimba
             cbDisplay.SelectedIndex = 3;
             cbSearchMode.SelectedIndex = 0;
             //prepare stuff for emailing
-            clsStorage.iEmailMemberIndexList.Clear();
+            clsStorage.selectedMembersList.Clear();
             lvMain.Items.AddRange(memberlist.ToArray());
         }
 
@@ -212,7 +212,7 @@ namespace Marimba
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.click.Play();
-                if (!email) //profile usage
+                if (!selectGroup) //profile usage
                 {
                     //insert pop-up with member's profile
                     Form memberprofile = new Profile(Convert.ToInt32(lvMain.SelectedItems[0].SubItems[5].Text));
@@ -221,11 +221,11 @@ namespace Marimba
                     if (clsStorage.currentClub.members[Convert.ToInt32(lvMain.SelectedItems[0].SubItems[5].Text)].strFName == "♪Unsubscribed")
                         lvMain.Items.RemoveAt(lvMain.SelectedIndices[0]);
                 }
-                else //email usage
+                else // sending to another window
                 {
                     //add any selected members to the list
                     foreach (ListViewItem recipient in lvMain.SelectedItems)
-                        clsStorage.iEmailMemberIndexList.Add(Convert.ToInt32(recipient.SubItems[5].Text));
+                        clsStorage.selectedMembersList.Add(Convert.ToInt32(recipient.SubItems[5].Text));
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }

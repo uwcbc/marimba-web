@@ -10,8 +10,11 @@ namespace Marimba
     {
         public static club currentClub;
         public static bool loggedin = false;
-        //this variable is used for sending email to a specific member
-        public static IList<int> iEmailMemberIndexList = new List<int>();
+        /*
+         * this variable is used for holding a list of selected members
+         * currently used for emails and adding users to a term
+         */
+        public static IList<int> selectedMembersList = new List<int>();
         public static bool unsavedChanges = false;
 
         public static string moneyTypeToString(int iType)

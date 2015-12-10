@@ -57,11 +57,11 @@ namespace Marimba
                 case 0:
                     temp.ShowDialog();
                     //check if something was selected
-                    if(clsStorage.iEmailMemberIndexList.Count > 0)
+                    if (clsStorage.selectedMembersList.Count > 0)
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.send, -1, clsStorage.iEmailMemberIndexList);
+                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.send, -1, clsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }                   
                     break;
@@ -69,30 +69,30 @@ namespace Marimba
                 case 1:
                     temp.ShowDialog();
                     //check if something was selected
-                    if (clsStorage.iEmailMemberIndexList.Count > 0)
+                    if (clsStorage.selectedMembersList.Count > 0)
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.bcc, -1, clsStorage.iEmailMemberIndexList);
+                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.bcc, -1, clsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }
                     break;
                 //all active members in current term
                 case 2:
                     //clear the list
-                    clsStorage.iEmailMemberIndexList.Clear();
+                    clsStorage.selectedMembersList.Clear();
 
                     //now, add everyone in the term to it
                     for(int i = 0; i < clsStorage.currentClub.terms[clsStorage.currentClub.sTerm-1].sMembers; i++)
                         if(!clsStorage.currentClub.terms[clsStorage.currentClub.sTerm-1].checkLimbo(i))
-                            clsStorage.iEmailMemberIndexList.Add(clsStorage.currentClub.terms[clsStorage.currentClub.sTerm-1].members[i]);
+                            clsStorage.selectedMembersList.Add(clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].members[i]);
 
                     //check if something was selected
-                    if (clsStorage.iEmailMemberIndexList.Count > 0)
+                    if (clsStorage.selectedMembersList.Count > 0)
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.bcc, -1, clsStorage.iEmailMemberIndexList);
+                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.bcc, -1, clsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }
                     
@@ -101,18 +101,18 @@ namespace Marimba
                 //similar idea to case 1 without the check
                 case 3:
                     //clear the list
-                    clsStorage.iEmailMemberIndexList.Clear();
+                    clsStorage.selectedMembersList.Clear();
 
                     //now, add everyone in the term to it
                     for (int i = 0; i < clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].sMembers; i++)
-                        clsStorage.iEmailMemberIndexList.Add(clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].members[i]);
+                        clsStorage.selectedMembersList.Add(clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].members[i]);
 
                     //check if something was selected
-                    if (clsStorage.iEmailMemberIndexList.Count > 0)
+                    if (clsStorage.selectedMembersList.Count > 0)
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.bcc, -1, clsStorage.iEmailMemberIndexList);
+                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.bcc, -1, clsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }
 
