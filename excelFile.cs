@@ -375,17 +375,17 @@ namespace Marimba
 
             for (int i = 0; i < clsStorage.currentClub.iBudget; i++)
             {
-                data[row, 0] = clsStorage.currentClub.budget[i].name;
-                data[row, 1] = clsStorage.currentClub.budget[i].value;
-                data[row, 2] = clsStorage.currentClub.budget[i].dateOccur;
-                data[row, 3] = clsStorage.currentClub.budget[i].dateAccount;
-                data[row, 4] = clsStorage.currentClub.budget[i].cat;
-                data[row, 5] = clsStorage.currentClub.budget[i].type;
-                data[row, 6] = clsStorage.currentClub.budget[i].term;
-                data[row, 7] = clsStorage.currentClub.budget[i].comment;
+                data[row, 0] = clsStorage.currentClub.budget.ElementAt(i).name;
+                data[row, 1] = clsStorage.currentClub.budget.ElementAt(i).value;
+                data[row, 2] = clsStorage.currentClub.budget.ElementAt(i).dateOccur;
+                data[row, 3] = clsStorage.currentClub.budget.ElementAt(i).dateAccount;
+                data[row, 4] = clsStorage.currentClub.budget.ElementAt(i).cat;
+                data[row, 5] = clsStorage.currentClub.budget.ElementAt(i).type;
+                data[row, 6] = clsStorage.currentClub.budget.ElementAt(i).term;
+                data[row, 7] = clsStorage.currentClub.budget.ElementAt(i).comment;
                 //only include for depreciation assets
-                if(clsStorage.currentClub.budget[i].type == 1)
-                    data[row, 8] = clsStorage.currentClub.budget[i].depOfAsset;
+                if(clsStorage.currentClub.budget.ElementAt(i).type == 1)
+                    data[row, 8] = clsStorage.currentClub.budget.ElementAt(i).depOfAsset;
                 row++;
                 iCurrent++;
                 Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
@@ -568,17 +568,17 @@ namespace Marimba
                 output.iBudget = Convert.ToInt32(valueArray[1, 2]);
                 for (int i = 0; i < output.iBudget; i++)
                 {
-                    output.budget[i].value = (double)valueArray[i + 3, 2];
-                    output.budget[i].name = (string)valueArray[i + 3, 1];
-                    output.budget[i].dateOccur = (DateTime)valueArray[i + 3, 3];
-                    output.budget[i].dateAccount = (DateTime)valueArray[i + 3, 4];
-                    output.budget[i].cat = (string)valueArray[i + 3,5];
-                    output.budget[i].type = Convert.ToInt32(valueArray[i + 3, 6]);
-                    output.budget[i].term = Convert.ToInt32(valueArray[i + 3, 7]);
-                    output.budget[i].comment = (string)valueArray[i + 3, 8];
+                    output.budget.ElementAt(i).value = (double)valueArray[i + 3, 2];
+                    output.budget.ElementAt(i).name = (string)valueArray[i + 3, 1];
+                    output.budget.ElementAt(i).dateOccur = (DateTime)valueArray[i + 3, 3];
+                    output.budget.ElementAt(i).dateAccount = (DateTime)valueArray[i + 3, 4];
+                    output.budget.ElementAt(i).cat = (string)valueArray[i + 3,5];
+                    output.budget.ElementAt(i).type = Convert.ToInt32(valueArray[i + 3, 6]);
+                    output.budget.ElementAt(i).term = Convert.ToInt32(valueArray[i + 3, 7]);
+                    output.budget.ElementAt(i).comment = (string)valueArray[i + 3, 8];
                     //if depreciation
-                    if(output.budget[i].type==1)
-                        output.budget[i].depOfAsset = Convert.ToInt32(valueArray[i + 3, 9]);
+                    if(output.budget.ElementAt(i).type==1)
+                        output.budget.ElementAt(i).depOfAsset = Convert.ToInt32(valueArray[i + 3, 9]);
                 }
 
                 //copy the history from the current club file

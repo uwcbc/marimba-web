@@ -56,17 +56,17 @@ namespace Marimba
                 }
                 else //editing a budget item
                 {
-                    clsStorage.currentClub.budget[iIndex].name = txtDescription.Text;
-                    clsStorage.currentClub.budget[iIndex].value = Convert.ToDouble(txtValue.Text);
-                    clsStorage.currentClub.budget[iIndex].type = cbType.SelectedIndex;
-                    clsStorage.currentClub.budget[iIndex].term = cbTerm.SelectedIndex;
-                    clsStorage.currentClub.budget[iIndex].cat = cbCat.Text;
-                    clsStorage.currentClub.budget[iIndex].comment = txtOther.Text;
-                    clsStorage.currentClub.budget[iIndex].dateOccur = mcDateOccurred.SelectionStart;
-                    clsStorage.currentClub.budget[iIndex].dateAccount = mcDateAccount.SelectionStart;
+                    clsStorage.currentClub.budget.ElementAt(iIndex).name = txtDescription.Text;
+                    clsStorage.currentClub.budget.ElementAt(iIndex).value = Convert.ToDouble(txtValue.Text);
+                    clsStorage.currentClub.budget.ElementAt(iIndex).type = cbType.SelectedIndex;
+                    clsStorage.currentClub.budget.ElementAt(iIndex).term = cbTerm.SelectedIndex;
+                    clsStorage.currentClub.budget.ElementAt(iIndex).cat = cbCat.Text;
+                    clsStorage.currentClub.budget.ElementAt(iIndex).comment = txtOther.Text;
+                    clsStorage.currentClub.budget.ElementAt(iIndex).dateOccur = mcDateOccurred.SelectionStart;
+                    clsStorage.currentClub.budget.ElementAt(iIndex).dateAccount = mcDateAccount.SelectionStart;
                     //if there is depreciation, record the asset
                     if (depSelected)
-                        clsStorage.currentClub.budget[iIndex].depOfAsset = assetIndexes[cbAsset.SelectedIndex];
+                        clsStorage.currentClub.budget.ElementAt(iIndex).depOfAsset = assetIndexes[cbAsset.SelectedIndex];
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
                     MessageBox.Show("Item edited successfully.");
@@ -89,25 +89,26 @@ namespace Marimba
             if(iIndex != -1)
             {
                 btnAdd.Text = "Edit";
-                txtDescription.Text = clsStorage.currentClub.budget[iIndex].name;
-                txtValue.Text = Convert.ToString(clsStorage.currentClub.budget[iIndex].value);
-                txtOther.Text = clsStorage.currentClub.budget[iIndex].comment;
-                cbCat.Text = clsStorage.currentClub.budget[iIndex].cat;
-                cbTerm.SelectedIndex = clsStorage.currentClub.budget[iIndex].term;
-                cbType.SelectedIndex = clsStorage.currentClub.budget[iIndex].type;
+                budgetItem currentItem = clsStorage.currentClub.budget.ElementAt(iIndex);
+                txtDescription.Text = currentItem.name;
+                txtValue.Text = Convert.ToString(currentItem.value);
+                txtOther.Text = currentItem.comment;
+                cbCat.Text = currentItem.cat;
+                cbTerm.SelectedIndex = currentItem.term;
+                cbType.SelectedIndex = currentItem.type;
                 //if depreciation, also change the asset
                 if (depSelected)
                     //first, search the array index for the location of the asset
                     //then, point the combobox to it
                     for(int i = 0; i < assetIndexes.Length; i++)
                         //if we found it
-                        if(assetIndexes[i] == clsStorage.currentClub.budget[iIndex].depOfAsset)
+                        if(assetIndexes[i] == currentItem.depOfAsset)
                         {
                             cbAsset.SelectedIndex = i;
                             break;
                         }
-                mcDateOccurred.SetDate(clsStorage.currentClub.budget[iIndex].dateOccur);
-                mcDateAccount.SetDate(clsStorage.currentClub.budget[iIndex].dateAccount);
+                mcDateOccurred.SetDate(currentItem.dateOccur);
+                mcDateAccount.SetDate(currentItem.dateAccount);
             }
             else
                 //if we default to selecting current term, do so!
