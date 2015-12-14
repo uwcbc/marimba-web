@@ -174,7 +174,7 @@ namespace Marimba
         /// <param name="location">The file location to save to</param>
         public static void exportMrb(string location)
         {
-            int iTotal = clsStorage.currentClub.iUser + clsStorage.currentClub.iMember + clsStorage.currentClub.sTerm*60 + clsStorage.currentClub.budget.Count + 1;
+            int iTotal = clsStorage.currentClub.strUsers.Count + clsStorage.currentClub.iMember + clsStorage.currentClub.sTerm*60 + clsStorage.currentClub.budget.Count + 1;
             int iCurrent = 0;
 
             string[] writableList;
@@ -189,13 +189,13 @@ namespace Marimba
 
             //now, we'll use a similar approach to how the club would actually be saved
             int row = 9;
-            object[,] data = new object[9 + clsStorage.currentClub.iUser, 4];
+            object[,] data = new object[9 + clsStorage.currentClub.strUsers.Count, 4];
             data[0, 0] = "File Version";
             data[0, 1] = Marimba.club.FILE_VERSION;
             data[1, 0] = "Club Name";
             data[1, 1] = clsStorage.currentClub.strName;
             data[2, 0] = "Number of Users";
-            data[2, 1] = clsStorage.currentClub.iUser;
+            data[2, 1] = clsStorage.currentClub.strUsers.Count;
             data[3, 0] = "Email Address";
             data[3, 1] = clsStorage.currentClub.strEmail;
             data[4, 0] = "IMAP Address";
@@ -209,16 +209,16 @@ namespace Marimba
             data[8, 0] = "SMTP SSL";
             data[8, 1] = clsStorage.currentClub.bSmtp;
 
-            for (int i = 0; i<clsStorage.currentClub.iUser;i++)
+            foreach (string[] user in clsStorage.currentClub.strUsers)
             {
                 for (int j = 0; j < 4; j++)
-                    data[row, j] = clsStorage.currentClub.strUsers[i, j];
+                    data[row, j] = user[j];
                 row++;
                 iCurrent++;
                 Program.home.bwReport.ReportProgress((iCurrent*100) / iTotal);
             }
 
-            Excel.Range updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[9 + clsStorage.currentClub.iUser, 4]];
+            Excel.Range updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[9 + clsStorage.currentClub.strUsers.Count, 4]];
             updateRange.set_Value(null, data);
 
             //Member Tab
@@ -440,7 +440,8 @@ namespace Marimba
             if(version >= 2)
             {
                 output.strName = (string)valueArray[2, 2];
-                output.iUser = Convert.ToInt16(valueArray[3, 2]);
+                int iUser = Convert.ToInt16(valueArray[3, 2]);
+                output.strUsers = new List<string[]>(iUser);
                 output.strEmail = (string)valueArray[4, 2];
                 output.strImap = (string)valueArray[5, 2];
                 output.bImap = (Boolean)valueArray[6, 2];
@@ -449,9 +450,15 @@ namespace Marimba
                 output.bSmtp = (Boolean)valueArray[9, 2];
 
                 //load Users
-                for (int i = 0; i < output.iUser; i++)
+                for (int i = 0; i < iUser; i++)
+                {
+                    string[] newUser = new string[4];
                     for (int j = 0; j < 4; j++)
-                        output.strUsers[i, j] = (string)valueArray[i + 10, j+1];
+                    {
+                        newUser[j] = (string)valueArray[i + 10, j + 1];
+                    }
+                    output.strUsers.Add(newUser);
+                }
 
                 //Members tab
 

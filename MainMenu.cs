@@ -71,9 +71,9 @@ namespace Marimba
                 this.Close();
             //guest login, go straight to attendance
             //I might change this later to allow signing up members
-            else if (clsStorage.currentClub.strUser == null)
+            else if (clsStorage.currentClub.strCurrentUser == null)
             {
-                clsStorage.currentClub.strUser = "Guest";
+                clsStorage.currentClub.strCurrentUser = "Guest";
                 Form attendance = new signin();
                 if (clsStorage.currentClub.sTerm == 0)
                 {
@@ -90,7 +90,7 @@ namespace Marimba
             }
             else
             {
-                lblWelcome.Text += clsStorage.currentClub.strUser;
+                lblWelcome.Text += clsStorage.currentClub.strCurrentUser;
                 populateHistory();
 
                 //load email

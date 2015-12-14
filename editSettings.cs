@@ -66,7 +66,7 @@ namespace Marimba
             //when ready, email settings will go here
 
             //only admins have access to admin tab
-            if (clsStorage.currentClub.strPrivilege == "Exec")
+            if (clsStorage.currentClub.strCurrentUserPrivilege == "Exec")
                 tpAdmin.Dispose();
         }
 

@@ -104,7 +104,7 @@ namespace Marimba
                         //create message
                         string strBody;
                         strBody = string.Format("<html>{0}{1}{2}<br><br>Processed by: {3}<br>Fee Paid: {4}<br>Amount Paid: ${5}<br>Date Paid: {6}<br><br>{7}</html>", clsStorage.receiptMessage[0],
-                            cbTerm.Text,clsStorage.receiptMessage[1],clsStorage.currentClub.strUser, cbFee.Text,txtAmount.Text,mcDate.SelectionStart.ToShortDateString(), clsStorage.receiptMessage[2]);
+                            cbTerm.Text,clsStorage.receiptMessage[1],clsStorage.currentClub.strCurrentUser, cbFee.Text,txtAmount.Text,mcDate.SelectionStart.ToShortDateString(), clsStorage.receiptMessage[2]);
 
                         if (Properties.Settings.Default.attachSig)
                             strBody += "<br>" + clsStorage.currentClub.clubEmail.createSignature();

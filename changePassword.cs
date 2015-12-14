@@ -18,7 +18,7 @@ namespace Marimba
 
         private void btnChange_Click(object sender, EventArgs e)
         {
-            if (txtConfirm.Text == txtNew.Text && clsStorage.currentClub.editUser(clsStorage.currentClub.strUser, txtOld.Text, txtNew.Text))
+            if (txtConfirm.Text == txtNew.Text && clsStorage.currentClub.editUser(clsStorage.currentClub.strCurrentUser, txtOld.Text, txtNew.Text))
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.success.Play();

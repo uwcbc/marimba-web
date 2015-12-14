@@ -12,6 +12,7 @@ namespace Marimba
 {
     public partial class frmEditUser : Form
     {
+
         public frmEditUser()
         {
             InitializeComponent();
@@ -38,7 +39,6 @@ namespace Marimba
                     sound.error.Play();
                 MessageBox.Show("That user does not exist. Please make sure you have selected a valid user.");
             }
-
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -54,6 +54,7 @@ namespace Marimba
                     MessageBox.Show("User successfully deleted.");
                     clsStorage.currentClub.addHistory(cboUserID.Text, history.changeType.deleteUser);
 
+                    cboUserID.Items.Remove(cboUserID.Text);
                     cboUserID.Text = "";
                     cboPrivileges.Text = "";
                 }
@@ -68,22 +69,27 @@ namespace Marimba
 
         private void cboUserID_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int userIndex = clsStorage.currentClub.findUser(cboUserID.Text);
-            if (userIndex == -1)
+            if (cboUserID.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            string[] user = clsStorage.currentClub.findUser(cboUserID.Text);
+            if (user == null)
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.error.Play();
                 MessageBox.Show("That user does not exist. Please make sure you have selected a valid user.");
             }
 
-            cboPrivileges.Text = clsStorage.currentClub.strUsers[userIndex, 2];
+            cboPrivileges.Text = user[2];
         }
 
         private void frmEditUser_Load(object sender, EventArgs e)
         {
-            for (int i = 0; i < clsStorage.currentClub.iUser; i++)
+            foreach (string[] user in clsStorage.currentClub.strUsers)
             {
-                cboUserID.Items.Add(clsStorage.currentClub.strUsers[i, 0]);
+                cboUserID.Items.Add(user[0]);
             }
         }
 
@@ -93,6 +99,5 @@ namespace Marimba
             cboUserID.Items.Clear();
             cboPrivileges.SelectedIndex = -1;
         }
-
     }
 }

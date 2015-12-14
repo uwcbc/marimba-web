@@ -26,21 +26,21 @@ namespace Marimba
         double fileVersion;
         //iUsers stores the number of users
 
-        private static readonly int MAX_USERS = 40;
         private static readonly int USER_FIELDS_TO_STORE = 4;
-        //strUsers [,1] stores Name
-        //strUsers [,2] stores password (note: encrypted, but not that well)
+        //strUsers [,0] stores Name
+        //strUsers [,1] stores password (note: encrypted, but not that well)
         //I do not recommend publicly releasing any .mrb files and use a unique password for Marimba
-        //strUsers [,3] stores type of user
-        //strUsers [,4] stores the key xor'd with the single hash of the user's password
-        public Int16 iUser, iMember;
-        public string[,] strUsers = new string[MAX_USERS, USER_FIELDS_TO_STORE];
+        //strUsers [,2] stores type of user
+        //strUsers [,3] stores the key xor'd with the single hash of the user's password
+        public List<string[]> strUsers;
+        private static readonly string[] priviledges = { "Exec", "Admin" };
 
+        public Int16 iMember;
         private static readonly int saltLength = 16;
         //currently, prepare for five thousand total members
         public member[] members = new member[5000];
         protected string strLocation;
-        public string strUser, strPrivilege;
+        public string strCurrentUser, strCurrentUserPrivilege;
         //terms!
         //sTerm is the number of terms
         public short sTerm;
@@ -71,14 +71,6 @@ namespace Marimba
         {
             this.strLocation = strLocation;
             strName = "";
-            iUser = 0;
-            for (int i = 0; i < 20; i++)
-            {
-                strUsers[i, 0] = "";
-                strUsers[i, 1] = "";
-                strUsers[i, 2] = "";
-                strUsers[i, 3] = "";
-            }
             sTerm = 0;
             iHistory = 0;
             aesInfo = aesKey;
@@ -102,7 +94,7 @@ namespace Marimba
             br = new BinaryReader(fs);
             fileVersion = br.ReadDouble(); //read the version number, needed for reading legacy file formats
             this.strName = br.ReadString();
-            iUser = br.ReadInt16();
+            int iUser = br.ReadInt16();
 
             //this next part is for importing old files
             int iTempUser;
@@ -111,12 +103,15 @@ namespace Marimba
             else
                 iTempUser = iUser;
 
+            strUsers = new List<string[]>(iUser);
             for (int i = 0; i < iTempUser; i++)
             {
-                strUsers[i, 0] = br.ReadString();
-                strUsers[i, 1] = br.ReadString();
-                strUsers[i, 2] = br.ReadString();
-                strUsers[i, 3] = br.ReadString();
+                string[] nextUser = new string[USER_FIELDS_TO_STORE];
+                for (int j = 0; j < USER_FIELDS_TO_STORE; j++)
+                {
+                    nextUser[j] = br.ReadString();
+                }
+                strUsers.Add(nextUser);
             }
             
             //string strKey = br.ReadString();
@@ -246,11 +241,15 @@ namespace Marimba
             //this will be useful later on if .mrb files are siginificantly modified
             bw.Write(FILE_VERSION);
             bw.Write(strName);
-            bw.Write(iUser);
+            bw.Write(strUsers.Count);
             //write the users (i.e. exec account information)
-            for (int i = 0; i < iUser; i++)
-                for(int j = 0; j < 4; j++)
-                    bw.Write(strUsers[i, j]);
+            foreach (string[] user in strUsers)
+            {
+                for (int i = 0; i < USER_FIELDS_TO_STORE; i++)
+                {
+                    bw.Write(user[i]);
+                }
+            }
             
             //ENCRYPTED SECTION
             byte[] bEncryptedSection;
@@ -373,9 +372,13 @@ namespace Marimba
         public bool addUser(string strName, string strPassword, string strPrivileges)
         {
             //see if a user with this name already exists
-            if (findUser(strName) >= 0)
+            if (findUser(strName) == null)
                 return false;
-            this.strUsers[iUser, 0] = strName;
+
+            if (Array.IndexOf(priviledges, strPrivileges) < 0)
+            {
+                return false;
+            }
             //do a basic encryption on the password
             //the intention is just so that no one can read plaintext passwords
             //I am well aware this algorithm isn't particularly strong, but it is sufficient for our needs
@@ -396,64 +399,50 @@ namespace Marimba
             // Convert the input string to a byte array and compute the hash. 
             byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(saltPlusPassword));
 
-            this.strUsers[iUser, 1] = bytesToHex(salt) + "$" + bytesToHex(data);
-            this.strUsers[iUser, 2] = strPrivileges;
-            this.strUsers[iUser, 3] = Convert.ToBase64String(clsStorage.byteXOR(aesInfo.Key, shaHash.ComputeHash(saltPlusPassword)));
-            iUser++;
+            string[] newUser = new string[USER_FIELDS_TO_STORE];
+            newUser[0] = strName;
+            newUser[1] = bytesToHex(salt) + "$" + bytesToHex(data);
+            newUser[2] = strPrivileges;
+            newUser[3] = Convert.ToBase64String(clsStorage.byteXOR(aesInfo.Key, shaHash.ComputeHash(saltPlusPassword)));
+            strUsers.Add(newUser);
             return true;
         }
 
         // remove the user with the given name from Marimba
         public bool deleteUser(string strName)
         {
-            int index = findUser(strName);
-            if (index < 0)
+            string[] user = findUser(strName);
+            if (user == null)
             {
                 return false;
             }
-
-            // shift everything back
-            for (int i = index; i < iUser; i++)
-            {
-                if (i == iUser - 1)
-                {
-                    break;
-                }
-                this.strUsers[i, 0] = this.strUsers[i + 1, 0];
-                this.strUsers[i, 1] = this.strUsers[i + 1, 1];
-                this.strUsers[i, 2] = this.strUsers[i + 1, 2];
-                this.strUsers[i, 3] = this.strUsers[i + 1, 3];
-            }
-
-            // get rid of extra entry at the end
-            this.strUsers[iUser - 1, 0] = "";
-            this.strUsers[iUser - 1, 1] = "";
-            this.strUsers[iUser - 1, 2] = "";
-            this.strUsers[iUser - 1, 3] = "";
-            iUser--;
+            strUsers.Remove(user);
 
             return true;
         }
 
         // get the index of the specified user
-        public int findUser(string strName)
+        public string[] findUser(string strName)
         {
             int i = 0;
             //first, find the user
-            for (i = 0; i < 20; i++)
+            foreach (string[] user in strUsers)
             {
-                if (this.strUsers[i, 0] == strName)
-                    return i;
+                if (user[0].Equals(strName))
+                {
+                    return user;
+                }
+                i++;
             }
             //did not find user
-            return -1;
+            return null;
         }
 
         // returns true if the login was successful, false otherwise
         public bool loginUser(string strName, string strPassword)
         {
-            int i = findUser(strName);
-            if (i == -1)
+            string[] user = findUser(strName);
+            if (user == null)
                 return false;
             else
             {
@@ -464,9 +453,9 @@ namespace Marimba
                 
                 
                 //retrieve the salt
-                byte[] salt = StringToByteArray(strUsers[i, 1].Split('$')[0]);
+                byte[] salt = StringToByteArray(user[1].Split('$')[0]);
                 //retrieve the hash
-                string hash = strUsers[i, 1].Split('$')[1];
+                string hash = user[1].Split('$')[1];
 
                 //calculate hash of salt + password
                 int passwordLength = Encoding.UTF8.GetBytes(strPassword).Length;
@@ -478,11 +467,11 @@ namespace Marimba
 
                 if (StringComparer.OrdinalIgnoreCase.Compare(hash, bytesToHex(data)) == 0)
                 {
-                    this.strUser = strName;
-                    this.strPrivilege = this.strUsers[i, 2];
+                    this.strCurrentUser = strName;
+                    this.strCurrentUserPrivilege = user[2];
                     try
                     {
-                        this.aesInfo.Key = clsStorage.byteXOR(Convert.FromBase64String(strUsers[i, 3]), shaHash.ComputeHash(saltPlusPassword));
+                        this.aesInfo.Key = clsStorage.byteXOR(Convert.FromBase64String(user[3]), shaHash.ComputeHash(saltPlusPassword));
                     }
                     catch
                     {
@@ -503,7 +492,7 @@ namespace Marimba
             //check user exists and current password is correct
             if (loginUser(strName, strPassword))
             {
-                int userIndex = findUser(strName);
+                string[] user = findUser(strName);
                 //replace the old password with the new password
                 SHA256 shaHash = SHA256.Create();
                 //salt
@@ -521,11 +510,11 @@ namespace Marimba
                 // Convert the input string to a byte array and compute the hash. 
                 byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(saltPlusPassword));
 
-                this.strUsers[userIndex, 1] = bytesToHex(salt) + "$" + bytesToHex(data);
+                user[1] = bytesToHex(salt) + "$" + bytesToHex(data);
 
                 //add the key used to encrypted the files here
                 
-                this.strUsers[userIndex, 3] = Convert.ToBase64String(clsStorage.byteXOR(aesInfo.Key, shaHash.ComputeHash(saltPlusPassword)));
+                user[3] = Convert.ToBase64String(clsStorage.byteXOR(aesInfo.Key, shaHash.ComputeHash(saltPlusPassword)));
 
                 return true;
             }
@@ -535,13 +524,13 @@ namespace Marimba
 
         public bool editUserPrivilege(string strName, string strNewPrivilege)
         {
-            int userIndex = findUser(strName);
-            if (userIndex < 0)
+            string[] user = findUser(strName);
+            if (user == null)
             {
                 return false;
             }
 
-            this.strUsers[userIndex, 2] = strNewPrivilege;
+            user[2] = strNewPrivilege;
             return true;
         }
 
@@ -561,7 +550,7 @@ namespace Marimba
             byte[] saltPlusPassword = new byte[saltLength + passwordLength];
 
             RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
-            for (int i = 0; i < iUser; i++)
+            foreach (string[] user in strUsers)
             {
                 //generate salt
                 rngCsp.GetBytes(salt);
@@ -572,9 +561,9 @@ namespace Marimba
                 data = shaHash.ComputeHash(shaHash.ComputeHash(saltPlusPassword));
 
                 //build hash
-                strUsers[i, 1] = bytesToHex(salt) + "$" + bytesToHex(data);
+                user[1] = bytesToHex(salt) + "$" + bytesToHex(data);
 
-                strUsers[i, 3] = Convert.ToBase64String(clsStorage.byteXOR(shaHash.ComputeHash(saltPlusPassword), newKey.Key));
+                user[3] = Convert.ToBase64String(clsStorage.byteXOR(shaHash.ComputeHash(saltPlusPassword), newKey.Key));
             }
 
             //finally, update key
@@ -914,7 +903,7 @@ namespace Marimba
 
         public void addHistory(string additionalInfo, history.changeType type)
         {
-            historyList[iHistory] = new history(strUser, type, additionalInfo, DateTime.Now);
+            historyList[iHistory] = new history(strCurrentUser, type, additionalInfo, DateTime.Now);
             iHistory++;
             //mark unsaved changes
             clsStorage.unsavedChanges = true;

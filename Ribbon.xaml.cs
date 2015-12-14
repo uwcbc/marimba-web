@@ -23,7 +23,7 @@ namespace Marimba
         public Ribbon()
         {
             InitializeComponent();
-            if (clsStorage.currentClub.strPrivilege == "Exec")
+            if (clsStorage.currentClub.strCurrentUserPrivilege == "Exec")
             {
                 Admin.Visibility = Visibility.Hidden;
             }

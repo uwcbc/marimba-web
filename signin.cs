@@ -241,7 +241,7 @@ namespace Marimba
             {
                 clsStorage.currentClub.addHistory(Convert.ToString(iSignin), history.changeType.signin);
                 //save if we are a guest account
-                if (clsStorage.currentClub.strUser == "Guest")
+                if (clsStorage.currentClub.strCurrentUser == "Guest")
                 {
                     if (sfdSave.ShowDialog() == DialogResult.OK)
                     {
