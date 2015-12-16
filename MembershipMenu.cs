@@ -118,7 +118,7 @@ namespace Marimba
         public void btnSignIn_Click(object sender, EventArgs e)
         {
             Form signinform = new signin();
-            if (clsStorage.currentClub.listTerms.Count == 0)
+            if (clsStorage.currentClub.listTerms == null || clsStorage.currentClub.listTerms.Count == 0)
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.error.Play();
