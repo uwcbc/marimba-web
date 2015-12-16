@@ -143,14 +143,6 @@ namespace Marimba
             this.lblTotalRehearsals.Text = "Total Rehearsals: " + clsStorage.currentClub.terms[iTerm].sRehearsals.ToString();
         }
 
-        public void ClickMember(Object sender, System.EventArgs e)
-        {
-            Label memberName = (Label)sender;
-            Form showProfile = new Profile(Convert.ToInt32(memberName.Tag));
-            showProfile.ShowDialog();
-        }
-
-
         private void btnExport_Click(object sender, EventArgs e)
         {
             int iTerm = cbTerm.SelectedIndex;
@@ -369,13 +361,15 @@ namespace Marimba
                     {  
                         if (Properties.Settings.Default.playSounds)
                             sound.click.Play();
-                        //iRemove is the index of the member to remove
+
+                        // we were successful, so add history and remove from the listview
+                        clsStorage.currentClub.addHistory(String.Format("{0}@{1}", lvAttendance.SelectedItems[0].SubItems[0].Text, cbTerm.Text), history.changeType.removeFromTerm);
+                        
+                        // iRemove is the index of the member to remove
                         int iRemove = lvAttendance.SelectedIndices[0];
                         for (int i = iRemove; i < clsStorage.currentClub.terms[cbTerm.SelectedIndex].sMembers; i++)
                             lvAttendance.Items[i + 1].SubItems[clsStorage.currentClub.terms[cbTerm.SelectedIndex].sRehearsals + 2].Text = Convert.ToString(i - 1);
                         lvAttendance.Items.RemoveAt(iRemove);
-                        //we were successful, so add history and remove from the listview
-                        clsStorage.currentClub.addHistory(String.Format("{0}@{1}", lvAttendance.SelectedItems[0].SubItems[0].Text, cbTerm.Text), history.changeType.removeFromTerm);
                     }
                     else
                         //we failed, probably because the member still has attendance
@@ -407,7 +401,7 @@ namespace Marimba
                 tmp.ShowDialog();
                 tmp.Dispose();
 
-                IList<int> addedList = new List<int>();
+                List<int> addedList = new List<int>();
                 foreach (int i in clsStorage.selectedMembersList)
                 {
                     if (!clsStorage.currentClub.terms[iTerm].addMember((short)i))
@@ -424,6 +418,14 @@ namespace Marimba
                     addedList.Add(i);
                 }
 
+                foreach (int i in clsStorage.selectedMembersList)
+                {
+                    string name = clsStorage.currentClub.formatedName(i);
+                    string selectedTermName = cbTerm.Text;
+                    clsStorage.currentClub.addHistory(String.Format("{0}@{1}", name, selectedTermName),
+                        history.changeType.addToTerm);
+                }
+
                 /* display our additions on the form */
                 lvAttendance.BeginUpdate();
 
@@ -436,8 +438,6 @@ namespace Marimba
                 lvAttendance.Items.AddRange(attendanceList.ToArray());
                 lvAttendance.EndUpdate();
 
-                /* flag changes */
-                attendancechanges = true;
                 if (Properties.Settings.Default.playSounds)
                     sound.success.Play();
             }

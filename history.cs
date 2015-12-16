@@ -16,9 +16,27 @@ namespace Marimba
         /// The type of change made, for the purpose of recording history of changes.
         /// NOTE: You need to always add new types to the end, since we store to file using ints.
         /// </summary>
-        public enum changeType{signup, signin, editMember, unsubscribe, deactivate, addUser, sentEmail, addFees, 
-            addBudget, editBudget, deleteBudget, setupElection, newTerm, importMembers, editAttendance, removeFromTerm, purgeMembers,
-            editUser, deleteUser
+        public enum changeType{
+            signup = 0,
+            signin = 1,
+            editMember = 2,
+            unsubscribe = 3,
+            deactivate = 4,
+            addUser = 5,
+            sentEmail = 6,
+            addFees = 7, 
+            addBudget = 8,
+            editBudget = 9,
+            deleteBudget = 10,
+            setupElection = 11,
+            newTerm = 12,
+            importMembers = 13,
+            editAttendance = 14,
+            removeFromTerm = 15,
+            purgeMembers = 16,
+            editUser = 17,
+            deleteUser = 18,
+            addToTerm = 19
         }
 
         //Our goal here is to minimize the number of strings stored
@@ -56,6 +74,9 @@ namespace Marimba
                     break;
                 case (changeType.addFees):
                     output += " recorded fees paid by " + otherInfo + " members - ";
+                    break;
+                case(changeType.addToTerm):
+                    output += " added " + otherInfo.Split('@')[0] + " to " + otherInfo.Split('@')[1] + " - ";
                     break;
                 case(changeType.addUser):
                     output += " created a new user account in Marimba for " + otherInfo + " - ";
