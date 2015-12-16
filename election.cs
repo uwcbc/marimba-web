@@ -91,17 +91,17 @@ namespace Marimba
             {
                 term2index = -1;
                 term2okay = true;
-                term1index = mainClub.terms[iTermIndex].memberSearch(i);
-                term1okay = (term1index == -1) || mainClub.terms[iTermIndex].limboMembers[term1index] ||
-                        (mainClub.terms[iTermIndex].feesPaid[term1index, 0] > 0);
+                term1index = mainClub.listTerms[iTermIndex].memberSearch(i);
+                term1okay = (term1index == -1) || mainClub.listTerms[iTermIndex].limboMembers[term1index] ||
+                        (mainClub.listTerms[iTermIndex].feesPaid[term1index, 0] > 0);
                 if (iTermIndex != 0)//There are two terms to go back to
                 {
-                    term2index = mainClub.terms[iTermIndex - 1].memberSearch(i);
-                    term2okay = (term2index == -1) || mainClub.terms[iTermIndex - 1].limboMembers[term2index] ||
-                        (mainClub.terms[iTermIndex - 1].feesPaid[term2index, 0] > 0);
+                    term2index = mainClub.listTerms[iTermIndex - 1].memberSearch(i);
+                    term2okay = (term2index == -1) || mainClub.listTerms[iTermIndex - 1].limboMembers[term2index] ||
+                        (mainClub.listTerms[iTermIndex - 1].feesPaid[term2index, 0] > 0);
                 }
-                if (((term1index != -1 && !mainClub.terms[iTermIndex].limboMembers[term1index]) ||
-                    (term2index != -1 && !mainClub.terms[iTermIndex - 1].limboMembers[term2index]))
+                if (((term1index != -1 && !mainClub.listTerms[iTermIndex].limboMembers[term1index]) ||
+                    (term2index != -1 && !mainClub.listTerms[iTermIndex - 1].limboMembers[term2index]))
                     && term1okay && term2okay && (clsStorage.currentClub.members[i].type == member.membertype.UWUnderGrad || clsStorage.currentClub.members[i].type == member.membertype.UWGrad))
                 {
                     elector temp = new elector();
@@ -114,7 +114,7 @@ namespace Marimba
                     iElectors++;
                 }
                 else if ((clsStorage.currentClub.members[i].type == member.membertype.UWUnderGrad || clsStorage.currentClub.members[i].type == member.membertype.UWGrad) &&
-                    ((term1index != -1 && !mainClub.terms[iTermIndex].limboMembers[term1index]) || (term2index != -1 && !mainClub.terms[iTermIndex - 1].limboMembers[term2index])))
+                    ((term1index != -1 && !mainClub.listTerms[iTermIndex].limboMembers[term1index]) || (term2index != -1 && !mainClub.listTerms[iTermIndex - 1].limboMembers[term2index])))
                 {
                     elector temp = new elector();
                     temp.strName = mainClub.formatedName(i);

@@ -31,7 +31,7 @@ namespace Marimba
             foreach (budgetItem item in clsStorage.currentClub.budget)
             {
                 string[] budgetText = new string[8];
-                budgetText[0] = clsStorage.currentClub.terms[item.term].strName; // name of term
+                budgetText[0] = clsStorage.currentClub.listTerms[item.term].strName; // name of term
                 budgetText[1] = item.name; // name of financial transaction
                 budgetText[2] = ""; // debit amount
                 budgetText[3] = ""; // credit amount

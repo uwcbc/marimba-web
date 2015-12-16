@@ -169,7 +169,7 @@ namespace Marimba
         {
             if (Properties.Settings.Default.playSounds)
                 sound.click.Play();
-            Program.home.moneyMenu.newfees.cbTerm.SelectedIndex = clsStorage.currentClub.sTerm - 1;
+            Program.home.moneyMenu.newfees.cbTerm.SelectedIndex = clsStorage.currentClub.listTerms.Count - 1;
             Program.home.moneyMenu.newfees.btnExport_Click(sender, e);
         }
 

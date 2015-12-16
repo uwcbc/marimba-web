@@ -25,7 +25,7 @@ namespace Marimba
 
             //if we default to selecting current term, do so!
             if (Properties.Settings.Default.selectCurrentTerm)
-                cbTerm.SelectedIndex = clsStorage.currentClub.sTerm - 1;
+                cbTerm.SelectedIndex = clsStorage.currentClub.listTerms.Count - 1;
         }
 
         private void btnList_Click(object sender, EventArgs e)

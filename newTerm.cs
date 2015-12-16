@@ -56,13 +56,13 @@ namespace Marimba
                             otherfeesnames[i] = otherfees[i].Split(',')[0].Trim();
                             otherfeesvalue[i] = Convert.ToDouble(otherfees[i].Split(',')[1].Trim());
                         }
-                        success = clsStorage.currentClub.addTerm(txtName.Text, Convert.ToInt16(clsStorage.currentClub.sTerm + 1), Convert.ToInt16(updNumRehearsals.Value),
+                        success = clsStorage.currentClub.addTerm(txtName.Text, Convert.ToInt16(clsStorage.currentClub.listTerms.Count + 1), Convert.ToInt16(updNumRehearsals.Value),
                             mcTermStart.SelectionStart.Date, mcTermEnd.SelectionStart.Date, rehearsals, Convert.ToDouble(txtMembershipFee.Text), otherfeesvalue, otherfeesnames);
                     }
                     //no other fees
                     else
                     {
-                        success = clsStorage.currentClub.addTerm(txtName.Text, Convert.ToInt16(clsStorage.currentClub.sTerm + 1), Convert.ToInt16(updNumRehearsals.Value),
+                        success = clsStorage.currentClub.addTerm(txtName.Text, Convert.ToInt16(clsStorage.currentClub.listTerms.Count + 1), Convert.ToInt16(updNumRehearsals.Value),
                             mcTermStart.SelectionStart.Date, mcTermEnd.SelectionStart.Date, rehearsals, Convert.ToDouble(txtMembershipFee.Text));
                     }
                     if (success)

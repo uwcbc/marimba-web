@@ -118,13 +118,13 @@ namespace Marimba
         public void btnSignIn_Click(object sender, EventArgs e)
         {
             Form signinform = new signin();
-            if (clsStorage.currentClub.sTerm == 0)
+            if (clsStorage.currentClub.listTerms.Count == 0)
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.error.Play();
                 MessageBox.Show("Cannot sign-in users because no term currently exists.");
             }
-            else if (clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].rehearsalIndex(DateTime.Today) != -1 ||
+            else if (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].rehearsalIndex(DateTime.Today) != -1 ||
                 MessageBox.Show("Today is not a rehearsal date. No attendance data will be recorded. Do you want to continue?", "Not Rehearsal Date", MessageBoxButtons.YesNo)
                 == DialogResult.Yes)
             {

@@ -169,7 +169,7 @@ namespace Marimba
                 {
                     //skip if it is an unsubscribed member
                     //also check for if we are only considering members in the current term
-                    if (clsStorage.currentClub.members[i].strFName != "♪Unsubscribed" && (!cbCurrentTerm.Checked || clsStorage.currentClub.terms[clsStorage.currentClub.sTerm-1].memberSearch(Convert.ToInt16(i)) >=0))
+                    if (clsStorage.currentClub.members[i].strFName != "♪Unsubscribed" && (!cbCurrentTerm.Checked || clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count-1].memberSearch(Convert.ToInt16(i)) >=0))
                     {
                         if (clsStorage.currentClub.members[i].curInstrument != member.instrument.other)
                             temp = new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), member.instrumentToString(clsStorage.currentClub.members[i].curInstrument),
@@ -242,7 +242,7 @@ namespace Marimba
                 foreach (ListViewItem name in memberlist)
                 {
                     //search the current term for the member
-                    if (clsStorage.currentClub.terms[clsStorage.currentClub.sTerm-1].memberSearch(Convert.ToInt16(name.SubItems[5].Text)) >= 0)
+                    if (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count-1].memberSearch(Convert.ToInt16(name.SubItems[5].Text)) >= 0)
                         tempList.Add(name);
                 }
                 memberlist = tempList;

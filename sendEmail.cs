@@ -83,9 +83,9 @@ namespace Marimba
                     clsStorage.selectedMembersList.Clear();
 
                     //now, add everyone in the term to it
-                    for(int i = 0; i < clsStorage.currentClub.terms[clsStorage.currentClub.sTerm-1].sMembers; i++)
-                        if(!clsStorage.currentClub.terms[clsStorage.currentClub.sTerm-1].checkLimbo(i))
-                            clsStorage.selectedMembersList.Add(clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].members[i]);
+                    for(int i = 0; i < clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count-1].sMembers; i++)
+                        if (!clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].checkLimbo(i))
+                            clsStorage.selectedMembersList.Add(clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].members[i]);
 
                     //check if something was selected
                     if (clsStorage.selectedMembersList.Count > 0)
@@ -104,8 +104,8 @@ namespace Marimba
                     clsStorage.selectedMembersList.Clear();
 
                     //now, add everyone in the term to it
-                    for (int i = 0; i < clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].sMembers; i++)
-                        clsStorage.selectedMembersList.Add(clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].members[i]);
+                    for (int i = 0; i < clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].sMembers; i++)
+                        clsStorage.selectedMembersList.Add(clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].members[i]);
 
                     //check if something was selected
                     if (clsStorage.selectedMembersList.Count > 0)

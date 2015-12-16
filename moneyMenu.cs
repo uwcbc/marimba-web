@@ -65,7 +65,7 @@ namespace Marimba
                     int i = 0;
                     foreach (budgetItem item in clsStorage.currentClub.budget)
                     {
-                        output[i + 1, 0] = clsStorage.currentClub.terms[item.term].strName;
+                        output[i + 1, 0] = clsStorage.currentClub.listTerms[item.term].strName;
                         output[i + 1, 1] = item.name;
                         if (item.type == (int)club.money.Revenue)
                             output[i + 1, 3] = item.value.ToString("C");
@@ -99,7 +99,7 @@ namespace Marimba
                         foreach (budgetItem item in clsStorage.currentClub.budget)
                         {
                             CsvRow row = new CsvRow();
-                            row.Add(clsStorage.currentClub.terms[item.term].strName);
+                            row.Add(clsStorage.currentClub.listTerms[item.term].strName);
                             row.Add(item.name);
                             if (item.type == (int)club.money.Revenue)
                             {

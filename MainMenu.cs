@@ -75,7 +75,7 @@ namespace Marimba
             {
                 clsStorage.currentClub.strCurrentUser = "Guest";
                 Form attendance = new signin();
-                if (clsStorage.currentClub.sTerm == 0)
+                if (clsStorage.currentClub.listTerms == null || clsStorage.currentClub.listTerms.Count == 0)
                 {
                     if(Properties.Settings.Default.playSounds)
                         sound.error.Play();

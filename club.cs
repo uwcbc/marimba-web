@@ -41,11 +41,9 @@ namespace Marimba
         public member[] members = new member[5000];
         protected string strLocation;
         public string strCurrentUser, strCurrentUserPrivilege;
-        //terms!
-        //sTerm is the number of terms
-        public short sTerm;
-        //terms stores the information about the terms
-        public term[] terms;
+
+        // listTerms stores the information about the terms
+        public List<term> listTerms;
 
         public election currentElection;
 
@@ -71,7 +69,6 @@ namespace Marimba
         {
             this.strLocation = strLocation;
             strName = "";
-            sTerm = 0;
             aesInfo = aesKey;
         }
 
@@ -163,10 +160,13 @@ namespace Marimba
                             iMember = Convert.ToInt16(srDecrypt.ReadLine());
                             for (int i = 0; i < iMember; i++)
                                 members[i] = new member(srDecrypt);
-                            sTerm = Convert.ToInt16(srDecrypt.ReadLine());
-                            terms = new term[sTerm];
+                            short sTerm = Convert.ToInt16(srDecrypt.ReadLine());
+                            listTerms = new List<term>(sTerm);
                             for (int i = 0; i < sTerm; i++)
-                                terms[i] = new term(srDecrypt);
+                            {
+                                term nextTerm = new term(srDecrypt);
+                                listTerms.Add(nextTerm);
+                            }
                             
                             //read the budget stuff
                             int iBudget = Convert.ToInt32(srDecrypt.ReadLine());
@@ -306,11 +306,11 @@ namespace Marimba
                                 sw.WriteLine((int)members[i].size);
                             }
                             //write the terms
-                            sw.WriteLine(sTerm);
+                            sw.WriteLine(listTerms.Count);
                             //loop through the terms
-                            for (int i = 0; i < sTerm; i++)
+                            foreach (term currentTerm in listTerms)
                             {
-                                terms[i].saveTerm(sw);
+                                currentTerm.saveTerm(sw);
                             }
                             //save the budget
                             sw.WriteLine(budget.Count);
@@ -672,9 +672,9 @@ namespace Marimba
             {
                 attendedOneRehearsal = false;
                 //check each term to confirm they are not in any of them
-                for (int j = 0; j < sTerm && !attendedOneRehearsal; j++)
+                for (int j = 0; j < listTerms.Count && !attendedOneRehearsal; j++)
                 {
-                    attendedOneRehearsal = attendedOneRehearsal || terms[j].memberSearch((short)i) != -1;
+                    attendedOneRehearsal = attendedOneRehearsal || listTerms[j].memberSearch((short)i) != -1;
                 }
 
                 //if they haven't attended any rehearsals, next check if they have been on the list for four years (1461 days)
@@ -704,13 +704,13 @@ namespace Marimba
             //then, move members into their new positions
             for (int i = index + 1; i < iMember; i++)
             {
-                for (int j = 0; j < sTerm; j++)
+                for (int j = 0; j < listTerms.Count; j++)
                 {
                     //check if the member is in a term
-                    iTermIndex = terms[j].memberSearch((short)i);
+                    iTermIndex = listTerms[j].memberSearch((short)i);
                     //if so, correct that members position in the term
                     if(iTermIndex!=-1)
-                        terms[j].members[iTermIndex]--;
+                        listTerms[j].members[iTermIndex]--;
                 }
                 //adjust the member's sID
                 members[i].sID--;
@@ -725,25 +725,25 @@ namespace Marimba
 
         public bool addTerm(string strName, short index, short numRehearsals, DateTime start, DateTime end, DateTime[] rehearsalDates, double membershipFees, double[] dOtherFees = null, string[] strOtherFees = null)
         {
-            if (sTerm == 0) //no term has been added yet
-                terms = new term[1];
-            //make the array of terms bigger otherwise
-            //the inefficiency of redeclaring the array is made up for by the fact that storing a term is a lot of data
-            //this is the most efficient means of doing this
-            else
-                Array.Resize(ref terms, sTerm + 1);
-            terms[sTerm] = new term(strName, index, numRehearsals, start, end, rehearsalDates, membershipFees, dOtherFees, strOtherFees);
-            sTerm++;
+            if (listTerms == null) //no term has been added yet
+                listTerms = new List<term>(1);
+
+            listTerms.Add(new term(strName, index, numRehearsals, start, end, rehearsalDates, membershipFees, dOtherFees, strOtherFees));
             return true;
+
             //like adding member, always returns true
             //functionality to add false in case adding a term becomes more difficult
         }
 
         public string[] termNames()
         {
-            string[] output = new string[sTerm];
-            for (int i = 0; i < sTerm; i++)
-                output[i] = terms[i].strName;
+            string[] output = new string[listTerms.Count];
+            int i = 0;
+            foreach (term currentTerm in listTerms)
+            {
+                output[i] = currentTerm.strName;
+                i++;
+            }
             return output;
         }
 

@@ -75,57 +75,60 @@ namespace Marimba
             //dFeesOwed calculates the total membership fees owed over all terms
             //dFeesPaid calculates the total membership fees paid over all terms (excluding discounts)
             double dFeesOwed = 0, dFeesPaid = 0;
-            for (int i = 0; i < clsStorage.currentClub.sTerm; i++)
+            foreach (term currentTerm in clsStorage.currentClub.listTerms)
             {
-                int iTermIndex = clsStorage.currentClub.terms[i].memberSearch(Convert.ToInt16(iID));
-                if (iTermIndex != -1 && !clsStorage.currentClub.terms[i].checkLimbo(iTermIndex))
+                int iTermIndex = currentTerm.memberSearch(Convert.ToInt16(iID));
+                if (iTermIndex != -1 && !currentTerm.checkLimbo(iTermIndex))
                 {
                     //count number of terms
                     iTerms++;
                     //count attendance records
-                    iTotal += clsStorage.currentClub.terms[i].sRehearsals;
-                    iAttended += clsStorage.currentClub.terms[i].iMemberAttendance(clsStorage.currentClub.terms[i].memberSearch(Convert.ToInt16(iID)));
-                    strTerms += String.Format(" - {0} \r\n", clsStorage.currentClub.terms[i].strName);
-                    dFeesOwed += clsStorage.currentClub.terms[i].membershipFees;
+                    iTotal += currentTerm.sRehearsals;
+                    iAttended += currentTerm.iMemberAttendance(currentTerm.memberSearch(Convert.ToInt16(iID)));
+                    strTerms += String.Format(" - {0} \r\n", currentTerm.strName);
+                    dFeesOwed += currentTerm.membershipFees;
                 }
                 else if (iTermIndex != -1) //limbo member
                 {
-                    strTerms += String.Format(" - {0} (not full member)\r\n", clsStorage.currentClub.terms[i].strName);
+                    strTerms += String.Format(" - {0} (not full member)\r\n", currentTerm.strName);
                 }
             }
+
             lblHistory.Text = String.Format("Number of terms: {0}\r\n{1}", iTerms, strTerms);
             lblHistory.Text += String.Format("Attended {0} of {1} rehearsals. Attendance percentage: {2}%\r\n",
                 iAttended, iTotal, Math.Round(Convert.ToDouble(iAttended) / iTotal * 100, 2));
+
             //Fees paid
             //also check if all membership fees have been paid
             double dTotal = 0;
             string strFees = "";
-            for(int i = 0; i<clsStorage.currentClub.sTerm;i++)
+
+            foreach (term currentTerm in clsStorage.currentClub.listTerms)
             {
                 //check if member is even in term
-                int iTermIndex = clsStorage.currentClub.terms[i].memberSearch(Convert.ToInt16(iID));
+                int iTermIndex = currentTerm.memberSearch(Convert.ToInt16(iID));
                 if (iTermIndex != -1)
                 {
                     //membership fee
-                    if (clsStorage.currentClub.terms[i].feesPaid[iTermIndex, 0] != 0)
+                    if (currentTerm.feesPaid[iTermIndex, 0] != 0)
                     {
-                        dTotal += clsStorage.currentClub.terms[i].feesPaid[iTermIndex, 0];
-                        strFees += String.Format("{0}\r\n- Membership Fee - ${1}\r\n", clsStorage.currentClub.terms[i].strName,
-                            clsStorage.currentClub.terms[i].feesPaid[iTermIndex, 0]);
+                        dTotal += currentTerm.feesPaid[iTermIndex, 0];
+                        strFees += String.Format("{0}\r\n- Membership Fee - ${1}\r\n", currentTerm.strName,
+                            currentTerm.feesPaid[iTermIndex, 0]);
                         //mark fees paid
                         //regardless of if there was a discount, add the whole membership fee
                         //this is to calculate any outstanding membership fees
-                        dFeesPaid += clsStorage.currentClub.terms[i].membershipFees;
+                        dFeesPaid += currentTerm.membershipFees;
                     }
                     //other fees
                     //we assume the membership fee is the first fee to be paid
-                    for (int j = 0; j < clsStorage.currentClub.terms[i].iOtherFees; j++)
+                    for (int j = 0; j < currentTerm.iOtherFees; j++)
                     {
-                        if (clsStorage.currentClub.terms[i].feesPaid[iTermIndex, j + 1] != 0)
+                        if (currentTerm.feesPaid[iTermIndex, j + 1] != 0)
                         {
-                            dTotal += clsStorage.currentClub.terms[i].feesPaid[iTermIndex, j + 1];
-                            strFees += String.Format("- {0} - ${1}\r\n", clsStorage.currentClub.terms[i].strOtherFees[j],
-                                clsStorage.currentClub.terms[i].feesPaid[iTermIndex, j + 1]);
+                            dTotal += currentTerm.feesPaid[iTermIndex, j + 1];
+                            strFees += String.Format("- {0} - ${1}\r\n", currentTerm.strOtherFees[j],
+                                currentTerm.feesPaid[iTermIndex, j + 1]);
                         }
                     }
                 }

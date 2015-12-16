@@ -114,7 +114,7 @@ namespace Marimba
                 //if we default to selecting current term, do so!
                 //notice we only do this if we are NOT editing
                 if (Properties.Settings.Default.selectCurrentTerm)
-                    cbTerm.SelectedIndex = clsStorage.currentClub.sTerm - 1;
+                    cbTerm.SelectedIndex = clsStorage.currentClub.listTerms.Count - 1;
         }
 
         void clearall()

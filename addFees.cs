@@ -28,11 +28,11 @@ namespace Marimba
             cbFee.Items.Clear();
             if (cbTerm.SelectedIndex >= 0) {
                 cbFee.Items.Add("Membership Fee");
-                if(clsStorage.currentClub.terms[cbTerm.SelectedIndex].iOtherFees > 0)
-                    cbFee.Items.AddRange(clsStorage.currentClub.terms[cbTerm.SelectedIndex].strOtherFees);
+                if(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iOtherFees > 0)
+                    cbFee.Items.AddRange(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].strOtherFees);
                 //bold rehearsal dates on the calendar
                 mcDate.RemoveAllBoldedDates();
-                mcDate.BoldedDates = clsStorage.currentClub.terms[cbTerm.SelectedIndex].rehearsalDates;
+                mcDate.BoldedDates = clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].rehearsalDates;
                 //allow exporting
                 btnExport.Enabled = true;
             }
@@ -52,7 +52,7 @@ namespace Marimba
             lvMembers.SmallImageList = Program.home.instrumentSmall;
             //if we default to selecting current term, do so!
             if (Properties.Settings.Default.selectCurrentTerm)
-                cbTerm.SelectedIndex = clsStorage.currentClub.sTerm - 1;
+                cbTerm.SelectedIndex = clsStorage.currentClub.listTerms.Count - 1;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -84,12 +84,12 @@ namespace Marimba
                         //first, mark in the term that the fees have been paid
                         //this effectively adds the amount the member paid
                         //currently, it does not check if a member has already paid
-                        clsStorage.currentClub.terms[cbTerm.SelectedIndex].feesPaid[memberIndex, cbFee.SelectedIndex] += Convert.ToDouble(txtAmount.Text);
-                        clsStorage.currentClub.terms[cbTerm.SelectedIndex].feesPaidDate[memberIndex, cbFee.SelectedIndex] = mcDate.SelectionStart;
+                        clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[memberIndex, cbFee.SelectedIndex] += Convert.ToDouble(txtAmount.Text);
+                        clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaidDate[memberIndex, cbFee.SelectedIndex] = mcDate.SelectionStart;
                         //next, add an item in the budget
-                        strComment += clsStorage.currentClub.formatedName(clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[memberIndex]) + ";";
-                        memberNames[i] = clsStorage.currentClub.formatedName(clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[memberIndex]);
-                        memberEmails[i] = clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[memberIndex]].strEmail;
+                        strComment += clsStorage.currentClub.formatedName(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[memberIndex]) + ";";
+                        memberNames[i] = clsStorage.currentClub.formatedName(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[memberIndex]);
+                        memberEmails[i] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[memberIndex]].strEmail;
                     }
                     //remove the last semicolon
                     strComment = strComment.Remove(strComment.Length - 1);
@@ -163,28 +163,28 @@ namespace Marimba
                 if (svdSave.FilterIndex == 1)
                 {
                     //first, set up string array to be sent to Excel
-                    object[,] output = new object[1 + clsStorage.currentClub.terms[cbTerm.SelectedIndex].sMembers, 5 + clsStorage.currentClub.terms[cbTerm.SelectedIndex].iOtherFees];
+                    object[,] output = new object[1 + clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].sMembers, 5 + clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iOtherFees];
                     output[0, 0] = "First Name";
                     output[0, 1] = "Last Name";
                     output[0, 2] = "Instrument";
                     output[0, 3] = "Member Status";
                     output[0, 4] = "Membership Fee";
-                    for (int i = 0; i < clsStorage.currentClub.terms[cbTerm.SelectedIndex].iOtherFees; i++)
-                        output[0, 5 + i] = clsStorage.currentClub.terms[cbTerm.SelectedIndex].strOtherFees[i];
-                    for (int i = 0; i < clsStorage.currentClub.terms[cbTerm.SelectedIndex].sMembers; i++)
+                    for (int i = 0; i < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iOtherFees; i++)
+                        output[0, 5 + i] = clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].strOtherFees[i];
+                    for (int i = 0; i < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].sMembers; i++)
                     {
-                        output[i + 1, 0] = clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].strFName;
-                        output[i + 1, 1] = clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].strLName;
-                        if (clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].curInstrument == member.instrument.other)
-                            output[i + 1, 2] = clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].strOtherInstrument;
+                        output[i + 1, 0] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strFName;
+                        output[i + 1, 1] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strLName;
+                        if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument == member.instrument.other)
+                            output[i + 1, 2] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strOtherInstrument;
                         else
-                            output[i + 1, 2] = member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].curInstrument);
-                        if (clsStorage.currentClub.terms[cbTerm.SelectedIndex].checkLimbo(i))
+                            output[i + 1, 2] = member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument);
+                        if (clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].checkLimbo(i))
                             output[i + 1, 3] = "Inactive";
                         else
                             output[i + 1, 3] = "Active";
-                        for (int j = 0; j <= clsStorage.currentClub.terms[cbTerm.SelectedIndex].iOtherFees; j++)
-                            output[i + 1, 4+j] = clsStorage.currentClub.terms[cbTerm.SelectedIndex].feesPaid[i, j].ToString("C");
+                        for (int j = 0; j <= clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iOtherFees; j++)
+                            output[i + 1, 4+j] = clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, j].ToString("C");
                     }
                     //now that the string array is set up, save it
                     excelFile.saveExcelRowHighlight(output, svdSave.FileName,3,"Inactive",System.Drawing.Color.Gray,4,"$0.00",System.Drawing.Color.Yellow);
@@ -202,27 +202,27 @@ namespace Marimba
                         firstrow.Add("Member Status");
                         firstrow.Add("Membership Fee");
                         //add the names of the other fees
-                        for (int i = 0; i < clsStorage.currentClub.terms[cbTerm.SelectedIndex].iOtherFees; i++)
-                            firstrow.Add(clsStorage.currentClub.terms[cbTerm.SelectedIndex].strOtherFees[i]);
+                        for (int i = 0; i < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iOtherFees; i++)
+                            firstrow.Add(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].strOtherFees[i]);
                         writer.WriteRow(firstrow);
                         //add all of the member details
-                        for (int i = 0; i < clsStorage.currentClub.terms[cbTerm.SelectedIndex].sMembers; i++)
+                        for (int i = 0; i < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].sMembers; i++)
                         {
                             CsvRow row = new CsvRow();
-                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].strFName);
-                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].strLName);
-                            if (clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].curInstrument == member.instrument.other)
-                                row.Add(clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].strOtherInstrument);
+                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strFName);
+                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strLName);
+                            if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument == member.instrument.other)
+                                row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strOtherInstrument);
                             else
-                                row.Add(member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].curInstrument));
+                                row.Add(member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument));
                             //report limbo status
                             //for reporting purposes, we'll call it "active" or "inactive"
-                            if (clsStorage.currentClub.terms[cbTerm.SelectedIndex].checkLimbo(i))
+                            if (clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].checkLimbo(i))
                                 row.Add("Inactive");
                             else
                                 row.Add("Active");
-                            for (int j = 0; j <= clsStorage.currentClub.terms[cbTerm.SelectedIndex].iOtherFees; j++)
-                                row.Add("$ " + Convert.ToString(clsStorage.currentClub.terms[cbTerm.SelectedIndex].feesPaid[i, j]));
+                            for (int j = 0; j <= clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iOtherFees; j++)
+                                row.Add("$ " + Convert.ToString(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, j]));
                             writer.WriteRow(row);
                         }
                     }
@@ -241,20 +241,20 @@ namespace Marimba
             }
 
             if (cbFee.SelectedIndex == 0)
-                txtAmount.Text = Convert.ToString(clsStorage.currentClub.terms[cbTerm.SelectedIndex].membershipFees);
+                txtAmount.Text = Convert.ToString(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].membershipFees);
             //other fee
             else
-                txtAmount.Text = Convert.ToString(clsStorage.currentClub.terms[cbTerm.SelectedIndex].dOtherFees[cbFee.SelectedIndex-1]);
+                txtAmount.Text = Convert.ToString(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].dOtherFees[cbFee.SelectedIndex-1]);
             lvMembers.BeginUpdate();
             lvMembers.Items.Clear();
             memberlist.Clear();
             if(cbTerm.SelectedIndex >=0)
             {
-                for(int i = 0; i<clsStorage.currentClub.terms[cbTerm.SelectedIndex].sMembers;i++)
+                for(int i = 0; i<clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].sMembers;i++)
                 {
-                    if (clsStorage.currentClub.terms[cbTerm.SelectedIndex].feesPaid[i, cbFee.SelectedIndex] == 0)
-                        memberlist.Add(new ListViewItem(new string[2]{clsStorage.currentClub.formatedName(clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]),
-                            Convert.ToString(i)}, member.instrumentIconIndex(clsStorage.currentClub.members[clsStorage.currentClub.terms[cbTerm.SelectedIndex].members[i]].curInstrument)));
+                    if (clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, cbFee.SelectedIndex] == 0)
+                        memberlist.Add(new ListViewItem(new string[2]{clsStorage.currentClub.formatedName(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]),
+                            Convert.ToString(i)}, member.instrumentIconIndex(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument)));
                 }
                 lvMembers.Items.AddRange(memberlist.ToArray());
                 lvMembers.Sort();

@@ -28,9 +28,9 @@ namespace Marimba
             iSignup = 0;
             lastSearch = "";
             cbMultiple.Enabled = false;
-            rehearsalindex = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].rehearsalIndex(DateTime.Today);
+            rehearsalindex = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].rehearsalIndex(DateTime.Today);
             lblTitle.Text = clsStorage.currentClub.strName + " Sign-in";
-            lblDate.Text = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].strName + " - " + DateTime.Today.ToLongDateString();
+            lblDate.Text = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].strName + " - " + DateTime.Today.ToLongDateString();
 
             //add the instruments to the combo box
             cbInstrument.BeginUpdate();
@@ -42,7 +42,7 @@ namespace Marimba
             cbInstrument.EndUpdate();
 
             //set up the table for attendance information
-            tlpAttendance.ColumnCount = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].sRehearsals;
+            tlpAttendance.ColumnCount = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].sRehearsals;
             tlpAttendance.ColumnStyles.Clear();
             //set up listviews
             lvSignedIn.SmallImageList = Program.home.instrumentSmall;
@@ -71,11 +71,11 @@ namespace Marimba
                         member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                     //if the member is not in the term, add them to the other members list
                     //otherwise, add them to the term members list
-                    indexInTerm = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].memberSearch(clsStorage.currentClub.members[i].sID);
+                    indexInTerm = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].memberSearch(clsStorage.currentClub.members[i].sID);
                     if (indexInTerm == -1)
                         otherMembers.Add(temp);
                     //do not add members who are already signed in
-                    else if (rehearsalindex == -1 || !clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].attendance[indexInTerm,rehearsalindex])
+                    else if (rehearsalindex == -1 || !clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[indexInTerm,rehearsalindex])
                         termMembers.Add(temp);
                 }
             }
@@ -92,18 +92,18 @@ namespace Marimba
             {
                 attendance[i] = new Label();
                 attendance[i].Dock = DockStyle.Fill;
-                attendance[i].Text = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].rehearsalDates[i].ToShortDateString();
+                attendance[i].Text = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].rehearsalDates[i].ToShortDateString();
                 attendance[i].Font = new System.Drawing.Font("Quicksand", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 attendance[i].TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
                 tlpAttendance.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100/tlpAttendance.ColumnCount));
                 tlpAttendance.Controls.Add(attendance[i], i, 0);
             }
             //fill Signed in list
-            for (int i = 0; i < clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].sMembers; i++)
+            for (int i = 0; i < clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].sMembers; i++)
             {
-                short sID = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].members[i];
-                if (clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].rehearsalIndex(DateTime.Today) >=0 &&
-                    clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].attendance[i,clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].rehearsalIndex(DateTime.Today)])
+                short sID = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].members[i];
+                if (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].rehearsalIndex(DateTime.Today) >=0 &&
+                    clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[i,clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].rehearsalIndex(DateTime.Today)])
                     lvSignedIn.Items.Insert(0, new ListViewItem(clsStorage.currentClub.members[sID].strFName + " " + clsStorage.currentClub.members[sID].strLName, member.instrumentIconIndex(clsStorage.currentClub.members[sID].curInstrument)));
             }
             lvSignedIn.Sorting = SortOrder.Ascending;
@@ -175,19 +175,19 @@ namespace Marimba
                 clsStorage.currentClub.members[userID].editMember(txtFirstName.Text, txtLastName.Text, cbClass.SelectedIndex,
                             Convert.ToUInt32(txtStudentNumber.Text), cbFaculty.SelectedIndex, cbInstrument.Text, txtEmail.Text,
                             "", clsStorage.currentClub.members[userID].signupTime, cbSize.SelectedIndex);
-                termIndex = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].memberSearch(userID);
+                termIndex = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].memberSearch(userID);
                 if (termIndex < 0) //member not currently part of the term
                 {
                     //now to add the member as part of the term
                     //this process is entirely invisible to the end user
-                    if (!clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].addMember(userID))
+                    if (!clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].addMember(userID))
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.error.Play();
                         MessageBox.Show("Adding user to current term failed.");
                     }
                     else
-                        termIndex = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].sMembers - 1;
+                        termIndex = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].sMembers - 1;
                 }
                 //the person signing in is now a member and marked as part of the term
                 //now we just have to sign them in
@@ -196,12 +196,12 @@ namespace Marimba
                 {
                     //show record on list, but first make sure they are not already signed in
                     lvSignedIn.BeginUpdate();
-                    if (clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].attendance[termIndex, rehearsalindex] == false)
+                    if (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[termIndex, rehearsalindex] == false)
                         lvSignedIn.Items.Insert(0, new ListViewItem(clsStorage.currentClub.members[userID].strFName + " " + clsStorage.currentClub.members[userID].strLName, member.instrumentIconIndex(clsStorage.currentClub.members[userID].curInstrument)));
                     lvSignedIn.Sort();
                     lvSignedIn.EndUpdate();
                     //mark attendance
-                    clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].attendance[termIndex, rehearsalindex] = true;
+                    clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[termIndex, rehearsalindex] = true;
                     iSignin++;
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
@@ -225,7 +225,7 @@ namespace Marimba
                 cbSize.SelectedIndex = -1;
                 cbMultiple.Enabled = false;
                 cbMultiple.Checked = false;
-                for (int i = 0; i < clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].sRehearsals; i++)
+                for (int i = 0; i < clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].sRehearsals; i++)
                     attendance[i].BackColor = SystemColors.Control;             
                 txtSearch.Text = "";
                 txtSearch.Focus();
@@ -286,13 +286,13 @@ namespace Marimba
                 cbSize.SelectedIndex = (int)clsStorage.currentClub.members[iUserIndex].size;
                 //if already a member of the term, check if the membership fee has been paid
                 //also populate attendance
-                int termIndex = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].memberSearch(Convert.ToInt16(iUserIndex));
+                int termIndex = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].memberSearch(Convert.ToInt16(iUserIndex));
                 if (termIndex != -1)
                 {
-                    cbFees.Checked = (clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].feesPaid[termIndex, 0] != 0);
-                    for (int i = 0; i <= clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].rehearsalIndex(DateTime.Today); i++)
+                    cbFees.Checked = (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].feesPaid[termIndex, 0] != 0);
+                    for (int i = 0; i <= clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].rehearsalIndex(DateTime.Today); i++)
                     {
-                        if (clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].attendance[termIndex, i]) //member was here
+                        if (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[termIndex, i]) //member was here
                             attendance[i].BackColor = Color.Green;
                         else //member was not here
                             attendance[i].BackColor = Color.Red;
@@ -351,10 +351,10 @@ namespace Marimba
                             member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                         //if the member is not in the term, add them to the other members list
                         //otherwise, add them to the term members list
-                        indexInTerm = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].memberSearch(clsStorage.currentClub.members[i].sID);
+                        indexInTerm = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].memberSearch(clsStorage.currentClub.members[i].sID);
                         if (indexInTerm == -1 && temp.SubItems[0].Text.ToLower().Contains(txtSearch.Text.ToLower()))
                             otherMembers.Add(temp);
-                        else if (temp.SubItems[0].Text.ToLower().Contains(txtSearch.Text.ToLower()) && rehearsalindex != -1 && (!clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].attendance[indexInTerm,rehearsalindex]))
+                        else if (temp.SubItems[0].Text.ToLower().Contains(txtSearch.Text.ToLower()) && rehearsalindex != -1 && (!clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[indexInTerm,rehearsalindex]))
                             termMembers.Add(temp);
                     }
                 }
@@ -445,31 +445,31 @@ namespace Marimba
             if (rehearsalindex != -1)
             {
                 short userID = Convert.ToInt16(lvSearch.SelectedItems[0].SubItems[5].Text);
-                int termIndex = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].memberSearch(userID);
+                int termIndex = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].memberSearch(userID);
                 if (termIndex < 0) //member not currently part of the term
                 {
                     //now to add the member as part of the term
                     //this process is entirely invisible to the end user
-                    if (!clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].addMember(userID))
+                    if (!clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].addMember(userID))
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.error.Play();
                         MessageBox.Show("Adding user to current term failed.");
                     }
                     else
-                        termIndex = clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].sMembers - 1;
+                        termIndex = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].sMembers - 1;
                 }
                 //the person signing in is now a member and marked as part of the term
                 //now we just have to sign them in
                 
                 //show record on list, but first make sure they are not already signed in
                 lvSignedIn.BeginUpdate();
-                if (clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].attendance[termIndex, rehearsalindex] == false)
+                if (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[termIndex, rehearsalindex] == false)
                     lvSignedIn.Items.Insert(0, new ListViewItem(clsStorage.currentClub.members[userID].strFName + " " + clsStorage.currentClub.members[userID].strLName, member.instrumentIconIndex(clsStorage.currentClub.members[userID].curInstrument)));
                 lvSignedIn.Sort();
                 lvSignedIn.EndUpdate();
                 //mark attendance
-                clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].attendance[termIndex, rehearsalindex] = true;
+                clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[termIndex, rehearsalindex] = true;
                 iSignin++;
                 if (Properties.Settings.Default.playSounds)
                     sound.success.Play();
@@ -493,7 +493,7 @@ namespace Marimba
             cbSize.SelectedIndex = -1;
             cbMultiple.Enabled = false;
             cbMultiple.Checked = false;
-            for (int i = 0; i < clsStorage.currentClub.terms[clsStorage.currentClub.sTerm - 1].sRehearsals; i++)
+            for (int i = 0; i < clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].sRehearsals; i++)
                 attendance[i].BackColor = SystemColors.Control;
             txtSearch.Text = "";
             txtSearch.Focus();

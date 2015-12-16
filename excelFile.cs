@@ -174,7 +174,7 @@ namespace Marimba
         /// <param name="location">The file location to save to</param>
         public static void exportMrb(string location)
         {
-            int iTotal = clsStorage.currentClub.strUsers.Count + clsStorage.currentClub.iMember + clsStorage.currentClub.sTerm*60 + clsStorage.currentClub.budget.Count + 1;
+            int iTotal = clsStorage.currentClub.strUsers.Count + clsStorage.currentClub.iMember + clsStorage.currentClub.listTerms.Count*60 + clsStorage.currentClub.budget.Count + 1;
             int iCurrent = 0;
 
             string[] writableList;
@@ -269,84 +269,84 @@ namespace Marimba
             //reset row for new tab
             row = 0;
             //reset data for new tab
-            data = new object[1+clsStorage.currentClub.sTerm*373, 120];
+            data = new object[1+clsStorage.currentClub.listTerms.Count*373, 120];
 
             data[row, 0] = "Number of Terms";
-            data[row, 1] = clsStorage.currentClub.sTerm;
+            data[row, 1] = clsStorage.currentClub.listTerms.Count;
             row++;
 
-            for (int i = 0; i < clsStorage.currentClub.sTerm; i++ )
+            foreach (term currentTerm in clsStorage.currentClub.listTerms)
             {
                 data[row, 0] = "Name Of Term";
-                data[row, 1] = clsStorage.currentClub.terms[i].strName;
+                data[row, 1] = currentTerm.strName;
                 row++;
                 data[row, 0] = "Number of Members";
-                data[row, 1] = clsStorage.currentClub.terms[i].sMembers;
+                data[row, 1] = currentTerm.sMembers;
                 row++;
                 data[row, 0] = "Term Index";
-                data[row, 1] = clsStorage.currentClub.terms[i].sNumber;
+                data[row, 1] = currentTerm.sNumber;
                 row++;
                 data[row, 0] = "List of Members:";
                 row++;
 
                 //list of members
-                for(int j = 0; j< clsStorage.currentClub.terms[i].sMembers; j++)
-                    data[row, j] = clsStorage.currentClub.terms[i].members[j];
+                for(int j = 0; j< currentTerm.sMembers; j++)
+                    data[row, j] = currentTerm.members[j];
                 row++;
                 data[row, 0] = "Start Date";
-                data[row, 1] = clsStorage.currentClub.terms[i].startDate.ToOADate();
+                data[row, 1] = currentTerm.startDate.ToOADate();
                 row++;
                 data[row, 0] = "End Date";
-                data[row, 1] = clsStorage.currentClub.terms[i].endDate.ToOADate();
+                data[row, 1] = currentTerm.endDate.ToOADate();
                 row++;
                 data[row, 0] = "Number of Rehearsals";
-                data[row, 1] = clsStorage.currentClub.terms[i].sRehearsals;
+                data[row, 1] = currentTerm.sRehearsals;
                 row++;
                 data[row, 0] = "Rehearsal Dates and Attendance";
                 row++;
 
                 //rehearsal dates headers
-                for (int j = 0; j < clsStorage.currentClub.terms[i].sRehearsals; j++)
-                    data[row, j + 1] = clsStorage.currentClub.terms[i].rehearsalDates[j].ToOADate();
+                for (int j = 0; j < currentTerm.sRehearsals; j++)
+                    data[row, j + 1] = currentTerm.rehearsalDates[j].ToOADate();
                 row++;
 
                 //the actual attendance, along with the member's indexes
-                for (int j = 0; j < clsStorage.currentClub.terms[i].sMembers; j++)
+                for (int j = 0; j < currentTerm.sMembers; j++)
                 {
-                    for (int k = 0; k < clsStorage.currentClub.terms[i].sRehearsals + 1; k++)
+                    for (int k = 0; k < currentTerm.sRehearsals + 1; k++)
                     {
                         if (k == 0)
-                            data[row, k] = clsStorage.currentClub.terms[i].members[j];
+                            data[row, k] = currentTerm.members[j];
                         else
-                            data[row, k] = clsStorage.currentClub.terms[i].attendance[j, k-1];
+                            data[row, k] = currentTerm.attendance[j, k-1];
                     }
                     row++;
                 }
 
                 //fees
                 data[row, 0] = "Number of Other Fees";
-                data[row, 1] = clsStorage.currentClub.terms[i].iOtherFees;
+                data[row, 1] = currentTerm.iOtherFees;
                 row++;
                 data[row, 1] = "Membership Fee";
-                data[row+1, 1] = clsStorage.currentClub.terms[i].membershipFees;
-                for (int j = 0; j < clsStorage.currentClub.terms[i].iOtherFees; j++ )
+                data[row+1, 1] = currentTerm.membershipFees;
+                for (int j = 0; j < currentTerm.iOtherFees; j++ )
                 {
-                    data[row, j * 2 + 3] = clsStorage.currentClub.terms[i].strOtherFees[j];
-                    data[row + 1, j * 2 + 3] = clsStorage.currentClub.terms[i].dOtherFees[j];
+                    data[row, j * 2 + 3] = currentTerm.strOtherFees[j];
+                    data[row + 1, j * 2 + 3] = currentTerm.dOtherFees[j];
                 }
                 row += 2;
 
                 //the fees paid, with the member's names
-                for (int j = 0; j < clsStorage.currentClub.terms[i].sMembers; j++)
+                for (int j = 0; j < currentTerm.sMembers; j++)
                 {
-                    for (int k = 0; k < clsStorage.currentClub.terms[i].iOtherFees + 2; k++)
+                    for (int k = 0; k < currentTerm.iOtherFees + 2; k++)
                     {
                         if (k == 0)
-                            data[row, k] = clsStorage.currentClub.terms[i].members[j];
+                            data[row, k] = currentTerm.members[j];
                         else
                         {
-                            data[row, k * 2 - 1] = clsStorage.currentClub.terms[i].feesPaid[j, k - 1];
-                            data[row, k * 2] = clsStorage.currentClub.terms[i].feesPaidDate[j, k - 1].ToOADate();
+                            data[row, k * 2 - 1] = currentTerm.feesPaid[j, k - 1];
+                            data[row, k * 2] = currentTerm.feesPaidDate[j, k - 1].ToOADate();
                         }     
                     }
                     row++;
@@ -355,7 +355,7 @@ namespace Marimba
                 Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
             }
 
-            updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[1 + clsStorage.currentClub.sTerm * 373, 120]];
+            updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[1 + clsStorage.currentClub.listTerms.Count * 373, 120]];
             updateRange.set_Value(null, data);
 
             // Budget Tab
@@ -501,71 +501,73 @@ namespace Marimba
                 valueArray = replaceNulls(valueArray);
 
                 int row = 2;
-                output.sTerm = Convert.ToInt16(valueArray[1,2]);
-                output.terms = new term[output.sTerm];
-                for (int i = 0; i < output.sTerm;i++)
+                short sTerm = Convert.ToInt16(valueArray[1,2]);
+                output.listTerms = new List<term>(sTerm);
+                for (int i = 0; i < sTerm; i++)
                 {
-                    output.terms[i] = new term();
-                    output.terms[i].strName = (string)valueArray[row, 2];
+                    term termToAdd = new term();
+                    termToAdd.strName = (string)valueArray[row, 2];
                     row++;
-                    output.terms[i].sMembers = Convert.ToInt16(valueArray[row, 2]);
+                    termToAdd.sMembers = Convert.ToInt16(valueArray[row, 2]);
                     row++;
-                    output.terms[i].sNumber = Convert.ToInt16(valueArray[row, 2]);
+                    termToAdd.sNumber = Convert.ToInt16(valueArray[row, 2]);
                     row += 2;
-                    for (int j = 0; j < output.terms[i].sMembers; j++)
-                        output.terms[i].members[j] = Convert.ToInt16(valueArray[row, j + 1]);
+                    for (int j = 0; j < termToAdd.sMembers; j++)
+                        termToAdd.members[j] = Convert.ToInt16(valueArray[row, j + 1]);
                     row++;
-                    output.terms[i].startDate = DateTime.FromOADate((double)valueArray[row, 2]);
+                    termToAdd.startDate = DateTime.FromOADate((double)valueArray[row, 2]);
                     row++;
-                    output.terms[i].endDate = DateTime.FromOADate((double)valueArray[row, 2]);
+                    termToAdd.endDate = DateTime.FromOADate((double)valueArray[row, 2]);
                     row++;
-                    output.terms[i].sRehearsals = Convert.ToInt16(valueArray[row, 2]);
+                    termToAdd.sRehearsals = Convert.ToInt16(valueArray[row, 2]);
                     row+=2;
                     //load rehearsal dates
-                    output.terms[i].rehearsalDates = new DateTime[output.terms[i].sRehearsals];
-                    for (int j = 0; j < output.terms[i].sRehearsals; j++)
-                        output.terms[i].rehearsalDates[j] = DateTime.FromOADate((double)valueArray[row, j + 2]);
+                    termToAdd.rehearsalDates = new DateTime[termToAdd.sRehearsals];
+                    for (int j = 0; j < termToAdd.sRehearsals; j++)
+                        termToAdd.rehearsalDates[j] = DateTime.FromOADate((double)valueArray[row, j + 2]);
                     row++;
 
 
                     //load attendance
-                    output.terms[i].attendance = new bool[120, output.terms[i].sRehearsals];
-                    for(int j = 0; j  <output.terms[i].sMembers;j++)
+                    termToAdd.attendance = new bool[120, termToAdd.sRehearsals];
+                    for(int j = 0; j  <termToAdd.sMembers;j++)
                     {
-                        for (int k = 0; k < output.terms[i].sRehearsals; k++)
-                            output.terms[i].attendance[j, k] = (bool)valueArray[row, k + 2];
+                        for (int k = 0; k < termToAdd.sRehearsals; k++)
+                            termToAdd.attendance[j, k] = (bool)valueArray[row, k + 2];
                         row++;
                     }
 
                     //load fees
-                    output.terms[i].iOtherFees = Convert.ToInt32(valueArray[row, 2]);
+                    termToAdd.iOtherFees = Convert.ToInt32(valueArray[row, 2]);
                     row++;
                     //membership fee
-                    output.terms[i].membershipFees = (double)valueArray[row+1, 2];
+                    termToAdd.membershipFees = (double)valueArray[row+1, 2];
                     //other fees
-                    output.terms[i].strOtherFees = new string[output.terms[i].iOtherFees];
-                    output.terms[i].dOtherFees = new double[output.terms[i].iOtherFees];
-                    for(int j = 0; j < output.terms[i].iOtherFees;j++)
+                    termToAdd.strOtherFees = new string[termToAdd.iOtherFees];
+                    termToAdd.dOtherFees = new double[termToAdd.iOtherFees];
+                    for(int j = 0; j < termToAdd.iOtherFees;j++)
                     {
-                        output.terms[i].strOtherFees[j] = (string)valueArray[row, 4 + j * 2];
-                        output.terms[i].dOtherFees[j] = (double)valueArray[row+1, 4 + j * 2];
+                        termToAdd.strOtherFees[j] = (string)valueArray[row, 4 + j * 2];
+                        termToAdd.dOtherFees[j] = (double)valueArray[row+1, 4 + j * 2];
                     }
                     row += 2;
 
 
                     //load who has paid
-                    output.terms[i].feesPaid = new double[120, output.terms[i].iOtherFees+1];
-                    output.terms[i].feesPaidDate = new DateTime[120, output.terms[i].iOtherFees + 1];
-                    for(int j = 0; j < output.terms[i].sMembers;j++)
+                    termToAdd.feesPaid = new double[120, termToAdd.iOtherFees+1];
+                    termToAdd.feesPaidDate = new DateTime[120, termToAdd.iOtherFees + 1];
+                    for(int j = 0; j < termToAdd.sMembers;j++)
                     {
-                        for(int k = 0; k < output.terms[i].iOtherFees+1; k++)
+                        for(int k = 0; k < termToAdd.iOtherFees+1; k++)
                         {
-                            output.terms[i].feesPaid[j, k] = (double)valueArray[row, 2 + k * 2];
-                            if (output.terms[i].feesPaid[j, k] != 0)
-                                output.terms[i].feesPaidDate[j, k] = DateTime.FromOADate((double)valueArray[row, 3 + k * 2]);
+                            termToAdd.feesPaid[j, k] = (double)valueArray[row, 2 + k * 2];
+                            if (termToAdd.feesPaid[j, k] != 0)
+                                termToAdd.feesPaidDate[j, k] = DateTime.FromOADate((double)valueArray[row, 3 + k * 2]);
                         }
                         row++;
                     }
+
+                    output.listTerms.Add(termToAdd);
                 }
 
                 //Budget tab
