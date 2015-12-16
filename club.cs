@@ -390,8 +390,11 @@ namespace Marimba
             byte[] saltPlusPassword = new byte[saltLength + passwordLength];
 
             //generate salt
-            RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
-            rngCsp.GetBytes(salt);
+            using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetBytes(salt);
+            }
+
             //combine the salt and password
             Array.Copy(salt, saltPlusPassword, saltLength);
             Array.Copy(Encoding.UTF8.GetBytes(strPassword), 0, saltPlusPassword, saltLength, passwordLength);
@@ -501,13 +504,16 @@ namespace Marimba
                 byte[] saltPlusPassword = new byte[saltLength + passwordLength];
 
                 //generate salt
-                RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
-                rngCsp.GetBytes(salt);
-                //combine the salt and password
+                using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+                {
+                    rngCsp.GetBytes(salt);
+                }
+
+                // combine the salt and password
                 Array.Copy(salt, saltPlusPassword, saltLength);
                 Array.Copy(Encoding.UTF8.GetBytes(strNewPassword), 0, saltPlusPassword, saltLength, passwordLength);
 
-                // Convert the input string to a byte array and compute the hash. 
+                // Convert the input string to a byte array and compute the hash.
                 byte[] data = shaHash.ComputeHash(shaHash.ComputeHash(saltPlusPassword));
 
                 user[1] = bytesToHex(salt) + "$" + bytesToHex(data);
@@ -548,12 +554,15 @@ namespace Marimba
             byte[] salt = new byte[saltLength];
             int passwordLength = Encoding.UTF8.GetBytes(strName).Length;
             byte[] saltPlusPassword = new byte[saltLength + passwordLength];
-
-            RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
+            
             foreach (string[] user in strUsers)
             {
-                //generate salt
-                rngCsp.GetBytes(salt);
+                using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+                {
+                    //generate salt
+                    rngCsp.GetBytes(salt);
+                }
+
                 //combine the salt and password
                 Array.Copy(salt, saltPlusPassword, saltLength);
                 Array.Copy(Encoding.UTF8.GetBytes(strName), 0, saltPlusPassword, saltLength, passwordLength);
