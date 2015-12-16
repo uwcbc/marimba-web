@@ -611,8 +611,11 @@ namespace Marimba
                 }
 
                 //copy the history from the current club file
-                output.iHistory = currentClub.iHistory;
-                output.historyList = currentClub.historyList;
+                output.historyList = new List<history>(currentClub.historyList.Count);
+                foreach (history item in currentClub.historyList)
+                {
+                    output.historyList.Add(item);
+                }
 
                 //close the workbook, try to prevent any massive memory leaks
                 GC.Collect();

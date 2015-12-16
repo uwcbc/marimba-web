@@ -51,12 +51,12 @@ namespace Marimba
 
         //budget stuff
         //iBudget counts the number of items in the budget
-        public IList<budgetItem> budget;
+        public List<budgetItem> budget;
         private static readonly int BUDGET_BUFFER = 50;
 
         //store the history 
-        public int iHistory;
-        public history[] historyList = new history[50000];
+        public List<history> historyList;
+        private static readonly int HISTORY_BUFFER = 50;
 
         //email stuff
         public string strEmail;
@@ -72,7 +72,6 @@ namespace Marimba
             this.strLocation = strLocation;
             strName = "";
             sTerm = 0;
-            iHistory = 0;
             aesInfo = aesKey;
         }
 
@@ -206,9 +205,13 @@ namespace Marimba
                                 }
                             }
 
-                            iHistory = Convert.ToInt32(srDecrypt.ReadLine());
+                            int iHistory = Convert.ToInt32(srDecrypt.ReadLine());
+                            historyList = new List<history>(iHistory + HISTORY_BUFFER);
                             for (int i = 0; i < iHistory; i++)
-                                historyList[i] = new history(srDecrypt);
+                            {
+                                history nextItem = new history(srDecrypt);
+                                historyList.Add(nextItem);
+                            }
 
                             //read email
                             if (fileVersion >= 2)
@@ -325,9 +328,11 @@ namespace Marimba
                             }
 
                             //save history
-                            sw.WriteLine(iHistory);
-                            for (int i = 0; i < iHistory; i++)
-                                historyList[i].saveHistory(sw);
+                            sw.WriteLine(historyList.Count);
+                            foreach (history item in historyList)
+                            {
+                                item.saveHistory(sw);
+                            }
                             
                             //save email details
                             sw.WriteLine(strEmail);
@@ -872,8 +877,9 @@ namespace Marimba
 
         public void addHistory(string additionalInfo, history.changeType type)
         {
-            historyList[iHistory] = new history(strCurrentUser, type, additionalInfo, DateTime.Now);
-            iHistory++;
+            history newItem = new history(strCurrentUser, type, additionalInfo, DateTime.Now);
+            historyList.Add(newItem);
+            
             //mark unsaved changes
             clsStorage.unsavedChanges = true;
 

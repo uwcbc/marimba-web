@@ -169,7 +169,7 @@ namespace Marimba
         {
             lvHistory.Items.Clear();
             //show the last twenty changes
-            for (int i = clsStorage.currentClub.iHistory-1; i >= Math.Max(0, clsStorage.currentClub.iHistory - 20); i--)
+            for (int i = clsStorage.currentClub.historyList.Count - 1; i >= Math.Max(0, clsStorage.currentClub.historyList.Count - 20); i--)
                 lvHistory.Items.Add(clsStorage.currentClub.historyList[i].toString());
         }
 
