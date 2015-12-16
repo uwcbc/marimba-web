@@ -45,7 +45,7 @@ namespace Marimba
         public double[,] feesPaid;
         public DateTime[,] feesPaidDate;
 
-        public term(string strName, short index, short numRehearsals, DateTime start, DateTime end, DateTime[] rehearsalDates, double membershipFees, double[] dOtherFees, string[] strOtherFees)
+        public term(string strName, short index, short numRehearsals, DateTime start, DateTime end, DateTime[] rehearsalDates, double membershipFees, double[] dOtherFees = null, string[] strOtherFees = null)
         {
             this.strName = strName;
             this.sMembers = 0;
@@ -59,7 +59,14 @@ namespace Marimba
             for (int i = 0; i < sRehearsals; i++)
                 this.rehearsalDates[i] = rehearsalDates[i];
             this.membershipFees = membershipFees;
-            this.iOtherFees = Convert.ToInt16(dOtherFees.Length);
+            if (dOtherFees != null)
+            {
+                this.iOtherFees = Convert.ToInt16(dOtherFees.Length);
+            }
+            else
+            {
+                this.iOtherFees = 0;
+            }
             this.dOtherFees = new double[iOtherFees];
             this.strOtherFees = new string[iOtherFees];
             for (int i = 0; i < iOtherFees; i++)
@@ -75,32 +82,6 @@ namespace Marimba
                     this.attendance[i, j] = false;
             this.feesPaid = new double[120, 1 + iOtherFees];
             this.feesPaidDate = new DateTime[120, 1 + iOtherFees];
-            checkLimbo();
-        }
-
-        public term(string strName, short index, short numRehearsals, DateTime start, DateTime end, DateTime[] rehearsalDates, double membershipFees)
-        {
-            this.strName = strName;
-            this.sMembers = 0;
-            this.sNumber = index;
-            for (int i = 0; i < 120; i++)
-                members[i] = -1; //set to -1 so we know it does not represent member 0
-            this.startDate = start;
-            this.endDate = end;
-            this.sRehearsals = numRehearsals;
-            this.rehearsalDates = new DateTime[numRehearsals];
-            for (int i = 0; i < sRehearsals; i++)
-                this.rehearsalDates[i] = rehearsalDates[i];
-            this.membershipFees = membershipFees;
-            this.iOtherFees = 0;
-            //initialize the attendance record
-            //it only means something if the rehearsal has happened and there is a member for that record
-            attendance = new bool[120, sRehearsals];
-            for (int i = 0; i < 120; i++)
-                for (int j = 0; j < sRehearsals; j++)
-                    this.attendance[i, j] = false;
-            this.feesPaid = new double[120, 1];
-            this.feesPaidDate = new DateTime[120, 1];
             checkLimbo();
         }
 

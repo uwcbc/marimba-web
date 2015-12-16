@@ -718,7 +718,7 @@ namespace Marimba
 
         }
 
-        public bool addTerm(string strName, short index, short numRehearsals, DateTime start, DateTime end, DateTime[] rehearsalDates, double membershipFees, double[] dOtherFees, string[] strOtherFees)
+        public bool addTerm(string strName, short index, short numRehearsals, DateTime start, DateTime end, DateTime[] rehearsalDates, double membershipFees, double[] dOtherFees = null, string[] strOtherFees = null)
         {
             if (sTerm == 0) //no term has been added yet
                 terms = new term[1];
@@ -728,23 +728,6 @@ namespace Marimba
             else
                 Array.Resize(ref terms, sTerm + 1);
             terms[sTerm] = new term(strName, index, numRehearsals, start, end, rehearsalDates, membershipFees, dOtherFees, strOtherFees);
-            sTerm++;
-            return true;
-            //like adding member, always returns true
-            //functionality to add false in case adding a term becomes more difficult
-        }
-
-        public bool addTerm(string strName, short index, short numRehearsals, DateTime start, DateTime end, DateTime[] rehearsalDates, double membershipFees)
-        {
-            //this version is if there are no other fees
-            if (sTerm == 0) //no term has been added yet
-                terms = new term[1];
-            //make the array of terms bigger otherwise
-            //the inefficiency of redeclaring the array is made up for by the fact that storing a term is a lot of data
-            //this is the most efficient means of doing this
-            else
-                Array.Resize(ref terms, sTerm + 1);
-            terms[sTerm] = new term(strName, index, numRehearsals, start, end, rehearsalDates, membershipFees);
             sTerm++;
             return true;
             //like adding member, always returns true
@@ -779,29 +762,6 @@ namespace Marimba
         public string firstAndLastName(int index)
         {
             return String.Format("{0} {1}", this.members[index].strFName, this.members[index].strLName);
-        }
-
-        /// <summary>
-        /// Creates a list of names of members of a term
-        /// </summary>
-        /// <param name="iTerm">The term index. Use -1 for all terms.</param>
-        /// <returns>A string array containing the names of the members</returns>
-        public string[] memberList(int iTerm)
-        {
-            string[] output;
-            if (iTerm == -1)
-            {
-                output = new string[this.iMember];
-                for (int i = 0; i < this.iMember; i++)
-                    output[i] = formatedName(i);
-            }
-            else
-            {
-                output = new string[terms[iTerm].sMembers];
-                for (int i = 0; i < terms[iTerm].sMembers; i++)
-                    output[i] = formatedName(terms[iTerm].members[i]);
-            }
-            return output;
         }
 
         /// <summary>
