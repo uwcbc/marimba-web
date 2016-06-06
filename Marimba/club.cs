@@ -888,22 +888,46 @@ namespace Marimba
 
     public class budgetItem
     {
-        //stores the size of the revenue/expense
+        /// <summary>
+        /// stores the magnitude of the revenue/expense
+        /// </summary>
         public double value;
-        //description of the item
+
+        /// <summary>
+        /// string description of the item provided by user
+        /// </summary>
         public string name;
-        //date the purchase/expense took place
+
+        /// <summary>
+        /// date the transaction took place
+        /// </summary>
         public DateTime dateOccur;
-        //date reflected in account
+
+        /// <summary>
+        /// date of transaction in the actual accounts
+        /// </summary>
         public DateTime dateAccount;
-        //cat is for organizing different budget items into similar categories
+
+        /// <summary>
+        /// allows users to organize transactions using string category
+        /// </summary>
         public string cat;
-        //whether item is asset, depreciation, revenue, or expense
+
+        /// <summary>
+        /// whether item is asset, depreciation, revenue, or expense
+        /// </summary>
         public int type;
-        //term index item applies to
+
+        /// <summary>
+        /// index of the term that this transaction took place in
+        /// </summary>
         public int term;
-        //record any additional information about the item
+
+        /// <summary>
+        /// record any additional information about the item
+        /// </summary>
         public string comment;
+
         /// <summary>
         /// If depreciation, stores a reference to the asset it depreciates
         /// </summary>
