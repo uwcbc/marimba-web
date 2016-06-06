@@ -17,12 +17,12 @@ It's not that bad, but it took me a while to figure out what to do, so hopefully
 ## Getting started
 1. Install Visual Studio 2013 from Dreamspark.
 
-Look for the Visual Studio 2013 installation on Dreamspark. As a UW student, you can get this for free. Download it (it's 2GB) and install it. You can leave all the defaults as is.
+    Look for the Visual Studio 2013 installation on Dreamspark. As a UW student, you can get this for free. Download it (it's 2GB) and install it. You can leave all the defaults as is.
 
 2. Setup the Visual Studio projects.
 
-Ask the previous developer of Marimba to add you to the uwcbc organization. To actually get the code, install a git client and clone the repo. To open the project, double click the .sln file in the new uwcbc-marimba folder. Everything should be working at this point! If not, ask the previous developer.
+    Ask the previous developer of Marimba to add you to the uwcbc organization. To actually get the code, install a git client and clone the repo. To open the project, double click the .sln file in the new uwcbc-marimba folder. Everything should be working at this point! If not, ask the previous developer.
 
 3. OPTIONAL: Integrate Visual Studio with Git.
 
-Ideally, you should be able to check-in and check-out changes directly in Visual Studio. This is up to whether you like the convenience of an IDE doing things for you, or like using a shell to run git commands.
+    Ideally, you should be able to check-in and check-out changes directly in Visual Studio. This is up to whether you like the convenience of an IDE doing things for you, or like using a shell to run git commands.
