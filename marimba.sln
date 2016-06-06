@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marimba", "Marimba.csproj", "{E5307D7C-B845-46FA-801E-F0D08ADC5F91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marimba", "Marimba\Marimba.csproj", "{E5307D7C-B845-46FA-801E-F0D08ADC5F91}"
 EndProject
-Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Setup", "..\Setup\Setup.isproj", "{F5EAABC3-8482-435B-98BA-25D6B68BF0CD}"
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Setup", "Setup\Setup.isproj", "{F5EAABC3-8482-435B-98BA-25D6B68BF0CD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E5307D7C-B845-46FA-801E-F0D08ADC5F91} = {E5307D7C-B845-46FA-801E-F0D08ADC5F91}
 	EndProjectSection
