@@ -838,31 +838,28 @@ namespace Marimba
         /// <returns>Returns true is the depreciation on the asset is at least the value of the asset</returns>
         public bool fullyDepreciatedAsset(budgetItem asset, DateTime? beforeDate = null)
         {
-            return fullyDepreciatedAsset(clsStorage.currentClub.budget.IndexOf(asset), beforeDate);
-        }
-
-        /// <summary>
-        /// Determines if asset has any value after depreciation
-        /// </summary>
-        /// <param name="index">Index of the asset</param>
-        /// <param name="beforeDate">Only include depreciation before this date</param>
-        /// <returns>Returns true is the depreciation on the asset is at least the value of the asset</returns>
-        public bool fullyDepreciatedAsset(int index, DateTime? beforeDate = null)
-        {
             if (beforeDate == null)
             {
                 beforeDate = DateTime.MaxValue;
             }
-            //don't even tr guess if the asset being depreciated hasn't been marked
-            if (index == -1)
+
+            //don't even to guess if the asset being depreciated hasn't been marked
+            if (!clsStorage.currentClub.budget.Contains(asset))
+            {
                 return false;
-            double dDep = 0;
-            //sum up all of the depreciation against this asset
-            foreach (budgetItem item in budget)
-                if (item.type == 1 && item.depOfAsset == budget[index] && item.dateOccur <= beforeDate)
-                    dDep += item.value;
-            //return true if the depreciation completely depreciates the asset
-            return dDep >= budget[index].value;
+            }
+
+            // sum up all of the depreciation against this asset
+            double amountDepreciated = 0;
+            foreach (budgetItem currentItem in budget)
+            {
+                if (currentItem.type == 1 && currentItem.depOfAsset == asset && currentItem.dateOccur <= beforeDate)
+                {
+                    amountDepreciated += currentItem.value;
+                }
+            }
+
+            return amountDepreciated >= asset.value;
         }
 
         public double valueAfterDepreciation(budgetItem asset)
