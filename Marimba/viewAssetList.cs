@@ -12,7 +12,6 @@ namespace Marimba
 {
     public partial class viewAssetList : Form
     {
-
         public ListViewColumnSorter lvmColumnSorter;
         Dictionary<int, budgetItem> budgetItemDictionary;
 
@@ -23,40 +22,7 @@ namespace Marimba
 
         private void viewAssetList_Load(object sender, EventArgs e)
         {
-            assetListView.BeginUpdate();
-            assetListView.Items.Clear();
-            
-            // reset sorting
-            lvmColumnSorter = new ListViewColumnSorter();
-            this.assetListView.ListViewItemSorter = lvmColumnSorter;
-
-            // get the indices of all assets in the budget
-            budgetItem[] assets = clsStorage.currentClub.assetList(true);
-            budgetItemDictionary = new Dictionary<int, budgetItem>(assets.Length);
-
-            List<ListViewItem> assetList = new List<ListViewItem>();
-            ListViewItem item;
-            for (int i = 0; i < assets.Length; i++)
-            {
-                // get the current budget item
-                budgetItem currentBudgetItem = assets[i];
-
-                // get the fields that will be displayed
-                string[] itemText = new string[4];
-                itemText[0] = currentBudgetItem.name;
-                itemText[1] = clsStorage.currentClub.valueAfterDepreciation(currentBudgetItem).ToString("C");
-                itemText[2] = currentBudgetItem.value.ToString("C");
-                itemText[3] = Convert.ToString(i);
-                budgetItemDictionary.Add(i, assets[i]);
-
-                // add the current item to the list to be displayed
-                item = new ListViewItem(itemText);
-                assetList.Add(item);
-            }
-
-            // update the list
-            assetListView.Items.AddRange(assetList.ToArray());
-            assetListView.EndUpdate();
+            updateAssetList(chkBoxShowDepreciated.Checked);
         }
 
         private void viewAssetList_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -103,6 +69,57 @@ namespace Marimba
         private void viewAssetList_FormClosed(object sender, FormClosedEventArgs e)
         {
             budgetItemDictionary = null;
+        }
+
+        private void chkBoxShowDepreciated_CheckedChanged(object sender, EventArgs e)
+        {
+            updateAssetList(chkBoxShowDepreciated.Checked);
+        }
+
+        private void chkBoxShowDepTransactions_CheckedChanged(object sender, EventArgs e)
+        {
+            updateAssetList(chkBoxShowDepreciated.Checked);
+        }
+
+        /// <summary>
+        /// Update the asset list in the Window
+        /// </summary>
+        /// <param name="showDepreciated">Whether to show completely-depreciated assets</param>
+        private void updateAssetList(bool showDepreciated) {
+            assetListView.BeginUpdate();
+            assetListView.Items.Clear();
+            
+            // reset sorting
+            lvmColumnSorter = new ListViewColumnSorter();
+            this.assetListView.ListViewItemSorter = lvmColumnSorter;
+
+            // get the indices of all assets in the budget
+            budgetItem[] assets = clsStorage.currentClub.assetList(showDepreciated);
+            budgetItemDictionary = new Dictionary<int, budgetItem>(assets.Length);
+
+            List<ListViewItem> assetList = new List<ListViewItem>();
+            ListViewItem item;
+            for (int i = 0; i < assets.Length; i++)
+            {
+                // get the current budget item
+                budgetItem currentBudgetItem = assets[i];
+
+                // get the fields that will be displayed
+                string[] itemText = new string[4];
+                itemText[0] = currentBudgetItem.name;
+                itemText[1] = clsStorage.currentClub.valueAfterDepreciation(currentBudgetItem).ToString("C");
+                itemText[2] = currentBudgetItem.value.ToString("C");
+                itemText[3] = Convert.ToString(i);
+                budgetItemDictionary.Add(i, assets[i]);
+
+                // add the current item to the list to be displayed
+                item = new ListViewItem(itemText);
+                assetList.Add(item);
+            }
+
+            // update the list
+            assetListView.Items.AddRange(assetList.ToArray());
+            assetListView.EndUpdate();
         }
     }
 }
