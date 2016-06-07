@@ -41,7 +41,7 @@ namespace Marimba
                 // get the current budget item
                 budgetItem currentBudgetItem = assets[i];
 
-                // get the fields that will eb displayed
+                // get the fields that will be displayed
                 string[] itemText = new string[4];
                 itemText[0] = currentBudgetItem.name;
                 itemText[1] = clsStorage.currentClub.valueAfterDepreciation(currentBudgetItem).ToString("C");
