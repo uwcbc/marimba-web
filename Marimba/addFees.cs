@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -187,9 +188,11 @@ namespace Marimba
                             output[i + 1, 4+j] = clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, j].ToString("C");
                     }
                     //now that the string array is set up, save it
-                    excelFile.saveExcelRowHighlight(output, svdSave.FileName,3,"Inactive",System.Drawing.Color.Gray,4,"$0.00",System.Drawing.Color.Yellow);
-                    if (Properties.Settings.Default.playSounds)
-                        sound.success.Play();
+                    excelFile.saveExcelRowHighlight(output, svdSave.FileName,
+                        new List<ExcelHighlightingInfo> {
+                            new ExcelHighlightingInfo { column = 5, matchExpression = "$0.00", colour = System.Drawing.Color.Yellow },
+                            new ExcelHighlightingInfo { column = 4, matchExpression = "Inactive", colour = System.Drawing.Color.Gray }
+                        });
                 }
                 else if (svdSave.FilterIndex == 2)
                 {

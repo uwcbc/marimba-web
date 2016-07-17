@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,157 +16,137 @@ namespace Marimba
         /// </summary>
         /// <param name="data">Array of data corresponding to Excel cells</param>
         /// <param name="location">Location where file is to be saved</param>
-        /// <param name="autofit">Whether or not to autofit the cell sizes</param>
-        public static void saveExcel(object[,] data, string location, bool autofit = false, string dateColumns = null, string dateFormat = null)
+        /// <param name="dateFormat">The format to use when saving dates</param>
+        /// <returns>Whether the file was successfully saved</returns>
+        public static void saveExcel(object[,] data, string location, string dateFormat = null)
         {
-
-            //first, set it up
-            Excel.Application ExcelApp = new Excel.Application();
-            ExcelApp.Visible = false;
-            Excel.Workbook ExcelWorkbook = ExcelApp.Workbooks.Add(Type.Missing);
-            Excel.Worksheet ExcelWorksheet = ExcelWorkbook.Sheets[1];
             try
             {
-                //next, fill in the data
-                int row = data.GetLength(0);
-                int column = data.GetLength(1);
-                Excel.Range rng = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[row, column]];
-                rng.set_Value(null, data);
-                if (dateColumns != null)
+                var workbook = new XLWorkbook();
+                workbook.Author = clsStorage.currentClub.strCurrentUser;
+                var worksheet = workbook.Worksheets.Add("Sheet 1");
+
+                int rows = data.GetLength(0);
+                int columns = data.GetLength(1);
+                for (int i = 0; i < rows; i++)
                 {
-                    ExcelWorksheet.Columns[dateColumns].NumberFormat = dateFormat;
+                    for (int j = 0; j < columns; j++)
+                    {
+                        worksheet.Cell(i + 1, j + 1).Value = data[i, j];
+                        if (dateFormat != null && data[i, j] is DateTime)
+                        {
+                            worksheet.Cell(i + 1, j + 1).Style.DateFormat.SetFormat(dateFormat);
+                        }
+                    }
                 }
+                worksheet.Rows().AdjustToContents();
+                worksheet.Columns().AdjustToContents();
 
-                if (autofit)
-                    ExcelWorksheet.Columns.AutoFit();
-
-                ExcelWorkbook.SaveAs(location, Excel.XlFileFormat.xlWorkbookDefault);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorksheet);
-                ExcelApp.Workbooks.Close();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorkbook);
-                ExcelApp.Quit();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelApp);
+                workbook.SaveAs(location);
+                if (Properties.Settings.Default.playSounds)
+                    sound.success.Play();
             }
-            catch(System.Runtime.InteropServices.COMException)
+            catch (Exception e)
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.error.Play();
-                System.Windows.Forms.MessageBox.Show("File was not saved. Unable to save file that is currently open.");
-                //dump garbage
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorksheet);
-                ExcelWorkbook.Close(false);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorkbook);
-                ExcelApp.Quit();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelApp);
+                System.Windows.Forms.MessageBox.Show("File was not saved. " + e.Message);
             }
         }
 
-        public static void saveExcelRowHighlight(object[,] data, string location, int col1, object crit1, System.Drawing.Color colour1, int col2, object crit2, System.Drawing.Color colour2)
+        public static void saveExcelRowHighlight(object[,] data, string location, IList<ExcelHighlightingInfo> highlightingCriteria)
         {
-
-            //first, set it up
-            Excel.Application ExcelApp = new Excel.Application();
-            ExcelApp.Visible = false;
-            Excel.Workbook ExcelWorkbook = ExcelApp.Workbooks.Add(Type.Missing);
-            Excel.Worksheet ExcelWorksheet = ExcelWorkbook.Sheets[1];
             try
             {
-                //next, fill in the data
-                int row = data.GetLength(0);
-                int column = data.GetLength(1);
-                Excel.Range rng = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[row, column]];
-                rng.set_Value(null, data);
+                var workbook = new XLWorkbook();
+                workbook.Author = clsStorage.currentClub.strCurrentUser;
+                var worksheet = workbook.Worksheets.Add("Sheet 1");
 
-                //do the highlighting
-                for (int i = 1; i <= row; i++)
+                int rows = data.GetLength(0);
+                int columns = data.GetLength(1);
+                for (int i = 0; i < rows; i++)
                 {
-                    if (data[i - 1, col1] == crit1)
-                        ExcelWorksheet.Range[ExcelWorksheet.Cells[i, 1], ExcelWorksheet.Cells[i, column]].Interior.Color = colour1;
-                    else if (data[i - 1, col2].ToString() == crit2.ToString())
-                        ExcelWorksheet.Range[ExcelWorksheet.Cells[i, 1], ExcelWorksheet.Cells[i, column]].Interior.Color = colour2;
+                    for (int j = 0; j < columns; j++)
+                    {
+                        worksheet.Cell(i + 1, j + 1).Value = data[i, j];
+                        worksheet.Cell(i + 1, j + 1).DataType = XLCellValues.Text;
+                    }
+                }
+                var range = worksheet.RangeUsed();
+
+                foreach (var criteria in highlightingCriteria)
+                {
+                    range.Rows(row => row.Cell(criteria.column).GetString() == criteria.matchExpression)
+                        .ForEach(row =>row.Style.Fill.BackgroundColor = XLColor.FromColor(criteria.colour));
                 }
 
-                ExcelWorkbook.SaveAs(location, Excel.XlFileFormat.xlWorkbookDefault);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorksheet);
-                ExcelApp.Workbooks.Close();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorkbook);
-                ExcelApp.Quit();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelApp);
+                workbook.SaveAs(location);
+                if (Properties.Settings.Default.playSounds)
+                    sound.success.Play();
             }
-            catch (System.Runtime.InteropServices.COMException)
+            catch (Exception e)
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.error.Play();
-                System.Windows.Forms.MessageBox.Show("File was not saved. Unable to save file that is currently open.");
-                //dump garbage
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorksheet);
-                ExcelWorkbook.Close(false);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorkbook);
-                ExcelApp.Quit();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelApp);
+                System.Windows.Forms.MessageBox.Show("File was not saved. " + e.Message);
             }
         }
 
+        /// <summary>
+        /// Saves the data as a financial statement; mostly just adds some underlining
+        /// </summary>
+        /// <param name="data">Financial statement data</param>
+        /// <param name="location">File location to save to</param>
+        /// <param name="autofit">Whether to autofit the columns</param>
         public static void saveFinancialStatement(object[,] data, string location, bool autofit = false)
         {
-            //this differs from saveExcel in that it adds the nice underlining one would expect of a financial statement
-
-            //first, set it up
-            Excel.Application ExcelApp = new Excel.Application();
-            ExcelApp.Visible = false;
-            Excel.Workbook ExcelWorkbook = ExcelApp.Workbooks.Add(Type.Missing);
-            Excel.Worksheet ExcelWorksheet = ExcelWorkbook.Sheets[1];
-
             try
             {
-                //next, fill in the data
-                int row = data.GetLength(0);
-                int column = data.GetLength(1);
-                Excel.Range rng = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[row, column]];
-                rng.set_Value(null, data);
+                var workbook = new XLWorkbook();
+                workbook.Author = clsStorage.currentClub.strCurrentUser;
+                var worksheet = workbook.Worksheets.Add("Sheet 1");
 
-                if (autofit)
-                    ExcelWorksheet.Columns.AutoFit();
-
-                column -= 2;
-
-                //merge the first two rows
-                ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[1, column]].Merge();
-                ExcelWorksheet.Range[ExcelWorksheet.Cells[2, 1], ExcelWorksheet.Cells[2, column]].Merge();
-
-                //add underlining
-                for (int j = 4; j <= row; j++)
+                int rows = data.GetLength(0);
+                int columns = data.GetLength(1);
+                for (int i = 0; i < rows; i++)
                 {
-                    for (int i = 2; i < column; i++)
+                    for (int j = 0; j < columns; j++)
+                    {
+                        worksheet.Cell(i + 1, j + 1).Value = data[i, j];
+                        worksheet.Cell(i + 1, j + 1).DataType = XLCellValues.Text;
+                    }
+                }
+                worksheet.Rows().AdjustToContents();
+                worksheet.Columns().AdjustToContents();
+
+                // merge the first two rows
+                worksheet.Row(1).Merge();
+                worksheet.Row(2).Merge();
+
+                // TECHDEBT: this is incomprehensible
+                columns -= 2;
+                for (int j = 4; j <= rows; j++)
+                {
+                    for (int i = 2; i < columns; i++)
                     {
                         if (!String.IsNullOrEmpty((string)data[j - 1, i - 1]) && !String.IsNullOrEmpty((string)data[j - 1, i]))
-                            ExcelWorksheet.Cells[j, i].Borders(9).LineStyle = Excel.XlLineStyle.xlContinuous;
-                        else if (!String.IsNullOrEmpty((string)data[j - 1, i - 1]) && j < row && !String.IsNullOrEmpty((string)data[j, i]) && String.IsNullOrEmpty((string)data[j, i - 1]))
-                            ExcelWorksheet.Cells[j, i].Borders(9).LineStyle = Excel.XlLineStyle.xlContinuous;
+                            worksheet.Cell(j, i).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        else if (!String.IsNullOrEmpty((string)data[j - 1, i - 1]) && j < rows && !String.IsNullOrEmpty((string)data[j, i]) && String.IsNullOrEmpty((string)data[j, i - 1]))
+                            worksheet.Cell(j, i).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                     }
-                    //add double line if applicable
-                    if (data[j - 1, column - 1] != null && data[j - 2, column - 1] == null && data[j - 2, column - 2] == null && (j == row || data[j, column - 1] == null))
-                        ExcelWorksheet.Cells[j, column].Borders(9).LineStyle = Excel.XlLineStyle.xlDouble;
+                    if (data[j - 1, columns - 1] != null && data[j - 2, columns - 1] == null && data[j - 2, columns - 2] == null && (j == rows || data[j, columns - 1] == null))
+                        worksheet.Cell(j, columns).Style.Border.BottomBorder = XLBorderStyleValues.Double;
                 }
 
-                ExcelWorkbook.SaveAs(location, Excel.XlFileFormat.xlWorkbookDefault);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorksheet);
-                ExcelApp.Workbooks.Close();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorkbook);
-                ExcelApp.Quit();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelApp);
+                workbook.SaveAs(location);
+                if (Properties.Settings.Default.playSounds)
+                    sound.success.Play();
             }
-            catch (System.Runtime.InteropServices.COMException)
+            catch (Exception e)
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.error.Play();
-                System.Windows.Forms.MessageBox.Show("File was not saved. Unable to save file that is currently open.");
-                //dump garbage
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorksheet);
-                ExcelWorkbook.Close(false);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorkbook);
-                ExcelApp.Quit();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelApp);
+                System.Windows.Forms.MessageBox.Show("File was not saved. " + e.Message);
             }
         }
 

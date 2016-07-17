@@ -78,7 +78,7 @@ namespace Marimba
                         output[i + 1, 8] = item.comment;
                         i++;
                     }
-                    excelFile.saveExcel(output, svdSave.FileName, false, "G:H", "dd/mm/yy");
+                    excelFile.saveExcel(output, svdSave.FileName, "dd/MM/yy");
                 }
                 //2 = CSV file
                 else if (svdSave.FilterIndex == 2)
@@ -119,9 +119,9 @@ namespace Marimba
                             writer.WriteRow(row);
                         }
                     }
+                    if (Properties.Settings.Default.playSounds)
+                        sound.success.Play();
                 }
-                if (Properties.Settings.Default.playSounds)
-                    sound.success.Play();
             }
         }
 

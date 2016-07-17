@@ -67,9 +67,16 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClosedXML">
+      <HintPath>..\packages\ClosedXML.0.76.0\lib\net40-client\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="ImapX">
       <HintPath>..\..\..\..\..\Downloads\Utilities\ImapX 2.0.0.16 Binaries\v4.5\ImapX.dll</HintPath>
     </Reference>
@@ -120,6 +127,7 @@
     <Compile Include="editUser.Designer.cs">
       <DependentUpon>editUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\ExcelHighlightingInfo.cs" />
     <Compile Include="viewAssetList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -367,6 +375,7 @@
     <None Include="app.config" />
     <None Include="fonts\Quicksand_Bold.otf" />
     <None Include="fonts\Quicksand_Book.otf" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -487,7 +496,7 @@
     <COMReference Include="Microsoft.Office.Core">
       <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
       <VersionMajor>2</VersionMajor>
-      <VersionMinor>5</VersionMinor>
+      <VersionMinor>8</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>

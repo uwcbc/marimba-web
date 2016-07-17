@@ -166,7 +166,7 @@ namespace Marimba
                     output[0, 4] = "E-Mail Address";
                     output[0, 5] = "Shirt Size";
                     for (int i = 0; i < clsStorage.currentClub.listTerms[iTerm].sRehearsals; i++)
-                        output[0,6+i] = clsStorage.currentClub.listTerms[iTerm].rehearsalDates[i];
+                        output[0, 6 + i] = clsStorage.currentClub.listTerms[iTerm].rehearsalDates[i];
                     for (int i = 0; i < clsStorage.currentClub.listTerms[iTerm].sMembers; i++)
                     {
                         output[i+1,0] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strFName;
@@ -187,7 +187,7 @@ namespace Marimba
                         }
                     }
                     //now that the string array is set up, save it
-                    excelFile.saveExcel(output, svdSave.FileName);
+                    excelFile.saveExcel(output, svdSave.FileName, "dd/MM/yyyy");
                 }
                 //2 = csv file
                 else if (svdSave.FilterIndex == 2)
@@ -226,9 +226,9 @@ namespace Marimba
                             writer.WriteRow(row);
                         }
                     }
+                    if (Properties.Settings.Default.playSounds)
+                        sound.success.Play();
                 }
-                if (Properties.Settings.Default.playSounds)
-                    sound.success.Play();
             }
         }
 

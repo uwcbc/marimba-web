@@ -95,10 +95,10 @@ namespace Marimba
                             writer.WriteRow(row);
                         }
                     }
+                    if (Properties.Settings.Default.playSounds)
+                        sound.success.Play();
                 }
             }
-            if (Properties.Settings.Default.playSounds)
-                sound.success.Play();
         }
     }
 }

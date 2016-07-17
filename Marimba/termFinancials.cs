@@ -484,10 +484,10 @@ namespace Marimba
                         //cash flow statement export
                         else
                             writeFinancialStatement(lvCash, writer);
+                        if (Properties.Settings.Default.playSounds)
+                            sound.success.Play();
                     }
                 }
-                if (Properties.Settings.Default.playSounds)
-                    sound.success.Play();
             }
         }
 
