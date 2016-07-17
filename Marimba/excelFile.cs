@@ -428,7 +428,7 @@ namespace Marimba
             updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[2 + clsStorage.currentClub.budget.Count, 9]];
             updateRange.set_Value(null, data);
 
-            //for integrity purposes, election and history will not be allowed to be edited this way
+            //for integrity purposes, history will not be allowed to be edited this way
 
             ExcelApp.ScreenUpdating = true;
             
