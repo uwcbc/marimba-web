@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -515,11 +516,8 @@ namespace Marimba
                 int width = lv.Items[i].SubItems.Count;
                 for (int j = 0; j < width; j++)
                 {
-                    if (double.TryParse(lv.Items[i].SubItems[j].Text, out curValue))
-                        //just to clarify, we convert the string to a number
-                        //which is then converted into a nice money format
-                        //it looks weird, but it works
-                        output[i, j] = curValue.ToString("C");
+                    if (double.TryParse(lv.Items[i].SubItems[j].Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out curValue))
+                        output[i, j] = curValue;
                     else
                         output[i, j] = lv.Items[i].SubItems[j].Text;
                 }

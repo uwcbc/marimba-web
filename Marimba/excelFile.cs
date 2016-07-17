@@ -13,6 +13,7 @@ namespace Marimba
     {
         /// <summary>
         /// Saves array into an .xlsx file
+        /// Note: If a data entry is a double, it is treated as currency.
         /// </summary>
         /// <param name="data">Array of data corresponding to Excel cells</param>
         /// <param name="location">Location where file is to be saved</param>
@@ -36,6 +37,11 @@ namespace Marimba
                         if (dateFormat != null && data[i, j] is DateTime)
                         {
                             worksheet.Cell(i + 1, j + 1).Style.DateFormat.SetFormat(dateFormat);
+                        }
+                        else if (data[i, j] is double)
+                        {
+                            worksheet.Cell(i + 1, j + 1).Style.NumberFormat.SetFormat("$0.00");
+                            worksheet.Cell(i + 1, j + 1).DataType = XLCellValues.Number;
                         }
                     }
                 }
@@ -69,7 +75,6 @@ namespace Marimba
                     for (int j = 0; j < columns; j++)
                     {
                         worksheet.Cell(i + 1, j + 1).Value = data[i, j];
-                        worksheet.Cell(i + 1, j + 1).DataType = XLCellValues.Text;
                     }
                 }
                 var range = worksheet.RangeUsed();
@@ -93,7 +98,8 @@ namespace Marimba
         }
 
         /// <summary>
-        /// Saves the data as a financial statement; mostly just adds some underlining
+        /// Saves the data as a financial statement; mostly just adds some underlining.
+        /// Note: If a data entry is a double, it is treated as currency.
         /// </summary>
         /// <param name="data">Financial statement data</param>
         /// <param name="location">File location to save to</param>
@@ -113,29 +119,71 @@ namespace Marimba
                     for (int j = 0; j < columns; j++)
                     {
                         worksheet.Cell(i + 1, j + 1).Value = data[i, j];
-                        worksheet.Cell(i + 1, j + 1).DataType = XLCellValues.Text;
+                        if (data[i, j] is double)
+                        {
+                            worksheet.Cell(i + 1, j + 1).Style.NumberFormat.SetFormat("$0.00");
+                            worksheet.Cell(i + 1, j + 1).DataType = XLCellValues.Number;
+                        }
                     }
                 }
                 worksheet.Rows().AdjustToContents();
                 worksheet.Columns().AdjustToContents();
 
                 // merge the first two rows
-                worksheet.Row(1).Merge();
-                worksheet.Row(2).Merge();
+                worksheet.Range(1, 1, 1, columns).Merge();
+                worksheet.Range(2, 1, 2, columns).Merge();
 
-                // TECHDEBT: this is incomprehensible
                 columns -= 2;
-                for (int j = 4; j <= rows; j++)
+                for (int i = 4; i <= rows; i++)
                 {
-                    for (int i = 2; i < columns; i++)
+                    for (int j = 2; j < columns; j++)
                     {
-                        if (!String.IsNullOrEmpty((string)data[j - 1, i - 1]) && !String.IsNullOrEmpty((string)data[j - 1, i]))
-                            worksheet.Cell(j, i).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                        else if (!String.IsNullOrEmpty((string)data[j - 1, i - 1]) && j < rows && !String.IsNullOrEmpty((string)data[j, i]) && String.IsNullOrEmpty((string)data[j, i - 1]))
-                            worksheet.Cell(j, i).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        bool currentCellFilled = data[i - 1, j - 1] != null && !String.IsNullOrEmpty(data[i - 1, j - 1].ToString());
+                        bool rightCellFilled = data[i - 1, j] != null && !String.IsNullOrEmpty(data[i - 1, j].ToString());
+                        bool belowCellFilled = i < rows && data[i, j - 1] != null && !String.IsNullOrEmpty(data[i, j - 1].ToString());
+                        bool belowRightCellFilled = i < rows && data[i, j] != null && !String.IsNullOrEmpty(data[i, j].ToString());
+
+                        /*
+                         * for any entry that deducts from a total amount, then the remaining amount is displayed to the right of the current value
+                         * -------------------------------------------
+                         * | Non-empty (bottom-bordered) | Non-empty |
+                         * -------------------------------------------
+                         */
+                        if (currentCellFilled && rightCellFilled) {
+                            worksheet.Cell(i, j).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        }
+                        /*
+                         * for any entry that is the bottom of a column of totals
+                         * ---------------------------------------------
+                         * | Non-empty (bottom-bordered) | Unknown     |
+                         * ---------------------------------------------
+                         * | Empty                       | Non-empty   |
+                         * ---------------------------------------------
+                         */
+                        else if (currentCellFilled && belowRightCellFilled && !belowCellFilled)
+                        {
+                            worksheet.Cell(i, j).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        }
                     }
-                    if (data[j - 1, columns - 1] != null && data[j - 2, columns - 1] == null && data[j - 2, columns - 2] == null && (j == rows || data[j, columns - 1] == null))
-                        worksheet.Cell(j, columns).Style.Border.BottomBorder = XLBorderStyleValues.Double;
+
+                    bool lastCellFilled = data[i - 1, columns - 1] != null;
+                    bool aboveLastCellFilled = data[i - 2, columns - 1] != null;
+                    bool topLeftOfLastCellFilled = data[i - 2, columns - 2] != null;
+                    bool belowLastCellFilled = i < rows && data[i, columns - 1] != null;
+                    bool lastRow = i == rows;
+
+                    /*
+                     * double border applied if above and below rows are free, then double-border the last cell of this row
+                     * -----------------------------------------
+                     * | Empty   | Empty                       |
+                     * -----------------------------------------
+                     * | Unknown | Non-empty (double-bordered) |
+                     * -----------------------------------------
+                     * | Empty   | Empty                       |
+                     * -----------------------------------------
+                     */
+                    if (lastCellFilled && !aboveLastCellFilled && !topLeftOfLastCellFilled && (lastRow || !belowLastCellFilled))
+                        worksheet.Cell(i, columns).Style.Border.BottomBorder = XLBorderStyleValues.Double;
                 }
 
                 workbook.SaveAs(location);

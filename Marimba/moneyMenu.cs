@@ -68,9 +68,9 @@ namespace Marimba
                         output[i + 1, 0] = clsStorage.currentClub.listTerms[item.term].strName;
                         output[i + 1, 1] = item.name;
                         if (item.type == (int)club.money.Revenue)
-                            output[i + 1, 3] = item.value.ToString("C");
+                            output[i + 1, 3] = item.value;
                         else
-                            output[i + 1, 2] = item.value.ToString("C");
+                            output[i + 1, 2] = item.value;
                         output[i + 1, 4] = item.cat;
                         output[i + 1, 5] = Convert.ToString((club.money)item.type);
                         output[i + 1, 6] = item.dateOccur;
