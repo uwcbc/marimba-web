@@ -207,242 +207,214 @@ namespace Marimba
             int iTotal = clsStorage.currentClub.strUsers.Count + clsStorage.currentClub.iMember + clsStorage.currentClub.listTerms.Count*60 + clsStorage.currentClub.budget.Count + 1;
             int iCurrent = 0;
 
-            string[] writableList;
-
-            //first, set it up
-            Excel.Application ExcelApp = new Excel.Application();
-            ExcelApp.Visible = false;
-            Excel.Workbook ExcelWorkbook = ExcelApp.Workbooks.Add(Type.Missing);
-            Excel.Worksheet ExcelWorksheet = ExcelWorkbook.Sheets[1];
-            ExcelWorksheet.Name = "General";
-            ExcelApp.ScreenUpdating = false;
-
-            //now, we'll use a similar approach to how the club would actually be saved
-            int row = 9;
-            object[,] data = new object[9 + clsStorage.currentClub.strUsers.Count, 4];
-            data[0, 0] = "File Version";
-            data[0, 1] = Marimba.club.FILE_VERSION;
-            data[1, 0] = "Club Name";
-            data[1, 1] = clsStorage.currentClub.strName;
-            data[2, 0] = "Number of Users";
-            data[2, 1] = clsStorage.currentClub.strUsers.Count;
-            data[3, 0] = "Email Address";
-            data[3, 1] = clsStorage.currentClub.strEmail;
-            data[4, 0] = "IMAP Address";
-            data[4, 1] = clsStorage.currentClub.strImap;
-            data[5, 0] = "IMAP SSL";
-            data[5, 1] = clsStorage.currentClub.bImap;
-            data[6, 0] = "SMTP Address";
-            data[6, 1] = clsStorage.currentClub.strSmtp;
-            data[7, 0] = "SMTP Port";
-            data[7, 1] = clsStorage.currentClub.iSmtp;
-            data[8, 0] = "SMTP SSL";
-            data[8, 1] = clsStorage.currentClub.bSmtp;
-
-            foreach (string[] user in clsStorage.currentClub.strUsers)
+            try
             {
-                for (int j = 0; j < 4; j++)
-                    data[row, j] = user[j];
-                row++;
-                iCurrent++;
-                Program.home.bwReport.ReportProgress((iCurrent*100) / iTotal);
-            }
+                var workbook = new XLWorkbook();
+                workbook.Author = clsStorage.currentClub.strCurrentUser;
+                
+                /*
+                 * General Sheet
+                 */
+                var worksheet = workbook.Worksheets.Add("General");
 
-            Excel.Range updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[9 + clsStorage.currentClub.strUsers.Count, 4]];
-            updateRange.set_Value(null, data);
+                worksheet.Cell(1, 1).Value = "File Version";
+                worksheet.Cell(1, 2).Value = Marimba.club.FILE_VERSION;
+                worksheet.Cell(2, 1).Value = "Club Name";
+                worksheet.Cell(2, 2).Value = clsStorage.currentClub.strName;
+                worksheet.Cell(3, 1).Value = "Number of Users";
+                worksheet.Cell(3, 2).Value = clsStorage.currentClub.strUsers.Count;
+                worksheet.Cell(4, 1).Value = "Email Address";
+                worksheet.Cell(4, 2).Value = clsStorage.currentClub.strEmail;
+                worksheet.Cell(5, 1).Value = "IMAP Address";
+                worksheet.Cell(5, 2).Value = clsStorage.currentClub.strImap;
+                worksheet.Cell(6, 1).Value = "IMAP SSL";
+                worksheet.Cell(6, 2).Value = clsStorage.currentClub.bImap;
+                worksheet.Cell(7, 1).Value = "SMTP Address";
+                worksheet.Cell(7, 2).Value = clsStorage.currentClub.strSmtp;
+                worksheet.Cell(8, 1).Value = "SMTP Port";
+                worksheet.Cell(8, 2).Value = clsStorage.currentClub.iSmtp;
+                worksheet.Cell(9, 1).Value = "SMTP SSL";
+                worksheet.Cell(9, 2).Value = clsStorage.currentClub.bSmtp;
 
-            //Member Tab
-            
-            ExcelWorkbook.Sheets.Add(After: ExcelWorksheet);
-            ExcelWorksheet = ExcelWorkbook.Sheets[2];
-            ExcelWorksheet.Name = "Members";
-            //reset row for new tab
-            row = 0;
-            //reset data for new tab
-            data = new object[2 + clsStorage.currentClub.iMember, 12 + Enum.GetValues(typeof(member.instrument)).Length];
-
-            data[row, 0] = "Number of Members";
-            data[row, 1]= clsStorage.currentClub.iMember;
-            row++;
-
-            //Note: Will need to add multiple instruments later
-            writableList = new string[] {"First Name", "Last Name", "Type","Student Number", "Faculty", "Instrument", "E-mail", "Other", "ID", "Signup Time", "Shirt Size", "Multiple Instruments"};
-            for (int i = 0; i < writableList.Length; i++)
-                data[row, i] = writableList[i];
-            for (int i = 0; i < Enum.GetValues(typeof(member.instrument)).Length; i++)
-                data[row, i + writableList.Length] = member.instrumentToString((member.instrument)i);
-            row++;
-
-            object[] memberDetails;
-            for(int i = 0; i < clsStorage.currentClub.iMember; i++)
-            {
-                memberDetails = clsStorage.currentClub.members[i].exportMember().ToArray();
-                for (int j = 0; j < writableList.Length; j++)
-                    data[row, j] = memberDetails[j];
-                //if the member plays multiple instruments, include that here
-                if ((bool)memberDetails[writableList.Length - 1])
-                    for (int j = 0; j < Enum.GetValues(typeof(member.instrument)).Length; j++)
-                        data[row, j + memberDetails.Length - 1] = ((bool[])(memberDetails[memberDetails.Length - 1]))[j];
-                        row++;
-                iCurrent++;
-                Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
-            }
-
-            updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[2 + clsStorage.currentClub.iMember, 12 + Enum.GetValues(typeof(member.instrument)).Length]];
-            updateRange.set_Value(null, data);
-
-            //Term Tab
-
-            ExcelWorkbook.Sheets.Add(After: ExcelWorksheet);
-            ExcelWorksheet = ExcelWorkbook.Sheets[3];
-            ExcelWorksheet.Name = "Terms";
-            //reset row for new tab
-            row = 0;
-            //reset data for new tab
-            data = new object[1+clsStorage.currentClub.listTerms.Count*373, 120];
-
-            data[row, 0] = "Number of Terms";
-            data[row, 1] = clsStorage.currentClub.listTerms.Count;
-            row++;
-
-            foreach (term currentTerm in clsStorage.currentClub.listTerms)
-            {
-                data[row, 0] = "Name Of Term";
-                data[row, 1] = currentTerm.strName;
-                row++;
-                data[row, 0] = "Number of Members";
-                data[row, 1] = currentTerm.sMembers;
-                row++;
-                data[row, 0] = "Term Index";
-                data[row, 1] = currentTerm.sNumber;
-                row++;
-                data[row, 0] = "List of Members:";
-                row++;
-
-                //list of members
-                for(int j = 0; j< currentTerm.sMembers; j++)
-                    data[row, j] = currentTerm.members[j];
-                row++;
-                data[row, 0] = "Start Date";
-                data[row, 1] = currentTerm.startDate.ToOADate();
-                row++;
-                data[row, 0] = "End Date";
-                data[row, 1] = currentTerm.endDate.ToOADate();
-                row++;
-                data[row, 0] = "Number of Rehearsals";
-                data[row, 1] = currentTerm.sRehearsals;
-                row++;
-                data[row, 0] = "Rehearsal Dates and Attendance";
-                row++;
-
-                //rehearsal dates headers
-                for (int j = 0; j < currentTerm.sRehearsals; j++)
-                    data[row, j + 1] = currentTerm.rehearsalDates[j].ToOADate();
-                row++;
-
-                //the actual attendance, along with the member's indexes
-                for (int j = 0; j < currentTerm.sMembers; j++)
+                int row = 10;
+                foreach (string[] user in clsStorage.currentClub.strUsers)
                 {
-                    for (int k = 0; k < currentTerm.sRehearsals + 1; k++)
-                    {
-                        if (k == 0)
-                            data[row, k] = currentTerm.members[j];
-                        else
-                            data[row, k] = currentTerm.attendance[j, k-1];
-                    }
+                    for (int j = 0; j < user.Length; j++)
+                        worksheet.Cell(row, j + 1).Value = user[j];
                     row++;
+                    iCurrent++;
+                    Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
                 }
 
-                //fees
-                data[row, 0] = "Number of Other Fees";
-                data[row, 1] = currentTerm.iOtherFees;
-                row++;
-                data[row, 1] = "Membership Fee";
-                data[row+1, 1] = currentTerm.membershipFees;
-                for (int j = 0; j < currentTerm.iOtherFees; j++ )
-                {
-                    data[row, j * 2 + 3] = currentTerm.strOtherFees[j];
-                    data[row + 1, j * 2 + 3] = currentTerm.dOtherFees[j];
-                }
-                row += 2;
+                /*
+                 * Members Sheet
+                 */
+                worksheet = workbook.Worksheets.Add("Members");
+                worksheet.Cell(1, 1).Value = "Number of Members";
+                worksheet.Cell(1, 2).Value = clsStorage.currentClub.iMember;
 
-                //the fees paid, with the member's names
-                for (int j = 0; j < currentTerm.sMembers; j++)
+                List<string[]> headers = new List<string[]> {new string[] { "First Name", "Last Name", "Type", "Student Number", "Faculty", "Instrument", "E-mail", "Other", "ID", "Signup Time", "Shirt Size", "Multiple Instruments" }};
+                worksheet.Cell(2, 1).Value = headers;
+                for (int i = 0; i < Enum.GetValues(typeof(member.instrument)).Length; i++)
                 {
-                    for (int k = 0; k < currentTerm.iOtherFees + 2; k++)
+                    worksheet.Cell(2, 1 + headers[0].Length + i).Value = member.instrumentToString((member.instrument)i);
+                }
+
+                IList<object[]> memberListToExport = new List<object[]>();
+                for (int i = 0; i < clsStorage.currentClub.iMember; i++)
+                {
+                    List<object> memberToExport = clsStorage.currentClub.members[i].exportMember();
+                    if (memberToExport.Last() is bool[])
                     {
-                        if (k == 0)
-                            data[row, k] = currentTerm.members[j];
-                        else
+                        bool[] instrumentsPlayed = (bool[])memberToExport.Last();
+                        memberToExport.RemoveAt(memberToExport.Count - 1);
+                        foreach (bool value in instrumentsPlayed)
                         {
-                            data[row, k * 2 - 1] = currentTerm.feesPaid[j, k - 1];
-                            data[row, k * 2] = currentTerm.feesPaidDate[j, k - 1].ToOADate();
-                        }     
+                            memberToExport.Add(value);
+                        }
+                    }
+                    memberListToExport.Add(memberToExport.ToArray());
+                    iCurrent++;
+                    Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
+                }
+                worksheet.Cell(3, 1).Value = memberListToExport;
+
+                /*
+                 * Term Sheet
+                 */
+                worksheet = workbook.Worksheets.Add("Terms");
+                worksheet.Cell(1, 1).Value = "Number of Terms";
+                worksheet.Cell(1, 2).Value = clsStorage.currentClub.listTerms.Count;
+                row = 2;
+                foreach (term currentTerm in clsStorage.currentClub.listTerms)
+                {
+                    // Preliminary Info
+                    worksheet.Cell(row, 1).Value = "Name Of Term";
+                    worksheet.Cell(row, 2).Value = currentTerm.strName;
+                    row++;
+                    worksheet.Cell(row, 1).Value = "Number of Members";
+                    worksheet.Cell(row, 2).Value = currentTerm.sMembers;
+                    row++;
+                    worksheet.Cell(row, 1).Value = "Term Index";
+                    worksheet.Cell(row, 2).Value = currentTerm.sNumber;
+                    row++;
+                    worksheet.Cell(row, 1).Value = "List of Members:";
+                    for (int i = 0; i < currentTerm.sMembers; i++)
+                    {
+                        worksheet.Cell(row, 2 + i).Value = currentTerm.members[i];
                     }
                     row++;
+                    worksheet.Cell(row, 1).Value = "Start Date";
+                    worksheet.Cell(row, 2).Value = currentTerm.startDate;
+                    worksheet.Cell(row, 2).Style.DateFormat.Format = "dd/MM/yyyy";
+                    row++;
+                    worksheet.Cell(row, 1).Value = "End Date";
+                    worksheet.Cell(row, 2).Value = currentTerm.endDate;
+                    worksheet.Cell(row, 2).Style.DateFormat.Format = "dd/MM/yyyy";
+                    row++;
+                    worksheet.Cell(row, 1).Value = "Number of Rehearsals";
+                    worksheet.Cell(row, 2).Value = currentTerm.sRehearsals;
+                    row++;
+                    worksheet.Cell(row, 1).Value = "Rehearsal Dates and Attendance";
+                    row++;
+
+                    // rehearsal dates headers
+                    worksheet.Cell(row, 2).Value = new List<DateTime[]> {currentTerm.rehearsalDates};
+                    worksheet.Row(row).Style.DateFormat.Format = "dd/MM/yyyy";
+                    row++;
+                    // the actual attendance, along with the member's indexes
+                    for (int j = 0; j < currentTerm.sMembers; j++)
+                    {
+                        worksheet.Cell(row, 1).Value = currentTerm.members[j];
+                        for (int k = 0; k < currentTerm.sRehearsals; k++)
+                        {
+                            worksheet.Cell(row, 2 + k).Value = currentTerm.attendance[j, k];
+                        }
+                        row++;
+                    }
+
+                    // fees description
+                    worksheet.Cell(row, 1).Value = "Number of Other Fees";
+                    worksheet.Cell(row, 2).Value = currentTerm.iOtherFees;
+                    row++;
+                    worksheet.Cell(row, 2).Value = "Membership Fee";
+                    for (int j = 0; j < currentTerm.iOtherFees; j++)
+                    {
+                        worksheet.Cell(row, 4 + j * 2).Value = currentTerm.strOtherFees[j];
+                    }
+                    row++;
+                    worksheet.Cell(row, 2).Value = currentTerm.membershipFees;
+                    for (int j = 0; j < currentTerm.iOtherFees; j++)
+                    {
+                        worksheet.Cell(row, 4 + j * 2).Value = currentTerm.dOtherFees[j];
+                    }
+                    row++;
+                    
+                    // fees record
+                    for (int j = 0; j < currentTerm.sMembers; j++)
+                    {
+                        worksheet.Cell(row, 1).Value = currentTerm.members[j];
+                        for (int k = 0; k < currentTerm.iOtherFees + 1; k++)
+                        {
+                            worksheet.Cell(row, 2 + k * 2).Value = currentTerm.feesPaid[j, k];
+                            if (currentTerm.feesPaidDate[j, k].Ticks > 0)
+                            {
+                                worksheet.Cell(row, 3 + k * 2).Value = currentTerm.feesPaidDate[j, k];
+                                worksheet.Cell(row, 3 + k * 2).Style.DateFormat.Format = "dd/MM/yyyy";
+                            }
+                        }
+                        row++;
+                    }
+                    iCurrent += 60;
+                    Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
                 }
-                iCurrent+=60;
-                Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
+
+                /*
+                 * Budget Tab
+                 */
+                worksheet = workbook.Worksheets.Add("Budget");
+                worksheet.Cell(1, 1).Value = "Number of Budget Items";
+                worksheet.Cell(1, 2).Value = clsStorage.currentClub.budget.Count;
+                headers = new List<string[]> {new string[] { "Name", "Value", "Date Occur", "Date Account", "Category", "Type", "Term", "Comment", "Asset for Depreciation" }};
+                worksheet.Cell(2, 1).Value = headers;
+                row = 3;
+                IList<object[]> budgetToExport = new List<object[]>();
+                foreach (budgetItem item in clsStorage.currentClub.budget)
+                {
+                    budgetToExport.Add(item.Export().ToArray());
+                    iCurrent++;
+                    Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
+                }
+                worksheet.Cell(3, 1).Value = budgetToExport;
+                int column = 1;
+                foreach (object value in budgetToExport[0])
+                {
+                    if (value is DateTime)
+                    {
+                        worksheet.Range(3, column, clsStorage.currentClub.budget.Count + 3, column).Style.DateFormat.Format = "dd/MM/yyyy";
+                    }
+                    else if (value is double) {
+                        worksheet.Range(3, column, clsStorage.currentClub.budget.Count + 3, column).Style.NumberFormat.Format = "$0.00";
+                        worksheet.Range(3, column, clsStorage.currentClub.budget.Count + 3, column).DataType = XLCellValues.Number;
+                    }
+                    column++;
+                }
+                worksheet.Columns().AdjustToContents();
+
+                //for integrity purposes, history will not be allowed to be edited this way
+
+                workbook.SaveAs(location);
+
+                //reset the progress bar
+                Program.home.bwReport.ReportProgress(100);
+
             }
-
-            updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[1 + clsStorage.currentClub.listTerms.Count * 373, 120]];
-            updateRange.set_Value(null, data);
-
-            // Budget Tab
-
-            ExcelWorkbook.Sheets.Add(After: ExcelWorksheet);
-            ExcelWorksheet = ExcelWorkbook.Sheets[4];
-            ExcelWorksheet.Name = "Budget";
-            //reset row for new tab
-            row = 0;
-            //reset data for new tab
-            data = new object[2+clsStorage.currentClub.budget.Count, 9];
-
-            data[row, 0] = "Number of Budget Items";
-            data[row, 1] = clsStorage.currentClub.budget.Count;
-            row++;
-
-            writableList = new string[] {"Name", "Value", "Date Occur","Date Account", "Category", "Type", "Term", "Comment", "Asset for Depreciation"};
-            for (int i = 0; i < writableList.Length; i++)
-                data[row, i] = writableList[i];
-            row++;
-
-            foreach (budgetItem item in clsStorage.currentClub.budget)
+            catch (Exception e)
             {
-                data[row, 0] = item.name;
-                data[row, 1] = item.value;
-                data[row, 2] = item.dateOccur.ToOADate();
-                data[row, 3] = item.dateAccount.ToOADate();
-                data[row, 4] = item.cat;
-                data[row, 5] = item.type;
-                data[row, 6] = item.term;
-                data[row, 7] = item.comment;
-                //only include for depreciation assets
-                if (item.type == 1)
-                    data[row, 8] = clsStorage.currentClub.budget.IndexOf(item.depOfAsset);
-                row++;
-                iCurrent++;
-                Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
+                if (Properties.Settings.Default.playSounds)
+                    sound.error.Play();
+                System.Windows.Forms.MessageBox.Show("File was not saved. " + e.Message);
             }
-
-            updateRange = ExcelWorksheet.Range[ExcelWorksheet.Cells[1, 1], ExcelWorksheet.Cells[2 + clsStorage.currentClub.budget.Count, 9]];
-            updateRange.set_Value(null, data);
-
-            //for integrity purposes, history will not be allowed to be edited this way
-
-            ExcelApp.ScreenUpdating = true;
-            
-
-            //finally, we can save and close
-            ExcelWorkbook.SaveAs(location, Excel.XlFileFormat.xlWorkbookDefault);
-            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorksheet);
-            ExcelApp.Workbooks.Close();
-            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelWorkbook);
-            ExcelApp.Quit();
-            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelApp);
-
-            //reset the progress bar
-            Program.home.bwReport.ReportProgress(100);
         }
 
         /// <summary>

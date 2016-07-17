@@ -932,5 +932,18 @@ namespace Marimba
         /// If depreciation, stores a reference to the asset it depreciates
         /// </summary>
         public budgetItem depOfAsset;
+
+        public IList<object> Export() {
+            List<object> output = new List<object> {
+                name, value, dateOccur, dateAccount, cat, type, term, comment
+            };
+
+            if (type == 1)
+            {
+                output.Add(clsStorage.currentClub.budget.IndexOf(depOfAsset));
+            }
+
+            return output;
+        }
     }
 }
