@@ -43,7 +43,7 @@ namespace Marimba
         /// </summary>
         /// <param name="input">A string</param>
         /// <returns>The cleaned string without new lines</returns>
-        public static string cleanNewLine(string input)
+        public static string cleanNewLine(string input) // TODO: THIS DOESN'T WORK FOR SOME REASON
         {
             return input.Replace("\r\n","\\R\\N");
         }

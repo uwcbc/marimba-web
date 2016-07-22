@@ -23,7 +23,7 @@ namespace Marimba
         //strLocation is the location of the file
         public string strName;
         //fileVersion contains the version of the file currently loaded
-        double fileVersion;
+        public double fileVersion;
         //iUsers stores the number of users
 
         private static readonly int USER_FIELDS_TO_STORE = 4;

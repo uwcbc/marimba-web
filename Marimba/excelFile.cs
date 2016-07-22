@@ -2,10 +2,9 @@
 using Marimba.Utility;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using Microsoft.Office.Core;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Marimba
 {
@@ -261,9 +260,18 @@ namespace Marimba
                 }
 
                 IList<object[]> memberListToExport = new List<object[]>();
+                int dateColumn = 0;
                 for (int i = 0; i < clsStorage.currentClub.iMember; i++)
                 {
                     List<object> memberToExport = clsStorage.currentClub.members[i].exportMember();
+                    for (int j = 0; j < memberToExport.Count; j++)
+                    {
+                        if (memberToExport[j] is DateTime)
+                        {
+                            memberToExport[j] = ((DateTime)memberToExport[j]).ToString("dd/MM/yyyy hh:mm:ss tt");
+                            dateColumn = j + 1;
+                        }
+                    }
                     if (memberToExport.Last() is bool[])
                     {
                         bool[] instrumentsPlayed = (bool[])memberToExport.Last();
@@ -278,6 +286,7 @@ namespace Marimba
                     Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
                 }
                 worksheet.Cell(3, 1).Value = memberListToExport;
+                worksheet.Range(3, dateColumn, clsStorage.currentClub.iMember, dateColumn).Style.DateFormat.Format = "dd/MM/yyyy hh:mm:ss AM/PM";
 
                 /*
                  * Term Sheet
@@ -305,11 +314,11 @@ namespace Marimba
                     }
                     row++;
                     worksheet.Cell(row, 1).Value = "Start Date";
-                    worksheet.Cell(row, 2).Value = currentTerm.startDate;
+                    worksheet.Cell(row, 2).Value = currentTerm.startDate.ToString("dd/MM/yyyy");
                     worksheet.Cell(row, 2).Style.DateFormat.Format = "dd/MM/yyyy";
                     row++;
                     worksheet.Cell(row, 1).Value = "End Date";
-                    worksheet.Cell(row, 2).Value = currentTerm.endDate;
+                    worksheet.Cell(row, 2).Value = currentTerm.endDate.ToString("dd/MM/yyyy");
                     worksheet.Cell(row, 2).Style.DateFormat.Format = "dd/MM/yyyy";
                     row++;
                     worksheet.Cell(row, 1).Value = "Number of Rehearsals";
@@ -319,7 +328,10 @@ namespace Marimba
                     row++;
 
                     // rehearsal dates headers
-                    worksheet.Cell(row, 2).Value = new List<DateTime[]> {currentTerm.rehearsalDates};
+                    for (int j = 0; j < currentTerm.rehearsalDates.Length; j++)
+                    {
+                        worksheet.Cell(row, 2 + j).Value = currentTerm.rehearsalDates[j].ToString("dd/MM/yyyy");
+                    }
                     worksheet.Row(row).Style.DateFormat.Format = "dd/MM/yyyy";
                     row++;
                     // the actual attendance, along with the member's indexes
@@ -359,7 +371,7 @@ namespace Marimba
                             worksheet.Cell(row, 2 + k * 2).Value = currentTerm.feesPaid[j, k];
                             if (currentTerm.feesPaidDate[j, k].Ticks > 0)
                             {
-                                worksheet.Cell(row, 3 + k * 2).Value = currentTerm.feesPaidDate[j, k];
+                                worksheet.Cell(row, 3 + k * 2).Value = currentTerm.feesPaidDate[j, k].ToString("dd/MM/yyyy");
                                 worksheet.Cell(row, 3 + k * 2).Style.DateFormat.Format = "dd/MM/yyyy";
                             }
                         }
@@ -381,7 +393,15 @@ namespace Marimba
                 IList<object[]> budgetToExport = new List<object[]>();
                 foreach (budgetItem item in clsStorage.currentClub.budget)
                 {
-                    budgetToExport.Add(item.Export().ToArray());
+                    object[] budgetItemToAdd = item.Export().ToArray();
+                    for (int j = 0; j < budgetItemToAdd.Length; j++)
+                    {
+                        if (budgetItemToAdd[j] is DateTime)
+                        {
+                            budgetItemToAdd[j] = ((DateTime)budgetItemToAdd[j]).ToString("dd/MM/yyyy");
+                        }
+                    }
+                    budgetToExport.Add(budgetItemToAdd);
                     iCurrent++;
                     Program.home.bwReport.ReportProgress((iCurrent * 100) / iTotal);
                 }
@@ -425,31 +445,25 @@ namespace Marimba
         /// <returns>Club with edits</returns>
         public static club loadFromExcel(string location, string newLocation, club currentClub)
         {
-            club output = clsStorage.currentClub.clubClone(newLocation);
+            // open the Excel file
+            var workbook = new XLWorkbook(location);
+            var worksheet = workbook.Worksheet("General");
 
-            //open the Excel file
-            Excel.Application ExcelApp = new Excel.Application();
-            Excel.Workbook workbook = ExcelApp.Workbooks.Open(location);
-            //open the first sheet, General
-            Excel.Worksheet worksheet = workbook.Sheets[1];
-
-            //get the data in the sheet
-            Excel.Range excelRange = worksheet.UsedRange;
-	        object[,] valueArray = (object[,])excelRange.get_Value(Excel.XlRangeValueDataType.xlRangeValueDefault);
-
-            int version = Convert.ToInt32(valueArray[1, 2]);
+            double version = Convert.ToDouble(worksheet.Cell(1,2).Value);
             //check to see if this file is designed to work with this version
             if(version >= 2)
             {
-                output.strName = (string)valueArray[2, 2];
-                int iUser = Convert.ToInt16(valueArray[3, 2]);
+                club output = clsStorage.currentClub.clubClone(newLocation);
+                output.fileVersion = version;
+                output.strName = (string)worksheet.Cell(2, 2).Value;
+                int iUser = Convert.ToInt16(worksheet.Cell(3, 2).Value);
                 output.strUsers = new List<string[]>(iUser);
-                output.strEmail = (string)valueArray[4, 2];
-                output.strImap = (string)valueArray[5, 2];
-                output.bImap = (Boolean)valueArray[6, 2];
-                output.strSmtp = (string)valueArray[7, 2];
-                output.iSmtp = Convert.ToInt16(valueArray[8, 2]);
-                output.bSmtp = (Boolean)valueArray[9, 2];
+                output.strEmail = (string)worksheet.Cell(4, 2).Value;
+                output.strImap = (string)worksheet.Cell(5, 2).Value;
+                output.bImap = (Boolean)worksheet.Cell(6, 2).Value;
+                output.strSmtp = (string)worksheet.Cell(7, 2).Value;
+                output.iSmtp = Convert.ToInt16(worksheet.Cell(8, 2).Value);
+                output.bSmtp = (Boolean)worksheet.Cell(9, 2).Value;
 
                 //load Users
                 for (int i = 0; i < iUser; i++)
@@ -457,7 +471,7 @@ namespace Marimba
                     string[] newUser = new string[4];
                     for (int j = 0; j < 4; j++)
                     {
-                        newUser[j] = (string)valueArray[i + 10, j + 1];
+                        newUser[j] = (string)worksheet.Cell(i + 10, j + 1).Value;
                     }
                     output.strUsers.Add(newUser);
                 }
@@ -465,68 +479,84 @@ namespace Marimba
                 //Members tab
 
                 //load sheet and data
-                worksheet = workbook.Sheets[2];
-                excelRange = worksheet.UsedRange;
-                valueArray = (object[,])excelRange.get_Value(Excel.XlRangeValueDataType.xlRangeValueDefault);
-                valueArray = replaceNulls(valueArray);
+                worksheet = workbook.Worksheet("Members");
 
-                output.iMember = Convert.ToInt16(valueArray[1, 2]);
+                output.iMember = Convert.ToInt16(worksheet.Cell(1, 2).Value);
                 //load Members
                 bool[] tempMultipleInstruments = new bool[Enum.GetValues(typeof(member.instrument)).Length];
                 for (int i = 0; i < output.iMember;i++)
                 {
                     //if the member does not play multiple instruments
-                    if(!(bool)valueArray[i+3,12])
-                        output.members[i] = new member((string)valueArray[i + 3, 1], (string)valueArray[i + 3, 2], Convert.ToInt32(valueArray[i + 3, 3]), Convert.ToUInt32(valueArray[i + 3, 4]),
-                            Convert.ToInt32(valueArray[i + 3, 5]), (string)valueArray[i + 3, 6], (string)valueArray[i + 3, 7], (string)valueArray[i + 3, 8],
-                            Convert.ToInt16(valueArray[i + 3, 9]), DateTime.FromOADate((double)valueArray[i + 3, 10]), Convert.ToInt32(valueArray[i + 3, 11]));
+                    if(!(bool)worksheet.Cell(i+3,12).Value)
+                        output.members[i] = new member(
+                            (string)worksheet.Cell(i + 3, 1).Value,
+                            (string)worksheet.Cell(i + 3, 2).Value,
+                            Convert.ToInt32(worksheet.Cell(i + 3, 3).Value),
+                            Convert.ToUInt32(worksheet.Cell(i + 3, 4).Value),
+                            Convert.ToInt32(worksheet.Cell(i + 3, 5).Value),
+                            (string)worksheet.Cell(i + 3, 6).Value,
+                            (string)worksheet.Cell(i + 3, 7).Value,
+                            (string)worksheet.Cell(i + 3, 8).Value,
+                            Convert.ToInt16(worksheet.Cell(i + 3, 9).Value),
+                            DateTime.ParseExact((string)worksheet.Cell(i + 3, 10).Value, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture),
+                            Convert.ToInt32(worksheet.Cell(i + 3, 11).Value));
                     else
                     {
                         //the member plays multiple instruments
                         //create their array of instruments they play first
 
                         for (int j = 0; j < Enum.GetValues(typeof(member.instrument)).Length; j++)
-                            tempMultipleInstruments[j] = Convert.ToBoolean(valueArray[i + 3, 13 + j]);
-                        output.members[i] = new member((string)valueArray[i + 3, 1], (string)valueArray[i + 3, 2], Convert.ToInt32(valueArray[i + 3, 3]), Convert.ToUInt32(valueArray[i + 3, 4]),
-                            Convert.ToInt32(valueArray[i + 3, 5]), (string)valueArray[i + 3, 6], (string)valueArray[i + 3, 7], (string)valueArray[i + 3, 8],
-                            Convert.ToInt16(valueArray[i + 3, 9]), DateTime.FromOADate((double)valueArray[i + 3, 10]), Convert.ToInt32(valueArray[i + 3, 11]), tempMultipleInstruments);
+                            tempMultipleInstruments[j] = Convert.ToBoolean(worksheet.Cell(i + 3, 13 + j).Value);
+                        output.members[i] = new member(
+                            (string)worksheet.Cell(i + 3, 1).Value,
+                            (string)worksheet.Cell(i + 3, 2).Value,
+                            Convert.ToInt32(worksheet.Cell(i + 3, 3).Value),
+                            Convert.ToUInt32(worksheet.Cell(i + 3, 4).Value),
+                            Convert.ToInt32(worksheet.Cell(i + 3, 5).Value),
+                            (string)worksheet.Cell(i + 3, 6).Value,
+                            (string)worksheet.Cell(i + 3, 7).Value,
+                            (string)worksheet.Cell(i + 3, 8).Value,
+                            Convert.ToInt16(worksheet.Cell(i + 3, 9).Value),
+                            DateTime.ParseExact((string)worksheet.Cell(i + 3, 10).Value, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture),
+                            Convert.ToInt32(worksheet.Cell(i + 3, 11).Value),
+                            tempMultipleInstruments);
                     }
                 }
 
                 //Terms tab
-                //This is the awful one
-
-                //load sheet and data
-                worksheet = workbook.Sheets[3];
-                excelRange = worksheet.UsedRange;
-                valueArray = (object[,])excelRange.get_Value(Excel.XlRangeValueDataType.xlRangeValueDefault);
-                valueArray = replaceNulls(valueArray);
+                worksheet = workbook.Worksheet("Terms");
 
                 int row = 2;
-                short sTerm = Convert.ToInt16(valueArray[1,2]);
+                short sTerm = Convert.ToInt16(worksheet.Cell(1,2).Value);
                 output.listTerms = new List<term>(sTerm);
                 for (int i = 0; i < sTerm; i++)
                 {
                     term termToAdd = new term();
-                    termToAdd.strName = (string)valueArray[row, 2];
+                    termToAdd.strName = (string)worksheet.Cell(row, 2).Value;
                     row++;
-                    termToAdd.sMembers = Convert.ToInt16(valueArray[row, 2]);
+                    termToAdd.sMembers = Convert.ToInt16(worksheet.Cell(row, 2).Value);
                     row++;
-                    termToAdd.sNumber = Convert.ToInt16(valueArray[row, 2]);
-                    row += 2;
+                    termToAdd.sNumber = Convert.ToInt16(worksheet.Cell(row, 2).Value);
+                    row++;
                     for (int j = 0; j < termToAdd.sMembers; j++)
-                        termToAdd.members[j] = Convert.ToInt16(valueArray[row, j + 1]);
+                        termToAdd.members[j] = Convert.ToInt16(worksheet.Cell(row, j + 2).Value);
                     row++;
-                    termToAdd.startDate = DateTime.FromOADate((double)valueArray[row, 2]);
+                    termToAdd.startDate = (worksheet.Cell(row, 2).Value is DateTime) ?
+                        (DateTime)worksheet.Cell(row, 2).Value :
+                        DateTime.ParseExact((string)worksheet.Cell(row, 2).Value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     row++;
-                    termToAdd.endDate = DateTime.FromOADate((double)valueArray[row, 2]);
+                    termToAdd.endDate = (worksheet.Cell(row, 2).Value is DateTime) ?
+                        (DateTime)worksheet.Cell(row, 2).Value :
+                        DateTime.ParseExact((string)worksheet.Cell(row, 2).Value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     row++;
-                    termToAdd.sRehearsals = Convert.ToInt16(valueArray[row, 2]);
+                    termToAdd.sRehearsals = Convert.ToInt16(worksheet.Cell(row, 2).Value);
                     row+=2;
                     //load rehearsal dates
                     termToAdd.rehearsalDates = new DateTime[termToAdd.sRehearsals];
                     for (int j = 0; j < termToAdd.sRehearsals; j++)
-                        termToAdd.rehearsalDates[j] = DateTime.FromOADate((double)valueArray[row, j + 2]);
+                        termToAdd.rehearsalDates[j] = (worksheet.Cell(row, j + 2).Value is DateTime) ?
+                            (DateTime)worksheet.Cell(row, j + 2).Value :
+                            DateTime.ParseExact((string)worksheet.Cell(row, j + 2).Value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     row++;
 
 
@@ -535,22 +565,22 @@ namespace Marimba
                     for(int j = 0; j  <termToAdd.sMembers;j++)
                     {
                         for (int k = 0; k < termToAdd.sRehearsals; k++)
-                            termToAdd.attendance[j, k] = (bool)valueArray[row, k + 2];
+                            termToAdd.attendance[j, k] = (bool)worksheet.Cell(row, k + 2).Value;
                         row++;
                     }
 
                     //load fees
-                    termToAdd.iOtherFees = Convert.ToInt32(valueArray[row, 2]);
+                    termToAdd.iOtherFees = Convert.ToInt32(worksheet.Cell(row, 2).Value);
                     row++;
                     //membership fee
-                    termToAdd.membershipFees = (double)valueArray[row+1, 2];
+                    termToAdd.membershipFees = (double)worksheet.Cell(row+1, 2).Value;
                     //other fees
                     termToAdd.strOtherFees = new string[termToAdd.iOtherFees];
                     termToAdd.dOtherFees = new double[termToAdd.iOtherFees];
                     for(int j = 0; j < termToAdd.iOtherFees;j++)
                     {
-                        termToAdd.strOtherFees[j] = (string)valueArray[row, 4 + j * 2];
-                        termToAdd.dOtherFees[j] = (double)valueArray[row+1, 4 + j * 2];
+                        termToAdd.strOtherFees[j] = (string)worksheet.Cell(row, 4 + j * 2).Value;
+                        termToAdd.dOtherFees[j] = (double)worksheet.Cell(row+1, 4 + j * 2).Value;
                     }
                     row += 2;
 
@@ -562,9 +592,11 @@ namespace Marimba
                     {
                         for(int k = 0; k < termToAdd.iOtherFees+1; k++)
                         {
-                            termToAdd.feesPaid[j, k] = (double)valueArray[row, 2 + k * 2];
+                            termToAdd.feesPaid[j, k] = (double)worksheet.Cell(row, 2 + k * 2).Value;
                             if (termToAdd.feesPaid[j, k] != 0)
-                                termToAdd.feesPaidDate[j, k] = DateTime.FromOADate((double)valueArray[row, 3 + k * 2]);
+                                termToAdd.feesPaidDate[j, k] = (worksheet.Cell(row, 3 + k * 2).Value is DateTime) ?
+                                    (DateTime)worksheet.Cell(row, 3 + k * 2).Value :
+                                    DateTime.ParseExact((string)worksheet.Cell(row, 3 + k * 2).Value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         }
                         row++;
                     }
@@ -575,12 +607,9 @@ namespace Marimba
                 //Budget tab
 
                 //load sheet and data
-                worksheet = workbook.Sheets[4];
-                excelRange = worksheet.UsedRange;
-                valueArray = (object[,])excelRange.get_Value(Excel.XlRangeValueDataType.xlRangeValueDefault);
-                valueArray = replaceNulls(valueArray);
+                worksheet = workbook.Worksheet("Budget");
 
-                int iBudget = Convert.ToInt32(valueArray[1, 2]);
+                int iBudget = Convert.ToInt32(worksheet.Cell(1, 2).Value);
                 output.budget = new List<budgetItem>(iBudget);
                 List<int> indicesOfDepreciators = new List<int>(iBudget);
                 List<int> indicesOfDepreciatedAssets = new List<int>(iBudget);
@@ -588,14 +617,18 @@ namespace Marimba
                 for (int i = 0; i < iBudget; i++)
                 {
                     budgetItem newItem = new budgetItem();
-                    newItem.value = (double)valueArray[i + 3, 2];
-                    newItem.name = (string)valueArray[i + 3, 1];
-                    newItem.dateOccur = DateTime.FromOADate((double)valueArray[i + 3, 3]);
-                    newItem.dateAccount = DateTime.FromOADate((double)valueArray[i + 3, 4]);
-                    newItem.cat = (string)valueArray[i + 3, 5];
-                    newItem.type = Convert.ToInt32(valueArray[i + 3, 6]);
-                    newItem.term = Convert.ToInt32(valueArray[i + 3, 7]);
-                    newItem.comment = (string)valueArray[i + 3, 8];
+                    newItem.value = (double)worksheet.Cell(i + 3, 2).Value;
+                    newItem.name = (string)worksheet.Cell(i + 3, 1).Value;
+                    newItem.dateOccur = (worksheet.Cell(i + 3, 3).Value is DateTime) ?
+                        (DateTime)worksheet.Cell(i + 3, 3).Value :
+                        DateTime.ParseExact((string)worksheet.Cell(i + 3, 3).Value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    newItem.dateAccount = (worksheet.Cell(i + 3, 4).Value is DateTime) ?
+                        (DateTime)worksheet.Cell(i + 3, 4).Value :
+                        DateTime.ParseExact((string)worksheet.Cell(i + 3, 4).Value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    newItem.cat = (string)worksheet.Cell(i + 3, 5).Value;
+                    newItem.type = Convert.ToInt32(worksheet.Cell(i + 3, 6).Value);
+                    newItem.term = Convert.ToInt32(worksheet.Cell(i + 3, 7).Value);
+                    newItem.comment = (string)worksheet.Cell(i + 3, 8).Value;
                     newItem.depOfAsset = null;
                     output.budget.Add(newItem);
 
@@ -603,7 +636,7 @@ namespace Marimba
                     if (output.budget[i].type == 1)
                     {
                         indicesOfDepreciators.Add(i);
-                        indicesOfDepreciatedAssets.Add(Convert.ToInt32(valueArray[i + 3, 9]));
+                        indicesOfDepreciatedAssets.Add(Convert.ToInt32(worksheet.Cell(i + 3, 9).Value));
                     }
                 }
 
@@ -620,17 +653,6 @@ namespace Marimba
                 {
                     output.historyList.Add(item);
                 }
-
-                //close the workbook, try to prevent any massive memory leaks
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelRange);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(worksheet);
-                workbook.Close(false, location, null);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(workbook);
-                ExcelApp.Quit();
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(ExcelApp);
                 
                 return output;
             }
