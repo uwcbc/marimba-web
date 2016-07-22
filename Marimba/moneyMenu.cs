@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -67,12 +68,12 @@ namespace Marimba
                     {
                         output[i + 1, 0] = clsStorage.currentClub.listTerms[item.term].strName;
                         output[i + 1, 1] = item.name;
-                        if (item.type == (int)club.money.Revenue)
+                        if (item.type == Enumerations.TransactionType.Revenue)
                             output[i + 1, 3] = item.value;
                         else
                             output[i + 1, 2] = item.value;
                         output[i + 1, 4] = item.cat;
-                        output[i + 1, 5] = Convert.ToString((club.money)item.type);
+                        output[i + 1, 5] = Convert.ToString(item.type);
                         output[i + 1, 6] = item.dateOccur;
                         output[i + 1, 7] = item.dateAccount;
                         output[i + 1, 8] = item.comment;
@@ -101,7 +102,7 @@ namespace Marimba
                             CsvRow row = new CsvRow();
                             row.Add(clsStorage.currentClub.listTerms[item.term].strName);
                             row.Add(item.name);
-                            if (item.type == (int)club.money.Revenue)
+                            if (item.type == Enumerations.TransactionType.Revenue)
                             {
                                 row.Add("");
                                 row.Add(String.Format("${0}", item.value));
@@ -112,7 +113,7 @@ namespace Marimba
                                 row.Add("");
                             }
                             row.Add(item.cat);
-                            row.Add(Convert.ToString((club.money)item.type));
+                            row.Add(Convert.ToString(item.type));
                             row.Add(item.dateOccur.ToShortDateString());
                             row.Add(item.dateAccount.ToShortDateString());
                             row.Add(item.comment);

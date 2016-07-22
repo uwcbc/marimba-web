@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -64,7 +65,7 @@ namespace Marimba
         public bool bSmtp;
         public int iSmtp;
         public email clubEmail;
-        public enum money { Asset, Depreciation, Expense, Revenue}
+
         public club(string strLocation, Aes aesKey = null)
         {
             this.strLocation = strLocation;
@@ -180,7 +181,7 @@ namespace Marimba
                                 newItem.dateOccur = new DateTime(Convert.ToInt64(srDecrypt.ReadLine()));
                                 newItem.dateAccount = new DateTime(Convert.ToInt64(srDecrypt.ReadLine()));
                                 newItem.cat = srDecrypt.ReadLine();
-                                newItem.type = Convert.ToInt32(srDecrypt.ReadLine());
+                                newItem.type = (Enumerations.TransactionType)Convert.ToInt32(srDecrypt.ReadLine());
                                 newItem.term = Convert.ToInt32(srDecrypt.ReadLine());
                                 newItem.comment = clsStorage.reverseCleanNewLine(srDecrypt.ReadLine());
                                 budget.Add(newItem);
@@ -321,7 +322,7 @@ namespace Marimba
                                 sw.WriteLine(item.dateOccur.Ticks);
                                 sw.WriteLine(item.dateAccount.Ticks);
                                 sw.WriteLine(item.cat);
-                                sw.WriteLine(item.type);
+                                sw.WriteLine((int)item.type);
                                 sw.WriteLine(item.term);
                                 sw.WriteLine(clsStorage.cleanNewLine(item.comment));
                                 sw.WriteLine(budget.IndexOf(item.depOfAsset));
@@ -789,11 +790,11 @@ namespace Marimba
         /// <param name="dtDateOccur">Date of event</param>
         /// <param name="dtDateAccount">Date as per account</param>
         /// <param name="strCategory">Category of item</param>
-        /// <param name="iType">Number indicating whether revenue/expense/etc.</param>
+        /// <param name="type">Whether this item is a revenue/expense/etc.</param>
         /// <param name="iTerm">Index of relevant term</param>
         /// <param name="strComment">Any comments from the user</param>
         /// <param name="assetIndex">Index of the asset</param>
-        public void addBudget(double val, string strName, DateTime dtDateOccur, DateTime dtDateAccount, string strCategory, int iType, int iTerm, string strComment, budgetItem asset = null)
+        public void addBudget(double val, string strName, DateTime dtDateOccur, DateTime dtDateAccount, string strCategory, Enumerations.TransactionType type, int iTerm, string strComment, budgetItem asset = null)
         {
             budgetItem newItem = new budgetItem();
             newItem.value = val;
@@ -801,11 +802,11 @@ namespace Marimba
             newItem.dateOccur = dtDateOccur;
             newItem.dateAccount = dtDateAccount;
             newItem.cat = strCategory;
-            newItem.type = iType;
+            newItem.type = type;
             newItem.term = iTerm;
             newItem.comment = strComment;
             //if depreciation
-            if (iType == 1)
+            if (type == Enumerations.TransactionType.Depreciation)
                 newItem.depOfAsset = asset;
             budget.Add(newItem);
         }
@@ -825,7 +826,7 @@ namespace Marimba
             List<budgetItem> output = new List<budgetItem>();
             foreach (budgetItem item in budget)
                 //if asset and not fully depreciated
-                if (item.type == 0 && (withDepAssets || !fullyDepreciatedAsset(item)))
+                if (item.type == Enumerations.TransactionType.Asset && (withDepAssets || !fullyDepreciatedAsset(item)))
                     output.Add(item);
             return output.ToArray();
         }
@@ -853,7 +854,7 @@ namespace Marimba
             double amountDepreciated = 0;
             foreach (budgetItem currentItem in budget)
             {
-                if (currentItem.type == 1 && currentItem.depOfAsset == asset && currentItem.dateOccur <= beforeDate)
+                if (currentItem.type == Enumerations.TransactionType.Depreciation && currentItem.depOfAsset == asset && currentItem.dateOccur <= beforeDate)
                 {
                     amountDepreciated += currentItem.value;
                 }
@@ -867,7 +868,7 @@ namespace Marimba
             double dDep = 0;
             //sum up all of the depreciation against this asset
             foreach (budgetItem itemIterator in budget)
-                if (itemIterator.type == 1 && itemIterator.depOfAsset == asset)
+                if (itemIterator.type == Enumerations.TransactionType.Depreciation && itemIterator.depOfAsset == asset)
                     dDep += itemIterator.value;
             return asset.value - dDep;
         }
@@ -916,7 +917,7 @@ namespace Marimba
         /// <summary>
         /// whether item is asset, depreciation, revenue, or expense
         /// </summary>
-        public int type;
+        public Enumerations.TransactionType type;
 
         /// <summary>
         /// index of the term that this transaction took place in
@@ -938,7 +939,7 @@ namespace Marimba
                 name, value, dateOccur, dateAccount, cat, type, term, comment
             };
 
-            if (type == 1)
+            if (type == Enumerations.TransactionType.Depreciation)
             {
                 output.Add(clsStorage.currentClub.budget.IndexOf(depOfAsset));
             }

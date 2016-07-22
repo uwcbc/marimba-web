@@ -97,8 +97,14 @@ namespace Marimba
                     //Note: For now, assuming date of collection and deposit are the same for membership fees
                     //Obviously this isn't true
                     //I will need to address this later
-                    clsStorage.currentClub.addBudget(Convert.ToDouble(txtAmount.Text)*length, cbFee.Text, mcDate.SelectionStart, mcDate.SelectionStart, cbFee.Text, (int)club.money.Revenue,
-                        cbTerm.SelectedIndex, strComment);
+                    clsStorage.currentClub.addBudget(Convert.ToDouble(txtAmount.Text) * length,
+                        cbFee.Text,
+                        mcDate.SelectionStart,
+                        mcDate.SelectionStart,
+                        cbFee.Text,
+                        Enumerations.TransactionType.Revenue,
+                        cbTerm.SelectedIndex,
+                        strComment);
                     //send digital receipts
                     if(checkReceipt.Checked)
                     {

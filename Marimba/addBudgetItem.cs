@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -44,10 +45,10 @@ namespace Marimba
                 {
                     if(depSelected)
                         clsStorage.currentClub.addBudget(Convert.ToDouble(txtValue.Text), txtDescription.Text, mcDateOccurred.SelectionStart,
-                            mcDateAccount.SelectionStart, cbCat.Text, cbType.SelectedIndex, cbTerm.SelectedIndex, txtOther.Text, assets[cbAsset.SelectedIndex]);
+                            mcDateAccount.SelectionStart, cbCat.Text, (Enumerations.TransactionType)cbType.SelectedIndex, cbTerm.SelectedIndex, txtOther.Text, assets[cbAsset.SelectedIndex]);
                     else
                         clsStorage.currentClub.addBudget(Convert.ToDouble(txtValue.Text), txtDescription.Text, mcDateOccurred.SelectionStart,
-                            mcDateAccount.SelectionStart, cbCat.Text, cbType.SelectedIndex, cbTerm.SelectedIndex, txtOther.Text);
+                            mcDateAccount.SelectionStart, cbCat.Text, (Enumerations.TransactionType)cbType.SelectedIndex, cbTerm.SelectedIndex, txtOther.Text);
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
                     MessageBox.Show("Item added successfully.");
@@ -59,7 +60,7 @@ namespace Marimba
                     budgetItem currentItem = clsStorage.currentClub.budget[iIndex];
                     currentItem.name = txtDescription.Text;
                     currentItem.value = Convert.ToDouble(txtValue.Text);
-                    currentItem.type = cbType.SelectedIndex;
+                    currentItem.type = (Enumerations.TransactionType)cbType.SelectedIndex;
                     currentItem.term = cbTerm.SelectedIndex;
                     currentItem.cat = cbCat.Text;
                     currentItem.comment = txtOther.Text;
@@ -96,7 +97,7 @@ namespace Marimba
                 txtOther.Text = currentItem.comment;
                 cbCat.Text = currentItem.cat;
                 cbTerm.SelectedIndex = currentItem.term;
-                cbType.SelectedIndex = currentItem.type;
+                cbType.SelectedIndex = (int)currentItem.type;
                 //if depreciation, also change the asset
                 if (depSelected)
                     //first, search the array index for the location of the asset

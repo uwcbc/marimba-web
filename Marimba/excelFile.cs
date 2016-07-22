@@ -626,14 +626,14 @@ namespace Marimba
                         (DateTime)worksheet.Cell(i + 3, 4).Value :
                         DateTime.ParseExact((string)worksheet.Cell(i + 3, 4).Value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     newItem.cat = (string)worksheet.Cell(i + 3, 5).Value;
-                    newItem.type = Convert.ToInt32(worksheet.Cell(i + 3, 6).Value);
+                    newItem.type = (Enumerations.TransactionType)Convert.ToInt32(worksheet.Cell(i + 3, 6).Value);
                     newItem.term = Convert.ToInt32(worksheet.Cell(i + 3, 7).Value);
                     newItem.comment = (string)worksheet.Cell(i + 3, 8).Value;
                     newItem.depOfAsset = null;
                     output.budget.Add(newItem);
 
                     // if depreciation
-                    if (output.budget[i].type == 1)
+                    if (output.budget[i].type == Enumerations.TransactionType.Depreciation)
                     {
                         indicesOfDepreciators.Add(i);
                         indicesOfDepreciatedAssets.Add(Convert.ToInt32(worksheet.Cell(i + 3, 9).Value));

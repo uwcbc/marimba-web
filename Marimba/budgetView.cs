@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.ComponentModel;
@@ -36,14 +37,14 @@ namespace Marimba
                 budgetText[2] = ""; // debit amount
                 budgetText[3] = ""; // credit amount
                 budgetText[4] = item.cat; // the type of thing being credited or debited
-                budgetText[5] = clsStorage.moneyTypeToString(item.type); // "Asset", "Depreciation", "Revenue" or "Expense"
+                budgetText[5] = item.type.ToString(); // "Asset", "Depreciation", "Revenue" or "Expense"
                 budgetText[6] = item.dateOccur.ToShortDateString(); // date of transaction
                 budgetText[7] = Convert.ToString(i); // internal index for this item and is not displayed; used so that we can double-click an item to open up its edit item window
                 budgetItemDictionary.Add(i, item);
                 i++;
 
                 // credit amounts
-                if (item.type == (int)club.money.Revenue)
+                if (item.type == Enumerations.TransactionType.Revenue)
                 {
                     budgetText[3] = item.value.ToString("C");
                     budgetList.Add(new ListViewItem(budgetText));

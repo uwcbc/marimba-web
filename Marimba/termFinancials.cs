@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -44,16 +45,16 @@ namespace Marimba
                         clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
                 {
                     //cash
-                    if ((club.money)item.type == club.money.Revenue)
+                    if (item.type == Enumerations.TransactionType.Revenue)
                     {
                         dCash += item.value;
                         dAssets += item.value;
                     }
-                    else if ((club.money)item.type == club.money.Asset)
+                    else if (item.type == Enumerations.TransactionType.Asset)
                     {
                         dCash -= item.value;
                     }
-                    else if ((club.money)item.type == club.money.Expense)
+                    else if (item.type == Enumerations.TransactionType.Expense)
                     {
                         dCash -= item.value;
                         dAssets -= item.value;
@@ -65,8 +66,8 @@ namespace Marimba
                     }
                     //capital assets & depreciation
                     //ignore fully depreciated assets up to this date
-                    if ((club.money)item.type == club.money.Asset && !clsStorage.currentClub.fullyDepreciatedAsset(item, clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
-                        || (club.money)item.type == club.money.Depreciation
+                    if (item.type == Enumerations.TransactionType.Asset && !clsStorage.currentClub.fullyDepreciatedAsset(item, clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
+                        || item.type == Enumerations.TransactionType.Depreciation
                         && !clsStorage.currentClub.fullyDepreciatedAsset(item.depOfAsset, clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1)))
                     {
                         int iIndex = iRevenueSearch(0, 11, item.cat, strAsset, true);
@@ -78,7 +79,7 @@ namespace Marimba
                             for (int j = 9; j > iIndex; j--)
                             {
                                 strAsset[j] = strAsset[j - 1];
-                                if ((club.money)item.type == club.money.Asset)
+                                if (item.type == Enumerations.TransactionType.Asset)
                                     dAsset[j] = dAsset[j - 1];
                                 else
                                     dDep[j] = dDep[j - 1];
@@ -86,14 +87,14 @@ namespace Marimba
 
                             }
                             strAsset[iIndex] = item.cat;
-                            if ((club.money)item.type == club.money.Asset)
+                            if (item.type == Enumerations.TransactionType.Asset)
                                 dAsset[iIndex] = item.value;
                             else
                                 dDep[iIndex] = item.value;
                         }
                         else //asset category already exists
                         {
-                            if ((club.money)item.type == club.money.Asset)
+                            if (item.type == Enumerations.TransactionType.Asset)
                                 dAsset[iIndex] += item.value;
                             else
                                 dDep[iIndex] += item.value;
@@ -178,7 +179,7 @@ namespace Marimba
                 //income statement, so ignore anything not affecting term
                 if (item.term == cbTerm.SelectedIndex)
                 {
-                    if ((club.money)item.type == club.money.Revenue)
+                    if (item.type == Enumerations.TransactionType.Revenue)
                     {
                         int iIndex = iRevenueSearch(0, 9, item.cat, strRev, true);
                         if (iIndex == -1) //revenue category does not exist
@@ -197,7 +198,7 @@ namespace Marimba
                         else //revenue category already exists
                             dRev[iIndex] += item.value;
                     }
-                    else if ((club.money)item.type != club.money.Asset)
+                    else if (item.type != Enumerations.TransactionType.Asset)
                     {
                         if (item.cat == "Waived Membership Fee")
                         {
@@ -307,27 +308,25 @@ namespace Marimba
                 if (item.dateAccount <
                     clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].startDate)
                 {
-                    if ((club.money)item.type == club.money.Revenue)
+                    if (item.type == Enumerations.TransactionType.Revenue)
                         dBegCash += item.value;
-                    else if ((club.money)item.type == club.money.Asset ||
-                        (club.money)item.type == club.money.Expense)
+                    else if (item.type == Enumerations.TransactionType.Asset ||
+                        item.type == Enumerations.TransactionType.Expense)
                         dBegCash -= item.value;
                 }
                 //occured in this term
-                else if (item.dateAccount <
-                    clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
+                else if (item.dateAccount < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
                 {
                     dValue = item.value;
                     //ignore depreciation
-                    if ((club.money)item.type == club.money.Depreciation)
+                    if (item.type == Enumerations.TransactionType.Depreciation)
                         dValue = 0;
                     //note to self: this section could be improved with arrays
                     //I decided against arrays here because the categories aren't yet final
                     //And the types for each category are also not yet final
                     //And it would cause a lot of headache if I had to add a category later and did not use this less efficient method
 
-                    else if ((club.money)item.type == club.money.Expense ||
-                        (club.money)item.type == club.money.Asset)
+                    else if (item.type == Enumerations.TransactionType.Expense || item.type == Enumerations.TransactionType.Asset)
                     {
                         if (item.cat == "Waived Membership Fee")
                         {

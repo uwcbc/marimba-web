@@ -127,6 +127,7 @@
     <Compile Include="editUser.Designer.cs">
       <DependentUpon>editUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\Enum.cs" />
     <Compile Include="Utility\ExcelHighlightingInfo.cs" />
     <Compile Include="viewAssetList.cs">
       <SubType>Form</SubType>
