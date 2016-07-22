@@ -113,7 +113,7 @@ namespace Marimba
                     if (Properties.Settings.Default.playSounds)
                         sound.click.Play();
                     lvMain.BeginUpdate();
-                    clsStorage.currentClub.addHistory(lvMain.SelectedItems[0].SubItems[1].Text, history.changeType.deleteBudget);
+                    clsStorage.currentClub.addHistory(lvMain.SelectedItems[0].SubItems[1].Text, Enumerations.ChangeType.DeleteBudget);
                     lvMain.Items.RemoveAt(lvMain.SelectedIndices[0]);                   
                     lvMain.EndUpdate();
                 }

@@ -141,7 +141,7 @@ namespace Marimba
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
                     MessageBox.Show("Successfully added all fees.");
-                    clsStorage.currentClub.addHistory(Convert.ToString(lvMembers.CheckedItems.Count), history.changeType.addFees);
+                    clsStorage.currentClub.addHistory(Convert.ToString(lvMembers.CheckedItems.Count), Enumerations.ChangeType.AddFees);
                     clearall();
                 }
             }

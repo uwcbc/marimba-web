@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -43,7 +44,7 @@ namespace Marimba
             if (Properties.Settings.Default.playSounds)
                 sound.success.Play();
             MessageBox.Show("Member successfully edited");
-            clsStorage.currentClub.addHistory(clsStorage.currentClub.formatedName(iID), history.changeType.editMember);
+            clsStorage.currentClub.addHistory(clsStorage.currentClub.formatedName(iID), Enumerations.ChangeType.EditMember);
         }
 
         private void Profile_Load(object sender, EventArgs e)
@@ -160,7 +161,7 @@ namespace Marimba
             //here we are merely deactivating the member
             //this is for people we would like to keep record of for UWCBC glory
             //but no longer need to receive e-mails
-            clsStorage.currentClub.addHistory(clsStorage.currentClub.formatedName(iID), history.changeType.deactivate);
+            clsStorage.currentClub.addHistory(clsStorage.currentClub.formatedName(iID), Enumerations.ChangeType.Deactivate);
             clsStorage.currentClub.members[iID].editMember(clsStorage.currentClub.members[iID].strFName, clsStorage.currentClub.members[iID].strLName,
                 (int)clsStorage.currentClub.members[iID].type, clsStorage.currentClub.members[iID].uiStudentNumber,
                 (int)clsStorage.currentClub.members[iID].memberFaculty, clsStorage.currentClub.members[iID].strOtherInstrument,
@@ -177,7 +178,7 @@ namespace Marimba
             //as well as all the term information if the unsubscribe actually attended rehearsals
             //instead, we remove everything we had and make that data anonymous
 
-            clsStorage.currentClub.addHistory(clsStorage.currentClub.formatedName(iID), history.changeType.unsubscribe);
+            clsStorage.currentClub.addHistory(clsStorage.currentClub.formatedName(iID), Enumerations.ChangeType.Unsubscribe);
             clsStorage.currentClub.members[iID].editMember("♪Unsubscribed", "♪Unsubscribed", (int)member.membertype.Other, 0, -1,
                 "","", "", clsStorage.currentClub.members[iID].signupTime, -1);
             if (Properties.Settings.Default.playSounds)

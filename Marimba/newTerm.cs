@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -70,7 +71,7 @@ namespace Marimba
                         if (Properties.Settings.Default.playSounds)
                             sound.success.Play();
                         MessageBox.Show("Term added successfully!");
-                        clsStorage.currentClub.addHistory(txtName.Text, history.changeType.newTerm);
+                        clsStorage.currentClub.addHistory(txtName.Text, Enumerations.ChangeType.NewTerm);
                         this.Close();
                     }
                 }

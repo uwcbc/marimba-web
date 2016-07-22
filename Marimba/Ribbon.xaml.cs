@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -230,7 +231,7 @@ namespace Marimba
                 clsStorage.currentClub.purgeOldMembers();
                 if (Properties.Settings.Default.playSounds)
                     sound.success.Play();
-                clsStorage.currentClub.addHistory(null, history.changeType.purgeMembers);
+                clsStorage.currentClub.addHistory(null, Enumerations.ChangeType.PurgeMembers);
                 MessageBox.Show("Successfully purged old members from club.");
             }
 

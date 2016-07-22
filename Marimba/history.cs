@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,42 +10,15 @@ namespace Marimba
     class history
     {
         public string user, otherInfo;
-        public changeType type;
+        public Enumerations.ChangeType type;
         public DateTime time;
         
-        /// <summary>
-        /// The type of change made, for the purpose of recording history of changes.
-        /// NOTE: You need to always add new types to the end, since we store to file using ints.
-        /// </summary>
-        public enum changeType{
-            signup = 0,
-            signin = 1,
-            editMember = 2,
-            unsubscribe = 3,
-            deactivate = 4,
-            addUser = 5,
-            sentEmail = 6,
-            addFees = 7, 
-            addBudget = 8,
-            editBudget = 9,
-            deleteBudget = 10,
-            setupElection = 11,
-            newTerm = 12,
-            importMembers = 13,
-            editAttendance = 14,
-            removeFromTerm = 15,
-            purgeMembers = 16,
-            editUser = 17,
-            deleteUser = 18,
-            addToTerm = 19
-        }
-
         //Our goal here is to minimize the number of strings stored
         //Strings take up a lot of disk space
         //changeType enum helps us save disk space
         //strUser and strAdditional are needed in case the number of users of additional members changes
         //we cannot reference them with their indexes
-        public history(string strUser, changeType type, string strAdditional, DateTime dtTime)
+        public history(string strUser, Enumerations.ChangeType type, string strAdditional, DateTime dtTime)
         {
             this.user = strUser;
             this.type = type;
@@ -55,7 +29,7 @@ namespace Marimba
         public history(StreamReader sr)
         {
             this.user = sr.ReadLine();
-            this.type = (changeType)Convert.ToInt32(sr.ReadLine());
+            this.type = (Enumerations.ChangeType)Convert.ToInt32(sr.ReadLine());
             this.otherInfo = sr.ReadLine();
             this.time = new DateTime(Convert.ToInt64(sr.ReadLine()));
         }
@@ -69,64 +43,64 @@ namespace Marimba
             string output = user;
             switch(type)
             {
-                case(changeType.addBudget):
+                case (Enumerations.ChangeType.AddBudget):
                     output += " added " + otherInfo + " to the budget - ";
                     break;
-                case (changeType.addFees):
+                case (Enumerations.ChangeType.AddFees):
                     output += " recorded fees paid by " + otherInfo + " members - ";
                     break;
-                case(changeType.addToTerm):
+                case (Enumerations.ChangeType.AddToTerm):
                     output += " added " + otherInfo.Split('@')[0] + " to " + otherInfo.Split('@')[1] + " - ";
                     break;
-                case(changeType.addUser):
+                case (Enumerations.ChangeType.AddUser):
                     output += " created a new user account in Marimba for " + otherInfo + " - ";
                     break;
-                case(changeType.editUser):
+                case (Enumerations.ChangeType.EditUser):
                     output += " edited the user account in Marimba for " + otherInfo + " - ";
                     break;
-                case(changeType.deleteUser):
+                case (Enumerations.ChangeType.DeleteUser):
                     output += " deleted the user account in Marimba for " + otherInfo + " - ";
                     break;
-                case(changeType.deactivate):
+                case (Enumerations.ChangeType.Deactivate):
                     output += " deactivated " + otherInfo + "'s membership record - ";
                     break;
-                case(changeType.deleteBudget):
+                case (Enumerations.ChangeType.DeleteBudget):
                     output += " deleted " + otherInfo + " from the budget - ";
                     break;
-                case(changeType.editAttendance):
+                case (Enumerations.ChangeType.EditAttendance):
                     output += " edited attendance records for " + otherInfo + " - ";
                     break;
-                case(changeType.editBudget):
+                case (Enumerations.ChangeType.EditBudget):
                     output += " edited " + otherInfo + " in the budget - ";
                     break;
-                case(changeType.editMember):
+                case (Enumerations.ChangeType.EditMember):
                     output += " edited " + otherInfo + " membership information - ";
                     break;
-                case(changeType.importMembers):
+                case (Enumerations.ChangeType.ImportMembers):
                     output += " imported new members from Google Doc - ";
                     break;
-                case(changeType.newTerm):
+                case (Enumerations.ChangeType.NewTerm):
                     output += " created a new term, " + otherInfo + " - ";
                     break;
-                case(changeType.removeFromTerm):
+                case (Enumerations.ChangeType.RemoveFromTerm):
                     output += " removed " + otherInfo.Split('@')[0] + " from " + otherInfo.Split('@')[1] + " - ";
                     break;
-                case(changeType.sentEmail):
+                case (Enumerations.ChangeType.SentEmail):
                     output += " sent an e-mail to " + otherInfo + " - ";
                     break;
-                case(changeType.setupElection):
+                case (Enumerations.ChangeType.SetupElection):
                     output += " set up an election - ";
                     break;
-                case(changeType.signin):
+                case (Enumerations.ChangeType.Signin):
                     output += " signed in members at the rehearsal - ";
                     break;
-                case(changeType.signup):
+                case (Enumerations.ChangeType.Signup):
                     output += " signed up " + otherInfo + " new members - ";
                     break;
-                case (changeType.unsubscribe):
+                case (Enumerations.ChangeType.Unsubscribe):
                     output += " unsubscribed " + otherInfo + " from the membership list - ";
                     break;
-                case (changeType.purgeMembers):
+                case (Enumerations.ChangeType.PurgeMembers):
                     output += " purged inactive members from the club's membership list - ";
                     break;
             }

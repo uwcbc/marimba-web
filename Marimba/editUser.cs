@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,7 +29,7 @@ namespace Marimba
                 if (Properties.Settings.Default.playSounds)
                     sound.success.Play();
                 MessageBox.Show("User successfully edited.");
-                clsStorage.currentClub.addHistory(cboUserID.Text, history.changeType.editUser);
+                clsStorage.currentClub.addHistory(cboUserID.Text, Enumerations.ChangeType.EditUser);
 
                 cboUserID.Text = "";
                 cboPrivileges.Text = "";
@@ -52,7 +53,7 @@ namespace Marimba
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
                     MessageBox.Show("User successfully deleted.");
-                    clsStorage.currentClub.addHistory(cboUserID.Text, history.changeType.deleteUser);
+                    clsStorage.currentClub.addHistory(cboUserID.Text, Enumerations.ChangeType.DeleteUser);
 
                     cboUserID.Items.Remove(cboUserID.Text);
                     cboUserID.Text = "";

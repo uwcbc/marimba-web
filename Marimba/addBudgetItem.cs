@@ -52,7 +52,7 @@ namespace Marimba
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
                     MessageBox.Show("Item added successfully.");
-                    clsStorage.currentClub.addHistory(txtDescription.Text, history.changeType.addBudget);
+                    clsStorage.currentClub.addHistory(txtDescription.Text, Enumerations.ChangeType.AddBudget);
                     clearall();
                 }
                 else //editing a budget item
@@ -72,7 +72,7 @@ namespace Marimba
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
                     MessageBox.Show("Item edited successfully.");
-                    clsStorage.currentClub.addHistory(txtDescription.Text, history.changeType.editBudget);
+                    clsStorage.currentClub.addHistory(txtDescription.Text, Enumerations.ChangeType.EditBudget);
                     this.Close();
                 }
             }

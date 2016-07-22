@@ -91,7 +91,7 @@ namespace Marimba
             br = new BinaryReader(fs);
             fileVersion = br.ReadDouble(); //read the version number, needed for reading legacy file formats
             this.strName = br.ReadString();
-            int iUser = br.ReadInt16();
+            int iUser = br.ReadInt32();
 
             //this next part is for importing old files
             int iTempUser;
@@ -873,7 +873,7 @@ namespace Marimba
             return asset.value - dDep;
         }
 
-        public void addHistory(string additionalInfo, history.changeType type)
+        public void addHistory(string additionalInfo, Enumerations.ChangeType type)
         {
             history newItem = new history(strCurrentUser, type, additionalInfo, DateTime.Now);
             historyList.Add(newItem);

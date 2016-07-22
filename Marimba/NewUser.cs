@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -33,7 +34,7 @@ namespace Marimba
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
                     MessageBox.Show("User successfully added");
-                    clsStorage.currentClub.addHistory(txtUserID.Text, history.changeType.addUser);
+                    clsStorage.currentClub.addHistory(txtUserID.Text, Enumerations.ChangeType.AddUser);
                     this.Close();
                 }
                 else

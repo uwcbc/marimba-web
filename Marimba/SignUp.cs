@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Media;
+using Marimba.Utility;
 
 namespace Marimba
 {
@@ -139,7 +140,7 @@ namespace Marimba
         {
             //store history of signup
             if (iSignup > 0)
-                clsStorage.currentClub.addHistory(Convert.ToString(iSignup), history.changeType.signup);
+                clsStorage.currentClub.addHistory(Convert.ToString(iSignup), Enumerations.ChangeType.Signup);
         }
 
         private void cbMultiple_CheckedChanged(object sender, EventArgs e)

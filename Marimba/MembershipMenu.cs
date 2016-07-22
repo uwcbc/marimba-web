@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -162,7 +163,7 @@ namespace Marimba
                                 Convert.ToUInt32(row[3]), member.stringToFaculty(row[6]), row[5], row[4], "", Convert.ToDateTime(row[0]));
                         }
                     }
-                    clsStorage.currentClub.addHistory("", history.changeType.importMembers);
+                    clsStorage.currentClub.addHistory("", Enumerations.ChangeType.ImportMembers);
                     if (Properties.Settings.Default.playSounds)
                         sound.success.Play();
                 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -236,10 +237,10 @@ namespace Marimba
         {
             //just storing a bit of history
             if (iSignup > 0)
-                clsStorage.currentClub.addHistory(Convert.ToString(iSignup), history.changeType.signup);
+                clsStorage.currentClub.addHistory(Convert.ToString(iSignup), Enumerations.ChangeType.Signup);
             if (iSignin > 0)
             {
-                clsStorage.currentClub.addHistory(Convert.ToString(iSignin), history.changeType.signin);
+                clsStorage.currentClub.addHistory(Convert.ToString(iSignin), Enumerations.ChangeType.Signin);
                 //save if we are a guest account
                 if (clsStorage.currentClub.strCurrentUser == "Guest")
                 {

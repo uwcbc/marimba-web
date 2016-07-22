@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -100,7 +101,7 @@ namespace Marimba
             //if attendance changes were made, record them
             if (attendancechanges)
             {
-                clsStorage.currentClub.addHistory(clsStorage.currentClub.listTerms[oldTermIndex].strName, history.changeType.editAttendance);
+                clsStorage.currentClub.addHistory(clsStorage.currentClub.listTerms[oldTermIndex].strName, Enumerations.ChangeType.EditAttendance);
                 attendancechanges = false;
             }
             oldTermIndex = cbTerm.SelectedIndex;
@@ -300,7 +301,7 @@ namespace Marimba
             //if attendance changes were made, record them
             if (attendancechanges)
             {
-                clsStorage.currentClub.addHistory(clsStorage.currentClub.listTerms[oldTermIndex].strName, history.changeType.editAttendance);
+                clsStorage.currentClub.addHistory(clsStorage.currentClub.listTerms[oldTermIndex].strName, Enumerations.ChangeType.EditAttendance);
                 attendancechanges = false;
             }
         }
@@ -363,7 +364,7 @@ namespace Marimba
                             sound.click.Play();
 
                         // we were successful, so add history and remove from the listview
-                        clsStorage.currentClub.addHistory(String.Format("{0}@{1}", lvAttendance.SelectedItems[0].SubItems[0].Text, cbTerm.Text), history.changeType.removeFromTerm);
+                        clsStorage.currentClub.addHistory(String.Format("{0}@{1}", lvAttendance.SelectedItems[0].SubItems[0].Text, cbTerm.Text), Enumerations.ChangeType.RemoveFromTerm);
                         
                         // iRemove is the index of the member to remove
                         int iRemove = lvAttendance.SelectedIndices[0];
@@ -422,8 +423,7 @@ namespace Marimba
                 {
                     string name = clsStorage.currentClub.formatedName(i);
                     string selectedTermName = cbTerm.Text;
-                    clsStorage.currentClub.addHistory(String.Format("{0}@{1}", name, selectedTermName),
-                        history.changeType.addToTerm);
+                    clsStorage.currentClub.addHistory(String.Format("{0}@{1}", name, selectedTermName), Enumerations.ChangeType.AddToTerm);
                 }
 
                 /* display our additions on the form */
