@@ -60,10 +60,10 @@ namespace Marimba
                     if (lvInstruments != null)
                     {
                         //prepare to make a list of all the instruments the member plays
-                        int iNumberofInstruments = Enum.GetValues(typeof(member.instrument)).Length;
+                        int iNumberofInstruments = Enum.GetValues(typeof(Member.Instrument)).Length;
                         tempPlays = new bool[iNumberofInstruments];
                         for (int i = 0; i < iNumberofInstruments; i++)
-                            tempPlays[(int)member.stringToInstrument(lvInstruments.Items[i].SubItems[0].Text)] = lvInstruments.Items[i].Checked;
+                            tempPlays[(int)Member.stringToInstrument(lvInstruments.Items[i].SubItems[0].Text)] = lvInstruments.Items[i].Checked;
                     }
 
                     //no missing info, then add the member!
@@ -129,8 +129,8 @@ namespace Marimba
             //add the instruments to the combo box
             cbInstrument.BeginUpdate();
             List<string> listInstruments = new List<string>();
-            foreach (member.instrument instrument in Enum.GetValues(typeof(member.instrument)))
-                listInstruments.Add(member.instrumentToString(instrument));
+            foreach (Member.Instrument instrument in Enum.GetValues(typeof(Member.Instrument)))
+                listInstruments.Add(Member.instrumentToString(instrument));
             listInstruments.Sort();
             cbInstrument.Items.AddRange(listInstruments.ToArray());
             cbInstrument.EndUpdate();
@@ -172,8 +172,8 @@ namespace Marimba
                 instrumentList = new List<ListViewItem>();
                 lvInstruments.Items.Clear();
                 instrumentList.Clear();
-                foreach (member.instrument instrument in Enum.GetValues(typeof(member.instrument)))
-                    instrumentList.Add(new ListViewItem(member.instrumentToString(instrument), member.instrumentIconIndex(instrument)));
+                foreach (Member.Instrument instrument in Enum.GetValues(typeof(Member.Instrument)))
+                    instrumentList.Add(new ListViewItem(Member.instrumentToString(instrument), Member.instrumentIconIndex(instrument)));
                 lvInstruments.Items.AddRange(instrumentList.ToArray());
                 this.Controls.Add(lvInstruments);
                 this.ResumeLayout(false);

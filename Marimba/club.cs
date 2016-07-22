@@ -39,7 +39,7 @@ namespace Marimba
         public Int16 iMember;
         private static readonly int saltLength = 16;
         //currently, prepare for five thousand total members
-        public member[] members = new member[5000];
+        public Member[] members = new Member[5000];
         protected string strLocation;
         public string strCurrentUser, strCurrentUserPrivilege;
 
@@ -160,7 +160,7 @@ namespace Marimba
                             //read the membership list
                             iMember = Convert.ToInt16(srDecrypt.ReadLine());
                             for (int i = 0; i < iMember; i++)
-                                members[i] = new member(srDecrypt);
+                                members[i] = new Member(srDecrypt);
                             short sTerm = Convert.ToInt16(srDecrypt.ReadLine());
                             listTerms = new List<term>(sTerm);
                             for (int i = 0; i < sTerm; i++)
@@ -295,7 +295,7 @@ namespace Marimba
                                 //write if the member plays multiple instruments
                                 //write any other instruments that the member plays (or does not play)
                                 sw.WriteLine(members[i].bMultipleInstruments);
-                                int numberOfInstruments = Enum.GetValues(typeof(member.instrument)).Length;
+                                int numberOfInstruments = Enum.GetValues(typeof(Member.Instrument)).Length;
                                 if(members[i].bMultipleInstruments)
                                     for (int j = 0; j < numberOfInstruments; j++)
                                         sw.WriteLine(members[i].playsInstrument[j]);
@@ -623,7 +623,7 @@ namespace Marimba
                     this.members[i].editMember(strFName, strLName, iType, uiID, iFaculty, strInstrument, strEmail, strOther, members[i].signupTime, iShirt);
                     return false;
                 }
-            this.members[iMember] = new member(strFName, strLName, iType, uiID, iFaculty, strInstrument, strOtherInstrument, strEmail, strOther, iShirt);
+            this.members[iMember] = new Member(strFName, strLName, iType, uiID, iFaculty, strInstrument, strOtherInstrument, strEmail, strOther, iShirt);
             iMember++;
             return true;
         }
@@ -639,7 +639,7 @@ namespace Marimba
                     this.members[i].editMember(strFName, strLName, iType, uiID, iFaculty, strInstrument, strEmail, strOther, members[i].signupTime, iShirt);
                     return false;
                 }
-            this.members[iMember] = new member(strFName, strLName, iType, uiID, iFaculty, strInstrument, strOtherInstrument, strEmail, strOther, iShirt, bInstruments);
+            this.members[iMember] = new Member(strFName, strLName, iType, uiID, iFaculty, strInstrument, strOtherInstrument, strEmail, strOther, iShirt, bInstruments);
             iMember++;
             return true;
         }
@@ -655,7 +655,7 @@ namespace Marimba
                     this.members[i].editMember(strFName, strLName, iType, uiID, iFaculty, strInstrument, strEmail, strOther, members[i].signupTime, -1);
                     return false;
                 }
-            this.members[iMember] = new member(strFName, strLName, iType, uiID, iFaculty, strInstrument, strEmail, strOther, signup, -1);
+            this.members[iMember] = new Member(strFName, strLName, iType, uiID, iFaculty, strInstrument, strEmail, strOther, signup, -1);
             iMember++;
             return true;
         }
@@ -750,8 +750,8 @@ namespace Marimba
 
         public string formatedName(int index)
         {
-            if(this.members[index].curInstrument != member.instrument.other)
-                return String.Format("{0}, {1}", firstAndLastName(index), member.instrumentToString(this.members[index].curInstrument));
+            if(this.members[index].curInstrument != Member.Instrument.Other)
+                return String.Format("{0}, {1}", firstAndLastName(index), Member.instrumentToString(this.members[index].curInstrument));
             else
             {
                 if (this.members[index].strOtherInstrument == null || this.members[index].strOtherInstrument == "")

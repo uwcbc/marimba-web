@@ -36,8 +36,8 @@ namespace Marimba
             //add the instruments to the combo box
             cbInstrument.BeginUpdate();
             List<string> listInstruments = new List<string>();
-            foreach (member.instrument instrument in Enum.GetValues(typeof(member.instrument)))
-                listInstruments.Add(member.instrumentToString(instrument));
+            foreach (Member.Instrument instrument in Enum.GetValues(typeof(Member.Instrument)))
+                listInstruments.Add(Member.instrumentToString(instrument));
             listInstruments.Sort();
             cbInstrument.Items.AddRange(listInstruments.ToArray());
             cbInstrument.EndUpdate();
@@ -60,16 +60,16 @@ namespace Marimba
                 //skip if it is an unsubscribed member or deactivated member
                 if (clsStorage.currentClub.members[i].strFName != "♪Unsubscribed" && clsStorage.currentClub.members[i].strEmail != "")
                 {
-                    if (clsStorage.currentClub.members[i].curInstrument != member.instrument.other)
-                        temp = new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), member.instrumentToString(clsStorage.currentClub.members[i].curInstrument),
+                    if (clsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
+                        temp = new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), Member.instrumentToString(clsStorage.currentClub.members[i].curInstrument),
                         clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
-                        member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
+                        Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                     else
                         temp = new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), clsStorage.currentClub.members[i].strOtherInstrument,
                         clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
-                        member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
+                        Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                     //if the member is not in the term, add them to the other members list
                     //otherwise, add them to the term members list
                     indexInTerm = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].memberSearch(clsStorage.currentClub.members[i].sID);
@@ -105,7 +105,7 @@ namespace Marimba
                 short sID = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].members[i];
                 if (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].rehearsalIndex(DateTime.Today) >=0 &&
                     clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[i,clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].rehearsalIndex(DateTime.Today)])
-                    lvSignedIn.Items.Insert(0, new ListViewItem(clsStorage.currentClub.members[sID].strFName + " " + clsStorage.currentClub.members[sID].strLName, member.instrumentIconIndex(clsStorage.currentClub.members[sID].curInstrument)));
+                    lvSignedIn.Items.Insert(0, new ListViewItem(clsStorage.currentClub.members[sID].strFName + " " + clsStorage.currentClub.members[sID].strLName, Member.instrumentIconIndex(clsStorage.currentClub.members[sID].curInstrument)));
             }
             lvSignedIn.Sorting = SortOrder.Ascending;
             lvSignedIn.Sort();
@@ -198,7 +198,7 @@ namespace Marimba
                     //show record on list, but first make sure they are not already signed in
                     lvSignedIn.BeginUpdate();
                     if (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[termIndex, rehearsalindex] == false)
-                        lvSignedIn.Items.Insert(0, new ListViewItem(clsStorage.currentClub.members[userID].strFName + " " + clsStorage.currentClub.members[userID].strLName, member.instrumentIconIndex(clsStorage.currentClub.members[userID].curInstrument)));
+                        lvSignedIn.Items.Insert(0, new ListViewItem(clsStorage.currentClub.members[userID].strFName + " " + clsStorage.currentClub.members[userID].strLName, Member.instrumentIconIndex(clsStorage.currentClub.members[userID].curInstrument)));
                     lvSignedIn.Sort();
                     lvSignedIn.EndUpdate();
                     //mark attendance
@@ -280,10 +280,10 @@ namespace Marimba
                 //load the instruments
                 instrumentLoad(iUserIndex);
 
-                if (clsStorage.currentClub.members[iUserIndex].curInstrument == member.instrument.other)
+                if (clsStorage.currentClub.members[iUserIndex].curInstrument == Member.Instrument.Other)
                     cbInstrument.Text = clsStorage.currentClub.members[iUserIndex].strOtherInstrument;
                 else
-                    cbInstrument.Text = member.instrumentToString(clsStorage.currentClub.members[iUserIndex].curInstrument);
+                    cbInstrument.Text = Member.instrumentToString(clsStorage.currentClub.members[iUserIndex].curInstrument);
                 cbSize.SelectedIndex = (int)clsStorage.currentClub.members[iUserIndex].size;
                 //if already a member of the term, check if the membership fee has been paid
                 //also populate attendance
@@ -340,16 +340,16 @@ namespace Marimba
                     //skip if it is an unsubscribed member
                     if (clsStorage.currentClub.members[i].strFName != "♪Unsubscribed" && clsStorage.currentClub.members[i].strEmail != "")
                     {
-                        if (clsStorage.currentClub.members[i].curInstrument != member.instrument.other)
-                            temp = new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), member.instrumentToString(clsStorage.currentClub.members[i].curInstrument),
+                        if (clsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
+                            temp = new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), Member.instrumentToString(clsStorage.currentClub.members[i].curInstrument),
                         clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
-                            member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
+                            Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                         else
                             temp = new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), clsStorage.currentClub.members[i].strOtherInstrument,
                         clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
-                            member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
+                            Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                         //if the member is not in the term, add them to the other members list
                         //otherwise, add them to the term members list
                         indexInTerm = clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].memberSearch(clsStorage.currentClub.members[i].sID);
@@ -466,7 +466,7 @@ namespace Marimba
                 //show record on list, but first make sure they are not already signed in
                 lvSignedIn.BeginUpdate();
                 if (clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].attendance[termIndex, rehearsalindex] == false)
-                    lvSignedIn.Items.Insert(0, new ListViewItem(clsStorage.currentClub.members[userID].strFName + " " + clsStorage.currentClub.members[userID].strLName, member.instrumentIconIndex(clsStorage.currentClub.members[userID].curInstrument)));
+                    lvSignedIn.Items.Insert(0, new ListViewItem(clsStorage.currentClub.members[userID].strFName + " " + clsStorage.currentClub.members[userID].strLName, Member.instrumentIconIndex(clsStorage.currentClub.members[userID].curInstrument)));
                 lvSignedIn.Sort();
                 lvSignedIn.EndUpdate();
                 //mark attendance
@@ -527,15 +527,15 @@ namespace Marimba
             //otherwise, limit the list to instruments the member actually plays
             if (!clsStorage.currentClub.members[iID].bMultipleInstruments)
             {
-                foreach (member.instrument instrument in Enum.GetValues(typeof(member.instrument)))
-                    listInstruments.Add(member.instrumentToString(instrument));
+                foreach (Member.Instrument instrument in Enum.GetValues(typeof(Member.Instrument)))
+                    listInstruments.Add(Member.instrumentToString(instrument));
             }
             else
             {
-                int numberOfInstruments = Enum.GetValues(typeof(member.instrument)).Length;
+                int numberOfInstruments = Enum.GetValues(typeof(Member.Instrument)).Length;
                 for (int i = 1; i < numberOfInstruments; i++)
                     if (clsStorage.currentClub.members[iID].playsInstrument[i])
-                        listInstruments.Add(member.instrumentToString((member.instrument)i));
+                        listInstruments.Add(Member.instrumentToString((Member.Instrument)i));
             }
             listInstruments.Sort();
             cbInstrument.Items.AddRange(listInstruments.ToArray());

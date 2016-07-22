@@ -53,13 +53,13 @@ namespace Marimba
                             
                             output[j + 1, 0] = clsStorage.currentClub.members[i].strFName;
                             output[j + 1, 1] = clsStorage.currentClub.members[i].strLName;
-                            output[j + 1, 2] = member.toString(clsStorage.currentClub.members[i].type);
+                            output[j + 1, 2] = Member.toString(clsStorage.currentClub.members[i].type);
                             output[j + 1, 3] = clsStorage.currentClub.members[i].uiStudentNumber;
-                            output[j + 1, 4] = member.toString(clsStorage.currentClub.members[i].memberFaculty);
-                            if (clsStorage.currentClub.members[i].curInstrument == member.instrument.other)
+                            output[j + 1, 4] = Member.toString(clsStorage.currentClub.members[i].memberFaculty);
+                            if (clsStorage.currentClub.members[i].curInstrument == Member.Instrument.Other)
                                 output[j + 1, 5] = clsStorage.currentClub.members[i].strOtherInstrument;
                             else
-                                output[j + 1, 5] = member.instrumentToString(clsStorage.currentClub.members[i].curInstrument);
+                                output[j + 1, 5] = Member.instrumentToString(clsStorage.currentClub.members[i].curInstrument);
                             output[j + 1, 6] = clsStorage.currentClub.members[i].strEmail;
                             output[j + 1, 7] = clsStorage.currentClub.members[i].size.ToString();
                             output[j + 1, 8] = clsStorage.currentClub.members[i].strOther;
@@ -95,13 +95,13 @@ namespace Marimba
                                 CsvRow row = new CsvRow();
                                 row.Add(clsStorage.currentClub.members[i].strFName);
                                 row.Add(clsStorage.currentClub.members[i].strLName);
-                                row.Add(member.toString(clsStorage.currentClub.members[i].type));
+                                row.Add(Member.toString(clsStorage.currentClub.members[i].type));
                                 row.Add(Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber));
-                                row.Add(member.toString(clsStorage.currentClub.members[i].memberFaculty));
-                                if (clsStorage.currentClub.members[i].curInstrument == member.instrument.other)
+                                row.Add(Member.toString(clsStorage.currentClub.members[i].memberFaculty));
+                                if (clsStorage.currentClub.members[i].curInstrument == Member.Instrument.Other)
                                     row.Add(clsStorage.currentClub.members[i].strOtherInstrument);
                                 else
-                                    row.Add(member.instrumentToString(clsStorage.currentClub.members[i].curInstrument));
+                                    row.Add(Member.instrumentToString(clsStorage.currentClub.members[i].curInstrument));
                                 row.Add(clsStorage.currentClub.members[i].strEmail);
                                 row.Add(clsStorage.currentClub.members[i].size.ToString());
                                 row.Add(clsStorage.currentClub.members[i].strOther);
@@ -160,7 +160,7 @@ namespace Marimba
                         while (reader.ReadRow(row) && row[0] != "")
                         {
                             clsStorage.currentClub.addMember(row[1], row[2], 0,
-                                Convert.ToUInt32(row[3]), member.stringToFaculty(row[6]), row[5], row[4], "", Convert.ToDateTime(row[0]));
+                                Convert.ToUInt32(row[3]), Member.stringToFaculty(row[6]), row[5], row[4], "", Convert.ToDateTime(row[0]));
                         }
                     }
                     clsStorage.currentClub.addHistory("", Enumerations.ChangeType.ImportMembers);

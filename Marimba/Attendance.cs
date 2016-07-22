@@ -80,7 +80,7 @@ namespace Marimba
             }
 
             /* actually add it to the list, and format it */
-            list.Add(new ListViewItem(attendance, member.instrumentIconIndex(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[memberTermID]].curInstrument)));
+            list.Add(new ListViewItem(attendance, Member.instrumentIconIndex(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[memberTermID]].curInstrument)));
             list.Last().UseItemStyleForSubItems = false;
             for (int i = 2; i <= clsStorage.currentClub.listTerms[iTerm].sRehearsals + 1; i++)
             {
@@ -173,10 +173,10 @@ namespace Marimba
                         output[i+1,0] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strFName;
                         output[i + 1, 1] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strLName;
                         output[i + 1, 2] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].uiStudentNumber;
-                        if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument == member.instrument.other)
+                        if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument == Member.Instrument.Other)
                             output[i + 1, 3] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strOtherInstrument;
                         else
-                            output[i + 1, 3] = member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument);
+                            output[i + 1, 3] = Member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument);
                         output[i + 1, 4] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strEmail;
                         output[i + 1, 5] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].size.ToString();
                         for (int j = 0; j < clsStorage.currentClub.listTerms[iTerm].sRehearsals; j++)
@@ -211,10 +211,10 @@ namespace Marimba
                             row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strFName);
                             row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strLName);
                             row.Add(Convert.ToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].uiStudentNumber));
-                            if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument == member.instrument.other)
+                            if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument == Member.Instrument.Other)
                                 row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strOtherInstrument);
                             else
-                                row.Add(member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument));
+                                row.Add(Member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument));
                             row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strEmail);
                             row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].size.ToString());
                             for (int j = 0; j < clsStorage.currentClub.listTerms[iTerm].sRehearsals; j++)

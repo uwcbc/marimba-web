@@ -6,34 +6,35 @@ using System.Text;
 
 namespace Marimba
 {
-    class member
+    class Member
     {
         public string strFName, strLName,strOtherInstrument, strEmail, strOther;
-        public instrument curInstrument;
+        public Instrument curInstrument;
         public bool[] playsInstrument;
-        public membertype type;
-        public faculty memberFaculty;
+        public MemberType type;
+        public Faculty memberFaculty;
         public uint uiStudentNumber;
         public short sID;
         public DateTime signupTime;
-        public shirtSize size;
+        public ShirtSize size;
         public bool bMultipleInstruments;
 
-        public enum membertype { UWUnderGrad, UWGrad, UWAlumni, Other };
-        public enum faculty { AHS, Arts, Engineering, Environment, Mathematics, Science, Unknown = -1 };
-        public enum shirtSize { XS, S, M, L, XL, XXL, Unknown = -1 };
-        public enum instrument { piccolo, flute, oboe,bassoon, eb_clarinet, clarinet, alto_clarinet, bass_clarinet, sop_sax, alto_sax, tenor_sax, bari_sax, trumpet, cornet, horn,
-        trombone, bass_trombone, euph, tuba, string_bass, elec_bass, percussion, drum_kit, timpani, mallet, piano, baton, other}
-        public member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt)
+        public enum MemberType { UWUnderGrad, UWGrad, UWAlumni, Other };
+        public enum Faculty { AHS, Arts, Engineering, Environment, Mathematics, Science, Unknown = -1 };
+        public enum ShirtSize { XS, S, M, L, XL, XXL, Unknown = -1 };
+        public enum Instrument { Piccolo, Flute, Oboe, Bassoon, EbClarinet, Clarinet, AltoClarinet, BassClarinet, SopranoSax, AltoSax, TenorSax, BariSax, Trumpet, Cornet, Horn,
+        Trombone, BassTrombone, Euphonium, Tuba, StringBass, ElectricBass, Percussion, DrumKit, Timpani, Mallet, Piano, Baton, Other }
+
+        public Member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt)
         {
             //declare basic information about user
             this.strFName = strFName;
             this.strLName = strLName;
-            this.type = (membertype)iType;
+            this.type = (MemberType)iType;
             this.uiStudentNumber = uiStudentNumber;
-            this.memberFaculty = (faculty)iFaculty;
+            this.memberFaculty = (Faculty)iFaculty;
             this.curInstrument = stringToInstrument(strInstrument);
-            if (this.curInstrument == instrument.other && String.IsNullOrEmpty(strOtherInstrument))
+            if (this.curInstrument == Instrument.Other && String.IsNullOrEmpty(strOtherInstrument))
                 this.strOtherInstrument = strInstrument;
             else
                 this.strOtherInstrument = strOtherInstrument;
@@ -41,29 +42,29 @@ namespace Marimba
             this.strOther = strOther;
             this.sID = clsStorage.currentClub.iMember;
             this.signupTime = DateTime.Now;
-            this.size = (shirtSize)iShirt;
+            this.size = (ShirtSize)iShirt;
             this.bMultipleInstruments = false;
         }
 
-        public member(StreamReader sr)
+        public Member(StreamReader sr)
         {
             strFName = sr.ReadLine();
             strLName = sr.ReadLine();
-            type = (membertype)Convert.ToInt32(sr.ReadLine());
+            type = (MemberType)Convert.ToInt32(sr.ReadLine());
             uiStudentNumber = Convert.ToUInt32(sr.ReadLine());
-            memberFaculty = (faculty)Convert.ToInt32(sr.ReadLine());
+            memberFaculty = (Faculty)Convert.ToInt32(sr.ReadLine());
 
             strOtherInstrument = sr.ReadLine();
-            curInstrument = (instrument)Convert.ToInt32(sr.ReadLine());
+            curInstrument = (Instrument)Convert.ToInt32(sr.ReadLine());
 
             bMultipleInstruments = Convert.ToBoolean(sr.ReadLine());
 
             //write if the member plays multiple instruments
             //write any other instruments that the member plays (or does not play)
-            int numberOfInstruments = Enum.GetValues(typeof(member.instrument)).Length;
+            int numberOfInstruments = Enum.GetValues(typeof(Member.Instrument)).Length;
             if (bMultipleInstruments)
             {
-                playsInstrument = new bool[Enum.GetValues(typeof(member.instrument)).Length];
+                playsInstrument = new bool[Enum.GetValues(typeof(Member.Instrument)).Length];
                 for (int j = 0; j < numberOfInstruments; j++)
                     playsInstrument[j] = Convert.ToBoolean(sr.ReadLine());
             }
@@ -72,19 +73,19 @@ namespace Marimba
             strOther = clsStorage.reverseCleanNewLine(sr.ReadLine());
             sID = Convert.ToInt16(sr.ReadLine());
             signupTime = new DateTime(Convert.ToInt64(sr.ReadLine()));
-            size = (shirtSize)Convert.ToInt32(sr.ReadLine());
+            size = (ShirtSize)Convert.ToInt32(sr.ReadLine());
         }
 
-        public member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt, bool[] bMultiple)
+        public Member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt, bool[] bMultiple)
         {
             //declare basic information about user
             this.strFName = strFName;
             this.strLName = strLName;
-            this.type = (membertype)iType;
+            this.type = (MemberType)iType;
             this.uiStudentNumber = uiStudentNumber;
-            this.memberFaculty = (faculty)iFaculty;
+            this.memberFaculty = (Faculty)iFaculty;
             this.curInstrument = stringToInstrument(strInstrument);
-            if (this.curInstrument == instrument.other && String.IsNullOrEmpty(strOtherInstrument))
+            if (this.curInstrument == Instrument.Other && String.IsNullOrEmpty(strOtherInstrument))
                 this.strOtherInstrument = strInstrument;
             else
                 this.strOtherInstrument = strOtherInstrument;
@@ -92,28 +93,28 @@ namespace Marimba
             this.strOther = strOther;
             this.sID = clsStorage.currentClub.iMember;
             this.signupTime = DateTime.Now;
-            this.size = (shirtSize)iShirt;
+            this.size = (ShirtSize)iShirt;
             //handle the multiple instruments here
             this.bMultipleInstruments = true;
-            this.playsInstrument = new bool[Enum.GetValues(typeof(member.instrument)).Length];
-            Array.Copy(bMultiple, this.playsInstrument, Enum.GetValues(typeof(member.instrument)).Length);
+            this.playsInstrument = new bool[Enum.GetValues(typeof(Member.Instrument)).Length];
+            Array.Copy(bMultiple, this.playsInstrument, Enum.GetValues(typeof(Member.Instrument)).Length);
         }
-        public member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strEmail,
+        public Member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strEmail,
             string strOther, short clubID, DateTime time, int iShirt, bool[] bMultiple = null)
         {
             //declare basic information about user
             this.strFName = strFName;
             this.strLName = strLName;
-            this.type = (membertype)iType;
+            this.type = (MemberType)iType;
             this.uiStudentNumber = uiStudentNumber;
-            this.memberFaculty = (faculty)iFaculty;
+            this.memberFaculty = (Faculty)iFaculty;
 
             //this is legacy support
             //let's bring it to the Marimba 2 standards
             //take the members instrument, try to recognize it
             //if we fail, mark it as other
             this.curInstrument = stringToInstrument(strInstrument);
-            if (this.curInstrument == instrument.other)
+            if (this.curInstrument == Instrument.Other)
                 this.strOtherInstrument = strInstrument;
             else
                 this.strOtherInstrument = "";
@@ -122,33 +123,33 @@ namespace Marimba
             this.strOther = strOther;
             this.sID = clubID;
             this.signupTime = time;
-            this.size = (shirtSize)iShirt;
+            this.size = (ShirtSize)iShirt;
             //multiple instruments
             if (bMultiple == null)
                 this.bMultipleInstruments = false;
             else
             {
                 this.bMultipleInstruments = true;
-                this.playsInstrument = new bool[Enum.GetValues(typeof(member.instrument)).Length];
-                Array.Copy(bMultiple, this.playsInstrument, Enum.GetValues(typeof(member.instrument)).Length);
+                this.playsInstrument = new bool[Enum.GetValues(typeof(Member.Instrument)).Length];
+                Array.Copy(bMultiple, this.playsInstrument, Enum.GetValues(typeof(Member.Instrument)).Length);
             }
         }
-        public member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strEmail,
+        public Member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strEmail,
     string strOther, DateTime time, int iShirt)
         {
             //declare basic information about user
             this.strFName = strFName;
             this.strLName = strLName;
-            this.type = (membertype)iType;
+            this.type = (MemberType)iType;
             this.uiStudentNumber = uiStudentNumber;
-            this.memberFaculty = (faculty)iFaculty;
+            this.memberFaculty = (Faculty)iFaculty;
             this.strOtherInstrument = strInstrument;
             this.curInstrument = stringToInstrument(strInstrument);
             this.strEmail = strEmail;
             this.strOther = strOther;
             this.sID = clsStorage.currentClub.iMember;
             this.signupTime = time;
-            this.size = (shirtSize)iShirt;
+            this.size = (ShirtSize)iShirt;
         }
 
         /// <summary>
@@ -169,15 +170,15 @@ namespace Marimba
         {
             this.strFName = strFName;
             this.strLName = strLName;
-            this.type = (membertype)iType;
+            this.type = (MemberType)iType;
             this.uiStudentNumber = uiStudentNumber;
-            this.memberFaculty = (faculty)iFaculty;
+            this.memberFaculty = (Faculty)iFaculty;
             this.strOtherInstrument = "";
             this.curInstrument = stringToInstrument(strInstrument);
             this.strEmail = strEmail;
             this.strOther = strOther;
             this.signupTime = time;
-            this.size = (shirtSize)iShirt;
+            this.size = (ShirtSize)iShirt;
         }
 
         /// <summary>
@@ -199,15 +200,15 @@ namespace Marimba
         {
             this.strFName = strFName;
             this.strLName = strLName;
-            this.type = (membertype)iType;
+            this.type = (MemberType)iType;
             this.uiStudentNumber = uiStudentNumber;
-            this.memberFaculty = (faculty)iFaculty;
+            this.memberFaculty = (Faculty)iFaculty;
             this.strOtherInstrument = strOtherInstrument;
             this.curInstrument = stringToInstrument(strInstrument);
             this.strEmail = strEmail;
             this.strOther = strOther;
             this.signupTime = time;
-            this.size = (shirtSize)iShirt;
+            this.size = (ShirtSize)iShirt;
         }
 
         /// <summary>
@@ -218,7 +219,7 @@ namespace Marimba
         /// <param name="memberlist1">First array of members</param>
         /// <param name="memberlist2">Second array of members</param>
         /// <returns>Returns index of last common member</returns>
-        public static int lastCommonMember(int low, int high, member[] memberlist1, member[] memberlist2)
+        public static int lastCommonMember(int low, int high, Member[] memberlist1, Member[] memberlist2)
         {
             if (low >= high) //found the first differing member
             {
@@ -251,7 +252,7 @@ namespace Marimba
             output.Add(uiStudentNumber);
             output.Add((int)memberFaculty);
             //Note to self: Eventually... change this to an int to save some space
-            if (curInstrument == instrument.other)
+            if (curInstrument == Instrument.Other)
                 output.Add(strOtherInstrument);
             else
                 output.Add(instrumentToString(curInstrument));
@@ -266,37 +267,37 @@ namespace Marimba
             return output;
         }
 
-        public static string toString(membertype type)
+        public static string toString(MemberType type)
         {
             switch(type)
             {
-                case(membertype.UWUnderGrad):
+                case(MemberType.UWUnderGrad):
                     return "UW Undergrad Student";
-                case(membertype.UWGrad):
+                case(MemberType.UWGrad):
                     return "UW Grad Student";
-                case(membertype.UWAlumni):
+                case(MemberType.UWAlumni):
                     return "UW Alumni";
-                case(membertype.Other):
+                case(MemberType.Other):
                     return "Other";
             }
             return "Unknown";
         }
 
-        public static string toString(faculty fac)
+        public static string toString(Faculty fac)
         {
             switch (fac)
             {
-                case (faculty.AHS):
+                case (Faculty.AHS):
                     return "Applied Health Science";
-                case (faculty.Arts):
+                case (Faculty.Arts):
                     return "Arts";
-                case (faculty.Engineering):
+                case (Faculty.Engineering):
                     return "Engineering";
-                case (faculty.Environment):
+                case (Faculty.Environment):
                     return "Environment";
-                case (faculty.Mathematics):
+                case (Faculty.Mathematics):
                     return "Mathematics";
-                case(faculty.Science):
+                case(Faculty.Science):
                     return "Science";
             }
             return "Unknown";
@@ -307,21 +308,21 @@ namespace Marimba
             switch (strFaculty.ToLower())
             {
                 case ("applied health science"):
-                    return (int)faculty.AHS;
+                    return (int)Faculty.AHS;
                 case ("ahs"):
-                    return (int)faculty.AHS;
+                    return (int)Faculty.AHS;
                 case ("arts"):
-                    return (int)faculty.Arts;
+                    return (int)Faculty.Arts;
                 case ("engineering"):
-                    return (int)faculty.Engineering;
+                    return (int)Faculty.Engineering;
                 case ("environment"):
-                    return (int)faculty.Environment;
+                    return (int)Faculty.Environment;
                 case ("mathematics"):
-                    return (int)faculty.Mathematics;
+                    return (int)Faculty.Mathematics;
                 case ("math"):
-                    return (int)faculty.Mathematics;
+                    return (int)Faculty.Mathematics;
                 case ("science"):
-                    return (int)faculty.Science;
+                    return (int)Faculty.Science;
             }
             //we didn't find anything, so return -1 otherwise
             return -1;
@@ -332,63 +333,63 @@ namespace Marimba
         /// </summary>
         /// <param name="input">Name of instrument</param>
         /// <returns>Icon index of instrument. Returns 15 (music stand) if not found.</returns>
-        public static int instrumentIconIndex(instrument input)
+        public static int instrumentIconIndex(Instrument input)
         {
             switch (input)
             {
-                case (instrument.alto_sax):
+                case (Instrument.AltoSax):
                     return 0;
-                case (instrument.alto_clarinet):
+                case (Instrument.AltoClarinet):
                     return 1;
-                case (instrument.bari_sax):
+                case (Instrument.BariSax):
                     return 2;
-                case (instrument.bass_clarinet):
+                case (Instrument.BassClarinet):
                     return 3;
-                case (instrument.bassoon):
+                case (Instrument.Bassoon):
                     return 4;
-                case (instrument.baton):
+                case (Instrument.Baton):
                     return 5;
-                case (instrument.cornet):
+                case (Instrument.Cornet):
                     return 23;
-                case (instrument.clarinet):
+                case (Instrument.Clarinet):
                     return 7;
-                case (instrument.eb_clarinet):
+                case (Instrument.EbClarinet):
                     return 7;
-                case (instrument.string_bass):
+                case (Instrument.StringBass):
                     return 8;
-                case (instrument.elec_bass):
+                case (Instrument.ElectricBass):
                     return 24;
-                case (instrument.drum_kit):
+                case (Instrument.DrumKit):
                     return 9;
-                case (instrument.percussion):
+                case (Instrument.Percussion):
                     return 10;
-                case (instrument.euph):
+                case (Instrument.Euphonium):
                     return 11;
-                case (instrument.flute):
+                case (Instrument.Flute):
                     return 12;
-                case (instrument.horn):
+                case (Instrument.Horn):
                     return 13;
-                case (instrument.mallet):
+                case (Instrument.Mallet):
                     return 14;
-                case (instrument.oboe):
+                case (Instrument.Oboe):
                     return 16;
-                case (instrument.piano):
+                case (Instrument.Piano):
                     return 17;
-                case (instrument.piccolo):
+                case (Instrument.Piccolo):
                     return 18;
-                case (instrument.sop_sax):
+                case (Instrument.SopranoSax):
                     return 19;
-                case (instrument.tenor_sax):
+                case (Instrument.TenorSax):
                     return 20;
-                case (instrument.timpani):
+                case (Instrument.Timpani):
                     return 21;
-                case (instrument.trombone):
+                case (Instrument.Trombone):
                     return 22;
-                case (instrument.bass_trombone):
+                case (Instrument.BassTrombone):
                     return 22;
-                case (instrument.trumpet):
+                case (Instrument.Trumpet):
                     return 23;
-                case (instrument.tuba):
+                case (Instrument.Tuba):
                     return 11;
             }
             //for any other instrument, just return the music stand
@@ -401,89 +402,89 @@ namespace Marimba
         /// </summary>
         /// <param name="strInstrument">Name of instrument</param>
         /// <returns>Icon index of instrument. Returns 15 (music stand) if not found.</returns>
-        public static instrument stringToInstrument(string strInstrument)
+        public static Instrument stringToInstrument(string strInstrument)
         {
             if (String.IsNullOrEmpty(strInstrument))
-                return instrument.other;
+                return Instrument.Other;
             strInstrument = strInstrument.ToLower();
             switch (strInstrument)
             {
                 case ("alto saxophone"):
-                    return instrument.alto_sax;
+                    return Instrument.AltoSax;
                 case ("alto sax"):
-                    return instrument.alto_sax;
+                    return Instrument.AltoSax;
                 case ("alto clarinet"):
-                    return instrument.alto_clarinet;
+                    return Instrument.AltoClarinet;
                 case ("baritone saxophone"):
-                    return instrument.bari_sax;
+                    return Instrument.BariSax;
                 case ("baritone sax"):
-                    return instrument.bari_sax;;
+                    return Instrument.BariSax;;
                 case ("bari sax"):
-                    return instrument.bari_sax;
+                    return Instrument.BariSax;
                 case ("bass clarinet"):
-                    return instrument.bass_clarinet;
+                    return Instrument.BassClarinet;
                 case ("bassoon"):
-                    return instrument.bassoon;
+                    return Instrument.Bassoon;
                 case ("baton"):
-                    return instrument.baton;
+                    return Instrument.Baton;
                 case ("cornet"):
-                    return instrument.cornet;
+                    return Instrument.Cornet;
                 case("eb clarinet"):
-                    return instrument.eb_clarinet;
+                    return Instrument.EbClarinet;
                 case("e flat clarinet"):
-                    return instrument.eb_clarinet;
+                    return Instrument.EbClarinet;
                 case ("guitar"):
-                    return instrument.other;
+                    return Instrument.Other;
                 case ("clarinet"):
-                    return instrument.clarinet;
+                    return Instrument.Clarinet;
                 case ("bass"):
-                    return instrument.string_bass;
+                    return Instrument.StringBass;
                 case ("electric bass"):
-                    return instrument.elec_bass;
+                    return Instrument.ElectricBass;
                 case ("string bass"):
-                    return instrument.string_bass;
+                    return Instrument.StringBass;
                 case ("bass guitar"):
-                    return instrument.elec_bass;
+                    return Instrument.ElectricBass;
                 case ("drum kit"):
-                    return instrument.drum_kit;
+                    return Instrument.DrumKit;
                 case ("percussion"):
-                    return instrument.percussion;
+                    return Instrument.Percussion;
                 case ("euphonium"):
-                    return instrument.euph;
+                    return Instrument.Euphonium;
                 case ("flute"):
-                    return instrument.flute;
+                    return Instrument.Flute;
                 case ("horn"):
-                    return instrument.horn;
+                    return Instrument.Horn;
                 case ("french horn"):
-                    return instrument.horn;
+                    return Instrument.Horn;
                 case ("mallet percussion"):
-                    return instrument.mallet;
+                    return Instrument.Mallet;
                 case ("oboe"):
-                    return instrument.oboe;
+                    return Instrument.Oboe;
                 case ("piano"):
-                    return instrument.piano;
+                    return Instrument.Piano;
                 case ("piccolo"):
-                    return instrument.piccolo;
+                    return Instrument.Piccolo;
                 case ("soprano saxophone"):
-                    return instrument.sop_sax;
+                    return Instrument.SopranoSax;
                 case ("soprano sax"):
-                    return instrument.sop_sax;
+                    return Instrument.SopranoSax;
                 case ("tenor saxophone"):
-                    return instrument.tenor_sax;
+                    return Instrument.TenorSax;
                 case ("tenor sax"):
-                    return instrument.tenor_sax;
+                    return Instrument.TenorSax;
                 case ("timpani"):
-                    return instrument.timpani;
+                    return Instrument.Timpani;
                 case ("trombone"):
-                    return instrument.trombone;
+                    return Instrument.Trombone;
                 case ("bass trombone"):
-                    return instrument.bass_trombone;
+                    return Instrument.BassTrombone;
                 case ("trumpet"):
-                    return instrument.trumpet;
+                    return Instrument.Trumpet;
                 case ("tuba"):
-                    return instrument.tuba;
+                    return Instrument.Tuba;
             }
-            return instrument.other;
+            return Instrument.Other;
         }
 
         
@@ -492,63 +493,63 @@ namespace Marimba
         /// </summary>
         /// <param name="input">Name of instrument</param>
         /// <returns>Icon index of instrument. Returns 15 (music stand) if not found.</returns>
-        public static string instrumentToString(instrument input)
+        public static string instrumentToString(Instrument input)
         {
             switch (input)
             {
-                case (instrument.alto_sax):
+                case (Instrument.AltoSax):
                     return "Alto Saxophone";
-                case (instrument.alto_clarinet):
+                case (Instrument.AltoClarinet):
                     return "Alto Clarinet";
-                case (instrument.bari_sax):
+                case (Instrument.BariSax):
                     return "Baritone Saxophone";
-                case (instrument.bass_clarinet):
+                case (Instrument.BassClarinet):
                     return "Bass Clarinet";
-                case (instrument.bassoon):
+                case (Instrument.Bassoon):
                     return "Bassoon";
-                case (instrument.baton):
+                case (Instrument.Baton):
                     return "Baton";
-                case (instrument.cornet):
+                case (Instrument.Cornet):
                     return "Cornet";
-                case (instrument.clarinet):
+                case (Instrument.Clarinet):
                     return "Clarinet";
-                case (instrument.eb_clarinet):
+                case (Instrument.EbClarinet):
                     return "Eb Clarinet";
-                case (instrument.string_bass):
+                case (Instrument.StringBass):
                     return "String Bass";
-                case (instrument.elec_bass):
+                case (Instrument.ElectricBass):
                     return "Electric Bass";
-                case (instrument.drum_kit):
+                case (Instrument.DrumKit):
                     return "Drum Kit";
-                case (instrument.percussion):
+                case (Instrument.Percussion):
                     return "Percussion";
-                case (instrument.euph):
+                case (Instrument.Euphonium):
                     return "Euphonium";
-                case (instrument.flute):
+                case (Instrument.Flute):
                     return "Flute";
-                case (instrument.horn):
+                case (Instrument.Horn):
                     return "French Horn";
-                case (instrument.mallet):
+                case (Instrument.Mallet):
                     return "Mallet Percussion";
-                case (instrument.oboe):
+                case (Instrument.Oboe):
                     return "Oboe";
-                case (instrument.piano):
+                case (Instrument.Piano):
                     return "Piano";
-                case (instrument.piccolo):
+                case (Instrument.Piccolo):
                     return "Piccolo";
-                case (instrument.sop_sax):
+                case (Instrument.SopranoSax):
                     return "Soprano Saxophone";
-                case (instrument.tenor_sax):
+                case (Instrument.TenorSax):
                     return "Tenor Saxophone";
-                case (instrument.timpani):
+                case (Instrument.Timpani):
                     return "Timpani";
-                case (instrument.trombone):
+                case (Instrument.Trombone):
                     return "Trombone";
-                case (instrument.bass_trombone):
+                case (Instrument.BassTrombone):
                     return "Bass Trombone";
-                case (instrument.trumpet):
+                case (Instrument.Trumpet):
                     return "Trumpet";
-                case (instrument.tuba):
+                case (Instrument.Tuba):
                     return "Tuba";
             }
             //for any other instrument, just return the music stand

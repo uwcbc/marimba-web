@@ -102,7 +102,7 @@ namespace Marimba
                 }
                 if (((term1index != -1 && !mainClub.listTerms[iTermIndex].limboMembers[term1index]) ||
                     (term2index != -1 && !mainClub.listTerms[iTermIndex - 1].limboMembers[term2index]))
-                    && term1okay && term2okay && (clsStorage.currentClub.members[i].type == member.membertype.UWUnderGrad || clsStorage.currentClub.members[i].type == member.membertype.UWGrad))
+                    && term1okay && term2okay && (clsStorage.currentClub.members[i].type == Member.MemberType.UWUnderGrad || clsStorage.currentClub.members[i].type == Member.MemberType.UWGrad))
                 {
                     elector temp = new elector();
 
@@ -113,7 +113,7 @@ namespace Marimba
                     electorList.Add(temp);
                     iElectors++;
                 }
-                else if ((clsStorage.currentClub.members[i].type == member.membertype.UWUnderGrad || clsStorage.currentClub.members[i].type == member.membertype.UWGrad) &&
+                else if ((clsStorage.currentClub.members[i].type == Member.MemberType.UWUnderGrad || clsStorage.currentClub.members[i].type == Member.MemberType.UWGrad) &&
                     ((term1index != -1 && !mainClub.listTerms[iTermIndex].limboMembers[term1index]) || (term2index != -1 && !mainClub.listTerms[iTermIndex - 1].limboMembers[term2index])))
                 {
                     elector temp = new elector();

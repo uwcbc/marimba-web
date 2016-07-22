@@ -182,10 +182,10 @@ namespace Marimba
                     {
                         output[i + 1, 0] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strFName;
                         output[i + 1, 1] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strLName;
-                        if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument == member.instrument.other)
+                        if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument == Member.Instrument.Other)
                             output[i + 1, 2] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strOtherInstrument;
                         else
-                            output[i + 1, 2] = member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument);
+                            output[i + 1, 2] = Member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument);
                         if (clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].checkLimbo(i))
                             output[i + 1, 3] = "Inactive";
                         else
@@ -220,10 +220,10 @@ namespace Marimba
                             CsvRow row = new CsvRow();
                             row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strFName);
                             row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strLName);
-                            if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument == member.instrument.other)
+                            if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument == Member.Instrument.Other)
                                 row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strOtherInstrument);
                             else
-                                row.Add(member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument));
+                                row.Add(Member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument));
                             //report limbo status
                             //for reporting purposes, we'll call it "active" or "inactive"
                             if (clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].checkLimbo(i))
@@ -263,7 +263,7 @@ namespace Marimba
                 {
                     if (clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, cbFee.SelectedIndex] == 0)
                         memberlist.Add(new ListViewItem(new string[2]{clsStorage.currentClub.formatedName(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]),
-                            Convert.ToString(i)}, member.instrumentIconIndex(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument)));
+                            Convert.ToString(i)}, Member.instrumentIconIndex(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument)));
                 }
                 lvMembers.Items.AddRange(memberlist.ToArray());
                 lvMembers.Sort();

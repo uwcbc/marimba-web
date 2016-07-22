@@ -36,22 +36,22 @@ namespace Marimba
 
             if(clsStorage.currentClub.members[index].bMultipleInstruments)
             {
-                foreach (member.instrument instrument in Enum.GetValues(typeof(member.instrument)))
+                foreach (Member.Instrument instrument in Enum.GetValues(typeof(Member.Instrument)))
                 {
                      if(clsStorage.currentClub.members[index].playsInstrument[(int)instrument])
-                         doesPlay.Add(new ListViewItem(member.instrumentToString(instrument),member.instrumentIconIndex(instrument)));
+                         doesPlay.Add(new ListViewItem(Member.instrumentToString(instrument),Member.instrumentIconIndex(instrument)));
                      else
-                         doesNotPlay.Add(new ListViewItem(member.instrumentToString(instrument),member.instrumentIconIndex(instrument)));
+                         doesNotPlay.Add(new ListViewItem(Member.instrumentToString(instrument),Member.instrumentIconIndex(instrument)));
                 }                
             }
             //if the member currently does not play multiple instruments, then every instrument (except their current one) is available
             else
-                foreach (member.instrument instrument in Enum.GetValues(typeof(member.instrument)))
+                foreach (Member.Instrument instrument in Enum.GetValues(typeof(Member.Instrument)))
                 {
                     if(clsStorage.currentClub.members[index].curInstrument==instrument)
-                        doesPlay.Add(new ListViewItem(member.instrumentToString(instrument), member.instrumentIconIndex(instrument)));
+                        doesPlay.Add(new ListViewItem(Member.instrumentToString(instrument), Member.instrumentIconIndex(instrument)));
                     else
-                        doesNotPlay.Add(new ListViewItem(member.instrumentToString(instrument), member.instrumentIconIndex(instrument)));
+                        doesNotPlay.Add(new ListViewItem(Member.instrumentToString(instrument), Member.instrumentIconIndex(instrument)));
                 }
             lvAvailable.Items.AddRange(doesNotPlay.ToArray());
             lvPlays.Items.AddRange(doesPlay.ToArray());
@@ -82,7 +82,7 @@ namespace Marimba
             foreach (ListViewItem newInstrument in lvPlays.SelectedItems)
             {
                 //user can't remove the instrument they play
-                if (member.stringToInstrument(newInstrument.Text) != clsStorage.currentClub.members[index].curInstrument)
+                if (Member.stringToInstrument(newInstrument.Text) != clsStorage.currentClub.members[index].curInstrument)
                 {
                     lvPlays.Items.Remove(newInstrument);
                     lvAvailable.Items.Add(newInstrument);                    
@@ -104,11 +104,11 @@ namespace Marimba
             {
                 clsStorage.currentClub.members[index].bMultipleInstruments = true;
                 //create new array for storing information
-                clsStorage.currentClub.members[index].playsInstrument = new bool[Enum.GetValues(typeof(member.instrument)).Length];
+                clsStorage.currentClub.members[index].playsInstrument = new bool[Enum.GetValues(typeof(Member.Instrument)).Length];
 
                 //marked each played instrument as played
                 foreach(ListViewItem playsIt in lvPlays.Items)
-                    clsStorage.currentClub.members[index].playsInstrument[(int)member.stringToInstrument(playsIt.Text)] = true;
+                    clsStorage.currentClub.members[index].playsInstrument[(int)Member.stringToInstrument(playsIt.Text)] = true;
             }
             this.Close();
         }
@@ -172,7 +172,7 @@ namespace Marimba
             {
                 //Obtain the ListViewItem to be dragged to the target location.
                 ListViewItem dragItem = sel[i];
-                if (member.stringToInstrument(dragItem.Text) != clsStorage.currentClub.members[index].curInstrument)
+                if (Member.stringToInstrument(dragItem.Text) != clsStorage.currentClub.members[index].curInstrument)
                 {
                     ListViewItem insertItem = (ListViewItem)dragItem.Clone();
                     lvAvailable.Items.Add(insertItem);

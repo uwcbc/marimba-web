@@ -254,9 +254,9 @@ namespace Marimba
 
                 List<string[]> headers = new List<string[]> {new string[] { "First Name", "Last Name", "Type", "Student Number", "Faculty", "Instrument", "E-mail", "Other", "ID", "Signup Time", "Shirt Size", "Multiple Instruments" }};
                 worksheet.Cell(2, 1).Value = headers;
-                for (int i = 0; i < Enum.GetValues(typeof(member.instrument)).Length; i++)
+                for (int i = 0; i < Enum.GetValues(typeof(Member.Instrument)).Length; i++)
                 {
-                    worksheet.Cell(2, 1 + headers[0].Length + i).Value = member.instrumentToString((member.instrument)i);
+                    worksheet.Cell(2, 1 + headers[0].Length + i).Value = Member.instrumentToString((Member.Instrument)i);
                 }
 
                 IList<object[]> memberListToExport = new List<object[]>();
@@ -483,12 +483,12 @@ namespace Marimba
 
                 output.iMember = Convert.ToInt16(worksheet.Cell(1, 2).Value);
                 //load Members
-                bool[] tempMultipleInstruments = new bool[Enum.GetValues(typeof(member.instrument)).Length];
+                bool[] tempMultipleInstruments = new bool[Enum.GetValues(typeof(Member.Instrument)).Length];
                 for (int i = 0; i < output.iMember;i++)
                 {
                     //if the member does not play multiple instruments
                     if(!(bool)worksheet.Cell(i+3,12).Value)
-                        output.members[i] = new member(
+                        output.members[i] = new Member(
                             (string)worksheet.Cell(i + 3, 1).Value,
                             (string)worksheet.Cell(i + 3, 2).Value,
                             Convert.ToInt32(worksheet.Cell(i + 3, 3).Value),
@@ -505,9 +505,9 @@ namespace Marimba
                         //the member plays multiple instruments
                         //create their array of instruments they play first
 
-                        for (int j = 0; j < Enum.GetValues(typeof(member.instrument)).Length; j++)
+                        for (int j = 0; j < Enum.GetValues(typeof(Member.Instrument)).Length; j++)
                             tempMultipleInstruments[j] = Convert.ToBoolean(worksheet.Cell(i + 3, 13 + j).Value);
-                        output.members[i] = new member(
+                        output.members[i] = new Member(
                             (string)worksheet.Cell(i + 3, 1).Value,
                             (string)worksheet.Cell(i + 3, 2).Value,
                             Convert.ToInt32(worksheet.Cell(i + 3, 3).Value),

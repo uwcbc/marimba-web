@@ -92,7 +92,7 @@ namespace Marimba
                 lvFromTo.Items.Clear();
                 if (fromMember)
                     lvFromTo.Items.Add(new ListViewItem(new string[2]{clsStorage.currentClub.firstAndLastName(fromIndex), temp.From.Address},
-                        member.instrumentIconIndex(clsStorage.currentClub.members[fromIndex].curInstrument)));
+                        Member.instrumentIconIndex(clsStorage.currentClub.members[fromIndex].curInstrument)));
                 else
                 {
                     if (String.IsNullOrEmpty(temp.From.DisplayName))
@@ -141,7 +141,7 @@ namespace Marimba
 
                         if (fromMember)
                             lvFromTo.Items.Add(new ListViewItem(new string[2] { clsStorage.currentClub.firstAndLastName(recipient), clsStorage.currentClub.members[recipient].strEmail },
-                                member.instrumentIconIndex(clsStorage.currentClub.members[recipient].curInstrument)));
+                                Member.instrumentIconIndex(clsStorage.currentClub.members[recipient].curInstrument)));
                     }
                 }
 

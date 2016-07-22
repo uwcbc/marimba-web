@@ -61,7 +61,7 @@ namespace Marimba
             txtStudentNumber.Text = Convert.ToString(clsStorage.currentClub.members[iID].uiStudentNumber);
             cbClass.SelectedIndex = (int)clsStorage.currentClub.members[iID].type;
             cbFaculty.SelectedIndex = (int)clsStorage.currentClub.members[iID].memberFaculty;
-            cbInstrument.Text = member.instrumentToString(clsStorage.currentClub.members[iID].curInstrument);
+            cbInstrument.Text = Member.instrumentToString(clsStorage.currentClub.members[iID].curInstrument);
             cbShirtSize.SelectedIndex = (int)clsStorage.currentClub.members[iID].size;
             //load history about member
             //and some fun facts :)
@@ -179,7 +179,7 @@ namespace Marimba
             //instead, we remove everything we had and make that data anonymous
 
             clsStorage.currentClub.addHistory(clsStorage.currentClub.formatedName(iID), Enumerations.ChangeType.Unsubscribe);
-            clsStorage.currentClub.members[iID].editMember("♪Unsubscribed", "♪Unsubscribed", (int)member.membertype.Other, 0, -1,
+            clsStorage.currentClub.members[iID].editMember("♪Unsubscribed", "♪Unsubscribed", (int)Member.MemberType.Other, 0, -1,
                 "","", "", clsStorage.currentClub.members[iID].signupTime, -1);
             if (Properties.Settings.Default.playSounds)
                 sound.success.Play();
@@ -222,15 +222,15 @@ namespace Marimba
             //otherwise, limit the list to instruments the member actually plays
             if (!clsStorage.currentClub.members[iID].bMultipleInstruments)
             {
-                foreach (member.instrument instrument in Enum.GetValues(typeof(member.instrument)))
-                    listInstruments.Add(member.instrumentToString(instrument));
+                foreach (Member.Instrument instrument in Enum.GetValues(typeof(Member.Instrument)))
+                    listInstruments.Add(Member.instrumentToString(instrument));
             }
             else
             {
-                int numberOfInstruments = Enum.GetValues(typeof(member.instrument)).Length;
+                int numberOfInstruments = Enum.GetValues(typeof(Member.Instrument)).Length;
                 for (int i = 0; i < numberOfInstruments; i++)
                     if (clsStorage.currentClub.members[iID].playsInstrument[i])
-                        listInstruments.Add(member.instrumentToString((member.instrument)i));
+                        listInstruments.Add(Member.instrumentToString((Member.Instrument)i));
             }
             listInstruments.Sort();
             cbInstrument.Items.AddRange(listInstruments.ToArray());
@@ -243,8 +243,8 @@ namespace Marimba
                 cbMultiple.Checked = false;
 
             //check for and handle other instruments
-            if (clsStorage.currentClub.members[iID].curInstrument == member.instrument.other || (clsStorage.currentClub.members[iID].bMultipleInstruments &&
-                clsStorage.currentClub.members[iID].playsInstrument[(int)member.instrument.other]))
+            if (clsStorage.currentClub.members[iID].curInstrument == Member.Instrument.Other || (clsStorage.currentClub.members[iID].bMultipleInstruments &&
+                clsStorage.currentClub.members[iID].playsInstrument[(int)Member.Instrument.Other]))
             {
                 showOther();
                 txtOtherInstrument.Text = clsStorage.currentClub.members[iID].strOtherInstrument;
@@ -313,7 +313,7 @@ namespace Marimba
             if (cbInstrument.Text == "Other" && !bOtherInstrument)
                 showOther();
             //confirm that member does not play "other" instrument
-            else if (cbInstrument.Text != "Other" && (!clsStorage.currentClub.members[iID].bMultipleInstruments || !clsStorage.currentClub.members[iID].playsInstrument[(int)member.instrument.other])
+            else if (cbInstrument.Text != "Other" && (!clsStorage.currentClub.members[iID].bMultipleInstruments || !clsStorage.currentClub.members[iID].playsInstrument[(int)Member.Instrument.Other])
                 && bOtherInstrument)
                 hideOther();
         }
