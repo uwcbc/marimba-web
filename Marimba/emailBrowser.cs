@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,18 +20,17 @@ namespace Marimba
 {
     partial class emailBrowser : Form
     {
-        public enum purpose { receive, send, bcc, mass_email, reply, forward, election };
-        public purpose use;
+        public Enumerations.EmailPurpose use;
         int messageIndex;
         IList<int> fromIndexList = new List<int>();
         bool fromMember = false;
 
-        public emailBrowser(purpose use, int messageIndex = -1, IList<int> fromIndexList = null)
+        public emailBrowser(Enumerations.EmailPurpose use, int messageIndex = -1, IList<int> fromIndexList = null)
         {
             //set up this form so it's all ready to go for whatever purpose we need
             this.use = use;
             InitializeComponent();
-            if (use == purpose.receive)
+            if (use == Enumerations.EmailPurpose.Receive)
             {
                 rtbWrite.Dispose();
                 btnSend.TabIndex--;
@@ -40,7 +40,7 @@ namespace Marimba
                 this.messageIndex = messageIndex;
                 txtSubject.ReadOnly = true;
             }
-            else if (use == purpose.send || use == purpose.reply || use == purpose.forward)
+            else if (use == Enumerations.EmailPurpose.Send || use == Enumerations.EmailPurpose.Reply || use == Enumerations.EmailPurpose.Forward)
             {
                 wbrView.Dispose();
                 btnForward.Dispose();
@@ -55,7 +55,7 @@ namespace Marimba
                 lblFrom.Text = "To";
                 btnSend.Text = "Send";
             }
-            else if (use == purpose.bcc || use == purpose.mass_email)
+            else if (use == Enumerations.EmailPurpose.Bcc || use == Enumerations.EmailPurpose.MassEmail)
             {
                 wbrView.Dispose();
                 btnForward.Dispose();
@@ -76,7 +76,7 @@ namespace Marimba
             //check what the purpose of this use of emailBrowser is
 
             int fromIndex;
-            if (use == purpose.receive)
+            if (use == Enumerations.EmailPurpose.Receive)
             {
 
                 //load the email
@@ -110,7 +110,11 @@ namespace Marimba
                 if (wbrView.Document.Body != null)
                     wbrView.Document.Body.SetAttribute("scroll", "auto");
             }
-            else if (use == purpose.send || use == purpose.reply || use == purpose.forward || use == purpose.bcc || use == purpose.mass_email)
+            else if (use == Enumerations.EmailPurpose.Send ||
+                use == Enumerations.EmailPurpose.Reply ||
+                use == Enumerations.EmailPurpose.Forward ||
+                use == Enumerations.EmailPurpose.Bcc ||
+                use == Enumerations.EmailPurpose.MassEmail)
             {
                 //load the from/to list
                 lvFromTo.BeginUpdate();
@@ -119,7 +123,7 @@ namespace Marimba
                 //go through the list of from/to people
                 //if they are a real member, make the connection
                 //otherwise, add them as an other
-                if (use == purpose.reply)
+                if (use == Enumerations.EmailPurpose.Reply)
                 {
                     //load the email
                     ImapX.Message temp = clsStorage.currentClub.clubEmail.returnMessage(messageIndex);
@@ -129,7 +133,7 @@ namespace Marimba
                     else
                         lvFromTo.Items.Add(new ListViewItem(new string[2] { temp.From.DisplayName, temp.From.Address }));
                 }
-                else if (use != purpose.mass_email)
+                else if (use != Enumerations.EmailPurpose.MassEmail)
                 {
                     foreach (int recipient in fromIndexList)
                     {
@@ -145,7 +149,7 @@ namespace Marimba
                 lvFromTo.EndUpdate();
 
                 //automatically fill subject line if we are forwarding or replying
-                if (use == purpose.reply || use == purpose.forward)
+                if (use == Enumerations.EmailPurpose.Reply || use == Enumerations.EmailPurpose.Forward)
                 {
                     ImapX.Message temp = clsStorage.currentClub.clubEmail.returnMessage(messageIndex);
                     txtSubject.Text = Marimba.email.replySubject(temp.Subject, use);                   
@@ -157,7 +161,8 @@ namespace Marimba
         {
             ImapX.Message temp;
             //if we are viewing a message, this button closes the view
-            if (use == purpose.receive) {
+            if (use == Enumerations.EmailPurpose.Receive)
+            {
                 this.Close();
             }
             else
@@ -175,7 +180,7 @@ namespace Marimba
 
                 //next, check if we are replying or forwarding
                 //in which case, attach that email here
-                if (use == purpose.reply || use == purpose.forward)
+                if (use == Enumerations.EmailPurpose.Reply || use == Enumerations.EmailPurpose.Forward)
                 {
                     temp = clsStorage.currentClub.clubEmail.returnMessage(messageIndex);
                     string attachedMessage = temp.Body.HasHtml ? temp.Body.Html : temp.Body.Text;
@@ -189,7 +194,7 @@ namespace Marimba
                 string[] toAddress;
                 string[] toNames;
                 //if it is being sent to someone specific, then we need to process these names
-                if (use == purpose.send || use == purpose.reply || use == purpose.forward || use == purpose.bcc)
+                if (use == Enumerations.EmailPurpose.Send || use == Enumerations.EmailPurpose.Reply || use == Enumerations.EmailPurpose.Forward || use == Enumerations.EmailPurpose.Bcc)
                 {
                     //prepare the variables
                     iRecipients = lvFromTo.Items.Count;
@@ -312,7 +317,7 @@ namespace Marimba
             if (Properties.Settings.Default.playSounds)
                 sound.click.Play();
 
-            emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.reply,  messageIndex, fromIndexList);
+            emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Reply, messageIndex, fromIndexList);
             webDesign.Show();
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -222,8 +223,8 @@ namespace Marimba
             {
                 if (Properties.Settings.Default.playSounds)
                     sound.click.Play();
-                
-                emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.receive, Convert.ToInt32(lvEmail.SelectedItems[0].SubItems[4].Text));
+
+                emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Receive, Convert.ToInt32(lvEmail.SelectedItems[0].SubItems[4].Text));
                 webDesign.Show();
             }
         }

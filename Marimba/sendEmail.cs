@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -43,7 +44,7 @@ namespace Marimba
                 if (Properties.Settings.Default.playSounds)
                     sound.click.Play();
 
-                emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.receive, Convert.ToInt32(lvEmail.SelectedItems[0].SubItems[4].Text));
+                emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Receive, Convert.ToInt32(lvEmail.SelectedItems[0].SubItems[4].Text));
                 webDesign.Show();
             }
         }
@@ -61,7 +62,7 @@ namespace Marimba
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.send, -1, clsStorage.selectedMembersList);
+                        emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Send, -1, clsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }                   
                     break;
@@ -73,7 +74,7 @@ namespace Marimba
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.bcc, -1, clsStorage.selectedMembersList);
+                        emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Bcc, -1, clsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }
                     break;
@@ -92,7 +93,7 @@ namespace Marimba
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.bcc, -1, clsStorage.selectedMembersList);
+                        emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Bcc, -1, clsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }
                     
@@ -112,7 +113,7 @@ namespace Marimba
                     {
                         if (Properties.Settings.Default.playSounds)
                             sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(emailBrowser.purpose.bcc, -1, clsStorage.selectedMembersList);
+                        emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Bcc, -1, clsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }
 
@@ -122,7 +123,7 @@ namespace Marimba
                     //check if something was selected
                     if (Properties.Settings.Default.playSounds)
                         sound.click.Play();
-                    emailBrowser massEmailMaker = new emailBrowser(emailBrowser.purpose.mass_email);
+                    emailBrowser massEmailMaker = new emailBrowser(Enumerations.EmailPurpose.MassEmail);
                     massEmailMaker.ShowDialog();
                     break;
             }

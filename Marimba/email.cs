@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marimba.Utility;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -155,7 +156,7 @@ namespace Marimba
             return client.Folders.Inbox.Messages[messageIndex];
         }
 
-        public bool sendMessage(string[] toAddress, string[] toName, string strSubject, string strHTML, emailBrowser.purpose purpose= emailBrowser.purpose.send)
+        public bool sendMessage(string[] toAddress, string[] toName, string strSubject, string strHTML, Enumerations.EmailPurpose purpose = Enumerations.EmailPurpose.Send)
         {
             //set up a try, catch thing... sending emails is tricky business
             try
@@ -172,7 +173,7 @@ namespace Marimba
                 {
                     //add the to names
                     //if bcc'ing, then only bcc
-                    if(purpose == emailBrowser.purpose.send || purpose == emailBrowser.purpose.forward || purpose == emailBrowser.purpose.reply)
+                    if (purpose == Enumerations.EmailPurpose.Send || purpose == Enumerations.EmailPurpose.Forward || purpose == Enumerations.EmailPurpose.Reply)
                         for (int i = 0; i < iLength; i++)
                             mail.To.Add(new System.Net.Mail.MailAddress(toAddress[i], toName[i]));
                     else
@@ -244,7 +245,7 @@ namespace Marimba
             return output;
         }
 
-        public static string replyHeader(string strFromAddress, string strFromName, DateTime timeSent, string strTo, string strSubject, emailBrowser.purpose use)
+        public static string replyHeader(string strFromAddress, string strFromName, DateTime timeSent, string strTo, string strSubject, Enumerations.EmailPurpose use)
         {
             //go through the various elements and implement them
             string output = "<p class=MsoNormal><span style='color:#1F497D'><o:p>&nbsp;</o:p></span></p><div><div style='border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0cm 0cm 0cm'><p class=MsoNormal><b>";
@@ -258,11 +259,11 @@ namespace Marimba
             return output;
         }
 
-        public static string replySubject(string strSubject, emailBrowser.purpose use)
+        public static string replySubject(string strSubject, Enumerations.EmailPurpose use)
         {
-            if (use == emailBrowser.purpose.reply && !strSubject.StartsWith("re:", true, null))
+            if (use == Enumerations.EmailPurpose.Reply && !strSubject.StartsWith("re:", true, null))
                 return "RE: " + strSubject;
-            else if (use == emailBrowser.purpose.forward && !strSubject.StartsWith("fw:", true, null))
+            else if (use == Enumerations.EmailPurpose.Forward && !strSubject.StartsWith("fw:", true, null))
                 return "FW: " + strSubject;
             else
                 return strSubject;

@@ -117,7 +117,7 @@ namespace Marimba
                             strBody += "<br>" + clsStorage.currentClub.clubEmail.createSignature();
 
                         bool success = true;
-                        while (!clsStorage.currentClub.clubEmail.sendMessage(memberEmails, memberNames, clsStorage.currentClub.strName + " " + clsStorage.receiptSubject, strBody, emailBrowser.purpose.bcc))
+                        while (!clsStorage.currentClub.clubEmail.sendMessage(memberEmails, memberNames, clsStorage.currentClub.strName + " " + clsStorage.receiptSubject, strBody, Enumerations.EmailPurpose.Bcc))
                         {
                             DialogResult result = MessageBox.Show("Sending digital receipts failed. Would you like to try again?", "Failed to send digital receipts", MessageBoxButtons.YesNo);
                             
