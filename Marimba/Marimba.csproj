@@ -196,7 +196,7 @@
     <Compile Include="MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="member.cs" />
+    <Compile Include="Member.cs" />
     <Compile Include="MemberList.cs">
       <SubType>Form</SubType>
     </Compile>
