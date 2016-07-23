@@ -491,7 +491,7 @@ namespace Marimba
                         output.members[i] = new Member(
                             (string)worksheet.Cell(i + 3, 1).Value,
                             (string)worksheet.Cell(i + 3, 2).Value,
-                            Convert.ToInt32(worksheet.Cell(i + 3, 3).Value),
+                            (Member.MemberType)Convert.ToInt32(worksheet.Cell(i + 3, 3).Value),
                             Convert.ToUInt32(worksheet.Cell(i + 3, 4).Value),
                             Convert.ToInt32(worksheet.Cell(i + 3, 5).Value),
                             (string)worksheet.Cell(i + 3, 6).Value,
@@ -510,7 +510,7 @@ namespace Marimba
                         output.members[i] = new Member(
                             (string)worksheet.Cell(i + 3, 1).Value,
                             (string)worksheet.Cell(i + 3, 2).Value,
-                            Convert.ToInt32(worksheet.Cell(i + 3, 3).Value),
+                            (Member.MemberType)Convert.ToInt32(worksheet.Cell(i + 3, 3).Value),
                             Convert.ToUInt32(worksheet.Cell(i + 3, 4).Value),
                             Convert.ToInt32(worksheet.Cell(i + 3, 5).Value),
                             (string)worksheet.Cell(i + 3, 6).Value,

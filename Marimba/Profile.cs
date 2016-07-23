@@ -32,12 +32,12 @@ namespace Marimba
             }
 
             if (bOtherInstrument) {
-                clsStorage.currentClub.members[iID].editMember(txtFirstName.Text, txtLastName.Text, cbClass.SelectedIndex, Convert.ToUInt32(txtStudentNumber.Text),
+                clsStorage.currentClub.members[iID].editMember(txtFirstName.Text, txtLastName.Text, (Member.MemberType)cbClass.SelectedIndex, Convert.ToUInt32(txtStudentNumber.Text),
                 cbFaculty.SelectedIndex, cbInstrument.Text, txtOtherInstrument.Text, txtEmail.Text, txtOther.Text, clsStorage.currentClub.members[iID].signupTime, cbShirtSize.SelectedIndex);
             }
             else
             {
-                clsStorage.currentClub.members[iID].editMember(txtFirstName.Text, txtLastName.Text, cbClass.SelectedIndex, Convert.ToUInt32(txtStudentNumber.Text),
+                clsStorage.currentClub.members[iID].editMember(txtFirstName.Text, txtLastName.Text, (Member.MemberType)cbClass.SelectedIndex, Convert.ToUInt32(txtStudentNumber.Text),
                     cbFaculty.SelectedIndex, cbInstrument.Text, txtEmail.Text, txtOther.Text, clsStorage.currentClub.members[iID].signupTime, cbShirtSize.SelectedIndex);
             }
 
@@ -54,10 +54,10 @@ namespace Marimba
 
             //load details about member
             lblTitle.Text = clsStorage.currentClub.formatedName(iID);
-            txtFirstName.Text = clsStorage.currentClub.members[iID].strFName;
-            txtLastName.Text = clsStorage.currentClub.members[iID].strLName;
-            txtEmail.Text = clsStorage.currentClub.members[iID].strEmail;
-            txtOther.Text = clsStorage.currentClub.members[iID].strOther;
+            txtFirstName.Text = clsStorage.currentClub.members[iID].firstName;
+            txtLastName.Text = clsStorage.currentClub.members[iID].lastName;
+            txtEmail.Text = clsStorage.currentClub.members[iID].email;
+            txtOther.Text = clsStorage.currentClub.members[iID].comments;
             txtStudentNumber.Text = Convert.ToString(clsStorage.currentClub.members[iID].uiStudentNumber);
             cbClass.SelectedIndex = (int)clsStorage.currentClub.members[iID].type;
             cbFaculty.SelectedIndex = (int)clsStorage.currentClub.members[iID].memberFaculty;
@@ -162,9 +162,9 @@ namespace Marimba
             //this is for people we would like to keep record of for UWCBC glory
             //but no longer need to receive e-mails
             clsStorage.currentClub.addHistory(clsStorage.currentClub.formatedName(iID), Enumerations.ChangeType.Deactivate);
-            clsStorage.currentClub.members[iID].editMember(clsStorage.currentClub.members[iID].strFName, clsStorage.currentClub.members[iID].strLName,
-                (int)clsStorage.currentClub.members[iID].type, clsStorage.currentClub.members[iID].uiStudentNumber,
-                (int)clsStorage.currentClub.members[iID].memberFaculty, clsStorage.currentClub.members[iID].strOtherInstrument,
+            clsStorage.currentClub.members[iID].editMember(clsStorage.currentClub.members[iID].firstName, clsStorage.currentClub.members[iID].lastName,
+                clsStorage.currentClub.members[iID].type, clsStorage.currentClub.members[iID].uiStudentNumber,
+                (int)clsStorage.currentClub.members[iID].memberFaculty, clsStorage.currentClub.members[iID].otherInstrument,
                 "", "",
                 clsStorage.currentClub.members[iID].signupTime, -1);
             if (Properties.Settings.Default.playSounds)
@@ -179,7 +179,7 @@ namespace Marimba
             //instead, we remove everything we had and make that data anonymous
 
             clsStorage.currentClub.addHistory(clsStorage.currentClub.formatedName(iID), Enumerations.ChangeType.Unsubscribe);
-            clsStorage.currentClub.members[iID].editMember("♪Unsubscribed", "♪Unsubscribed", (int)Member.MemberType.Other, 0, -1,
+            clsStorage.currentClub.members[iID].editMember("♪Unsubscribed", "♪Unsubscribed", Member.MemberType.Other, 0, -1,
                 "","", "", clsStorage.currentClub.members[iID].signupTime, -1);
             if (Properties.Settings.Default.playSounds)
                 sound.success.Play();
@@ -247,7 +247,7 @@ namespace Marimba
                 clsStorage.currentClub.members[iID].playsInstrument[(int)Member.Instrument.Other]))
             {
                 showOther();
-                txtOtherInstrument.Text = clsStorage.currentClub.members[iID].strOtherInstrument;
+                txtOtherInstrument.Text = clsStorage.currentClub.members[iID].otherInstrument;
             }
         }
 

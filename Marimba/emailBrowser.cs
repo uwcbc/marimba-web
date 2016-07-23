@@ -140,7 +140,7 @@ namespace Marimba
                         fromMember = recipient != -1;
 
                         if (fromMember)
-                            lvFromTo.Items.Add(new ListViewItem(new string[2] { clsStorage.currentClub.firstAndLastName(recipient), clsStorage.currentClub.members[recipient].strEmail },
+                            lvFromTo.Items.Add(new ListViewItem(new string[2] { clsStorage.currentClub.firstAndLastName(recipient), clsStorage.currentClub.members[recipient].email },
                                 Member.instrumentIconIndex(clsStorage.currentClub.members[recipient].curInstrument)));
                     }
                 }
@@ -233,7 +233,7 @@ namespace Marimba
                     //go through and add members to be mailed to
                     for (int i = 0; i < clsStorage.currentClub.iMember; i++)
                     {
-                        allAddress.Add(clsStorage.currentClub.members[i].strEmail);
+                        allAddress.Add(clsStorage.currentClub.members[i].email);
                         allNames.Add(clsStorage.currentClub.firstAndLastName(i));
                     }
 

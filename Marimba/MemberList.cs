@@ -43,16 +43,16 @@ namespace Marimba
             for (int i = 0; i < clsStorage.currentClub.iMember; i++)
             {
                 //skip if it is an unsubscribed member
-                if (clsStorage.currentClub.members[i].strFName != "♪Unsubscribed")
+                if (clsStorage.currentClub.members[i].firstName != "♪Unsubscribed")
                 {
                     if (clsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
                         memberlist.Add(new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), Member.instrumentToString(clsStorage.currentClub.members[i].curInstrument),
-                        clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
+                        clsStorage.currentClub.members[i].email, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
                         Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument)));
                     else
-                        memberlist.Add(new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i),clsStorage.currentClub.members[i].strOtherInstrument,
-                        clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
+                        memberlist.Add(new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i),clsStorage.currentClub.members[i].otherInstrument,
+                        clsStorage.currentClub.members[i].email, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
                         Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument)));
                 }
@@ -169,17 +169,17 @@ namespace Marimba
                 {
                     //skip if it is an unsubscribed member
                     //also check for if we are only considering members in the current term
-                    if (clsStorage.currentClub.members[i].strFName != "♪Unsubscribed" && (!cbCurrentTerm.Checked || clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count-1].memberSearch(Convert.ToInt16(i)) >=0))
+                    if (clsStorage.currentClub.members[i].firstName != "♪Unsubscribed" && (!cbCurrentTerm.Checked || clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count-1].memberSearch(Convert.ToInt16(i)) >=0))
                     {
                         if (clsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
                             temp = new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), Member.instrumentToString(clsStorage.currentClub.members[i].curInstrument),
-                        clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
+                        clsStorage.currentClub.members[i].email, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
                             Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                         else
-                            temp = new ListViewItem(new string[6] {clsStorage.currentClub.members[i].strFName + " " +
-                        clsStorage.currentClub.members[i].strLName, clsStorage.currentClub.members[i].strOtherInstrument,
-                        clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
+                            temp = new ListViewItem(new string[6] {clsStorage.currentClub.members[i].firstName + " " +
+                        clsStorage.currentClub.members[i].lastName, clsStorage.currentClub.members[i].otherInstrument,
+                        clsStorage.currentClub.members[i].email, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
                             Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                         if (temp.SubItems[cbSearchMode.SelectedIndex].Text.ToLower().Contains(txtSearch.Text.ToLower()))
@@ -218,7 +218,7 @@ namespace Marimba
                     Form memberprofile = new Profile(Convert.ToInt32(lvMain.SelectedItems[0].SubItems[5].Text));
                     memberprofile.ShowDialog();
                     //if someone was unsubscribed, remove them
-                    if (clsStorage.currentClub.members[Convert.ToInt32(lvMain.SelectedItems[0].SubItems[5].Text)].strFName == "♪Unsubscribed")
+                    if (clsStorage.currentClub.members[Convert.ToInt32(lvMain.SelectedItems[0].SubItems[5].Text)].firstName == "♪Unsubscribed")
                         lvMain.Items.RemoveAt(lvMain.SelectedIndices[0]);
                 }
                 else // sending to another window
@@ -262,17 +262,17 @@ namespace Marimba
                 for (int i = 0; i < clsStorage.currentClub.iMember; i++)
                 {
                     //skip if it is an unsubscribed member
-                    if (clsStorage.currentClub.members[i].strFName != "♪Unsubscribed")
+                    if (clsStorage.currentClub.members[i].firstName != "♪Unsubscribed")
                     {
                         if (clsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
                             temp = new ListViewItem(new string[6] {clsStorage.currentClub.firstAndLastName(i), Member.instrumentToString(clsStorage.currentClub.members[i].curInstrument),
-                        clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
+                        clsStorage.currentClub.members[i].email, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
                             Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                         else
-                            temp = new ListViewItem(new string[6] {clsStorage.currentClub.members[i].strFName + " " +
-                        clsStorage.currentClub.members[i].strLName, clsStorage.currentClub.members[i].strOtherInstrument,
-                        clsStorage.currentClub.members[i].strEmail, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
+                            temp = new ListViewItem(new string[6] {clsStorage.currentClub.members[i].firstName + " " +
+                        clsStorage.currentClub.members[i].lastName, clsStorage.currentClub.members[i].otherInstrument,
+                        clsStorage.currentClub.members[i].email, Convert.ToString(clsStorage.currentClub.members[i].uiStudentNumber),
                         clsStorage.currentClub.members[i].signupTime.ToString(), Convert.ToString(clsStorage.currentClub.members[i].sID)},
                             Member.instrumentIconIndex(clsStorage.currentClub.members[i].curInstrument));
                         if (temp.SubItems[cbSearchMode.SelectedIndex].Text.ToLower().Contains(txtSearch.Text.ToLower()))

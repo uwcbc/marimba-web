@@ -90,7 +90,7 @@ namespace Marimba
                         //next, add an item in the budget
                         strComment += clsStorage.currentClub.formatedName(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[memberIndex]) + ";";
                         memberNames[i] = clsStorage.currentClub.formatedName(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[memberIndex]);
-                        memberEmails[i] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[memberIndex]].strEmail;
+                        memberEmails[i] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[memberIndex]].email;
                     }
                     //remove the last semicolon
                     strComment = strComment.Remove(strComment.Length - 1);
@@ -180,10 +180,10 @@ namespace Marimba
                         output[0, 5 + i] = clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].strOtherFees[i];
                     for (int i = 0; i < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].sMembers; i++)
                     {
-                        output[i + 1, 0] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strFName;
-                        output[i + 1, 1] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strLName;
+                        output[i + 1, 0] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].firstName;
+                        output[i + 1, 1] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].lastName;
                         if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument == Member.Instrument.Other)
-                            output[i + 1, 2] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strOtherInstrument;
+                            output[i + 1, 2] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].otherInstrument;
                         else
                             output[i + 1, 2] = Member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument);
                         if (clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].checkLimbo(i))
@@ -218,10 +218,10 @@ namespace Marimba
                         for (int i = 0; i < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].sMembers; i++)
                         {
                             CsvRow row = new CsvRow();
-                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strFName);
-                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strLName);
+                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].firstName);
+                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].lastName);
                             if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument == Member.Instrument.Other)
-                                row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].strOtherInstrument);
+                                row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].otherInstrument);
                             else
                                 row.Add(Member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].members[i]].curInstrument));
                             //report limbo status

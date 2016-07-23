@@ -281,14 +281,14 @@ namespace Marimba
                             sw.WriteLine(iMember);
                             for (int i = 0; i < iMember; i++)
                             {
-                                sw.WriteLine(members[i].strFName);
-                                sw.WriteLine(members[i].strLName);
+                                sw.WriteLine(members[i].firstName);
+                                sw.WriteLine(members[i].lastName);
                                 sw.WriteLine((int)members[i].type);
                                 sw.WriteLine(members[i].uiStudentNumber);
                                 sw.WriteLine((int)members[i].memberFaculty);
                                 //if the member plays an "other" instrument, write it here
                                 //write blank if the member does not play an other instrument
-                                sw.WriteLine(members[i].strOtherInstrument);
+                                sw.WriteLine(members[i].otherInstrument);
                                 //write the main instrument
                                 sw.WriteLine((int)members[i].curInstrument);
 
@@ -300,8 +300,8 @@ namespace Marimba
                                     for (int j = 0; j < numberOfInstruments; j++)
                                         sw.WriteLine(members[i].playsInstrument[j]);
 
-                                sw.WriteLine(members[i].strEmail);
-                                sw.WriteLine(clsStorage.cleanNewLine(members[i].strOther));
+                                sw.WriteLine(members[i].email);
+                                sw.WriteLine(clsStorage.cleanNewLine(members[i].comments));
                                 sw.WriteLine(members[i].sID);
                                 sw.WriteLine(members[i].signupTime.Ticks);
                                 sw.WriteLine((int)members[i].size);
@@ -612,50 +612,50 @@ namespace Marimba
             return bytes;
         }
 
-        public bool addMember(string strFName, string strLName, int iType, uint uiID, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt)
+        public bool addMember(string strFName, string strLName, Member.MemberType type, uint uiID, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt)
         {
             //before adding, check if it is a duplicate member
             //a matching student number or email address will be the judge of this
             //if it is a duplicate, then update the member's profile
             for (int i = 0; i < iMember; i++)
-                if (this.members[i].strEmail == strEmail || (this.members[i].uiStudentNumber == uiID && uiID != 0))
+                if (this.members[i].email == strEmail || (this.members[i].uiStudentNumber == uiID && uiID != 0))
                 {
-                    this.members[i].editMember(strFName, strLName, iType, uiID, iFaculty, strInstrument, strEmail, strOther, members[i].signupTime, iShirt);
+                    this.members[i].editMember(strFName, strLName, type, uiID, iFaculty, strInstrument, strEmail, strOther, members[i].signupTime, iShirt);
                     return false;
                 }
-            this.members[iMember] = new Member(strFName, strLName, iType, uiID, iFaculty, strInstrument, strOtherInstrument, strEmail, strOther, iShirt);
+            this.members[iMember] = new Member(strFName, strLName, type, uiID, iFaculty, strInstrument, strOtherInstrument, strEmail, strOther, iShirt);
             iMember++;
             return true;
         }
 
-        public bool addMember(string strFName, string strLName, int iType, uint uiID, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt, bool[] bInstruments)
+        public bool addMember(string strFName, string strLName, Member.MemberType type, uint uiID, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt, bool[] bInstruments)
         {
             //before adding, check if it is a duplicate member
             //a matching student number or email address will be the judge of this
             //if it is a duplicate, then update the member's profile
             for (int i = 0; i < iMember; i++)
-                if (this.members[i].strEmail == strEmail || (this.members[i].uiStudentNumber == uiID && uiID != 0))
+                if (this.members[i].email == strEmail || (this.members[i].uiStudentNumber == uiID && uiID != 0))
                 {
-                    this.members[i].editMember(strFName, strLName, iType, uiID, iFaculty, strInstrument, strEmail, strOther, members[i].signupTime, iShirt);
+                    this.members[i].editMember(strFName, strLName, type, uiID, iFaculty, strInstrument, strEmail, strOther, members[i].signupTime, iShirt);
                     return false;
                 }
-            this.members[iMember] = new Member(strFName, strLName, iType, uiID, iFaculty, strInstrument, strOtherInstrument, strEmail, strOther, iShirt, bInstruments);
+            this.members[iMember] = new Member(strFName, strLName, type, uiID, iFaculty, strInstrument, strOtherInstrument, strEmail, strOther, iShirt, bInstruments);
             iMember++;
             return true;
         }
 
         //this version is kept for legacy purposes to open old data
-        public bool addMember(string strFName, string strLName, int iType, uint uiID, int iFaculty, string strInstrument, string strEmail, string strOther, DateTime signup)
+        public bool addMember(string strFName, string strLName, Member.MemberType type, uint uiID, int iFaculty, string strInstrument, string strEmail, string strOther, DateTime signup)
         {
             //before adding, check if it is a duplicate member
             //a matching student number or email address will be the judge of this
             for (int i = 0; i < iMember; i++)
-                if (this.members[i].strEmail == strEmail || (this.members[i].uiStudentNumber == uiID && uiID != 0))
+                if (this.members[i].email == strEmail || (this.members[i].uiStudentNumber == uiID && uiID != 0))
                 {
-                    this.members[i].editMember(strFName, strLName, iType, uiID, iFaculty, strInstrument, strEmail, strOther, members[i].signupTime, -1);
+                    this.members[i].editMember(strFName, strLName, type, uiID, iFaculty, strInstrument, strEmail, strOther, members[i].signupTime, -1);
                     return false;
                 }
-            this.members[iMember] = new Member(strFName, strLName, iType, uiID, iFaculty, strInstrument, strEmail, strOther, signup, -1);
+            this.members[iMember] = new Member(strFName, strLName, type, uiID, iFaculty, strInstrument, strEmail, strOther, signup, -1);
             iMember++;
             return true;
         }
@@ -754,20 +754,20 @@ namespace Marimba
                 return String.Format("{0}, {1}", firstAndLastName(index), Member.instrumentToString(this.members[index].curInstrument));
             else
             {
-                if (this.members[index].strOtherInstrument == null || this.members[index].strOtherInstrument == "")
+                if (this.members[index].otherInstrument == null || this.members[index].otherInstrument == "")
                 {
                     return String.Format("{0}", firstAndLastName(index));
                 }
                 else
                 {
-                    return String.Format("{0}, {1}", firstAndLastName(index), this.members[index].strOtherInstrument);
+                    return String.Format("{0}, {1}", firstAndLastName(index), this.members[index].otherInstrument);
                 }
             }
         }
 
         public string firstAndLastName(int index)
         {
-            return String.Format("{0} {1}", this.members[index].strFName, this.members[index].strLName);
+            return String.Format("{0} {1}", this.members[index].firstName, this.members[index].lastName);
         }
 
         /// <summary>
@@ -777,7 +777,7 @@ namespace Marimba
         public int emailSearch(string strEmail)
         {
             for(int i = 0; i < iMember; i++)
-                if (members[i].strEmail == strEmail)
+                if (members[i].email == strEmail)
                     return i;
             return -1;
         }

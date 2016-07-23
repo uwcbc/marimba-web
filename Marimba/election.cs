@@ -107,7 +107,7 @@ namespace Marimba
                     elector temp = new elector();
 
                     temp.strName = mainClub.formatedName(i);
-                    temp.strEmail = mainClub.members[i].strEmail;
+                    temp.strEmail = mainClub.members[i].email;
                     temp.id = i;
 
                     electorList.Add(temp);
@@ -118,7 +118,7 @@ namespace Marimba
                 {
                     elector temp = new elector();
                     temp.strName = mainClub.formatedName(i);
-                    temp.strEmail = mainClub.members[i].strEmail;
+                    temp.strEmail = mainClub.members[i].email;
                     temp.id = i;
 
                     almostElector.Add(temp);

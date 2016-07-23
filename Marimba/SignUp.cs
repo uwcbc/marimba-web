@@ -70,9 +70,9 @@ namespace Marimba
                      //NOTE TO SELF: add functionality to check for duplicate members
                     if (cbClass.Text != "UW Undergrad Student" && cbClass.Text != "UW Grad Student")
                             txtStudentNumber.Text = "0";
-                    if (cbMultiple.Checked && clsStorage.currentClub.addMember(txtFirstName.Text, txtLastName.Text, cbClass.SelectedIndex,
+                    if (cbMultiple.Checked && clsStorage.currentClub.addMember(txtFirstName.Text, txtLastName.Text, (Member.MemberType)cbClass.SelectedIndex,
                         Convert.ToUInt32(txtStudentNumber.Text), cbFaculty.SelectedIndex, cbInstrument.Text, tempOtherInstrument, txtEmail.Text,
-                        txtOther.Text, -1, tempPlays) || clsStorage.currentClub.addMember(txtFirstName.Text, txtLastName.Text, cbClass.SelectedIndex,
+                        txtOther.Text, -1, tempPlays) || clsStorage.currentClub.addMember(txtFirstName.Text, txtLastName.Text, (Member.MemberType)cbClass.SelectedIndex,
                         Convert.ToUInt32(txtStudentNumber.Text), cbFaculty.SelectedIndex, cbInstrument.Text, tempOtherInstrument, txtEmail.Text,
                         txtOther.Text, -1))
                     {

@@ -170,14 +170,14 @@ namespace Marimba
                         output[0, 6 + i] = clsStorage.currentClub.listTerms[iTerm].rehearsalDates[i];
                     for (int i = 0; i < clsStorage.currentClub.listTerms[iTerm].sMembers; i++)
                     {
-                        output[i+1,0] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strFName;
-                        output[i + 1, 1] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strLName;
+                        output[i+1,0] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].firstName;
+                        output[i + 1, 1] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].lastName;
                         output[i + 1, 2] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].uiStudentNumber;
                         if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument == Member.Instrument.Other)
-                            output[i + 1, 3] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strOtherInstrument;
+                            output[i + 1, 3] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].otherInstrument;
                         else
                             output[i + 1, 3] = Member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument);
-                        output[i + 1, 4] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strEmail;
+                        output[i + 1, 4] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].email;
                         output[i + 1, 5] = clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].size.ToString();
                         for (int j = 0; j < clsStorage.currentClub.listTerms[iTerm].sRehearsals; j++)
                         {
@@ -208,14 +208,14 @@ namespace Marimba
                         for (int i = 0; i < clsStorage.currentClub.listTerms[iTerm].sMembers; i++)
                         {
                             CsvRow row = new CsvRow();
-                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strFName);
-                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strLName);
+                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].firstName);
+                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].lastName);
                             row.Add(Convert.ToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].uiStudentNumber));
                             if (clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument == Member.Instrument.Other)
-                                row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strOtherInstrument);
+                                row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].otherInstrument);
                             else
                                 row.Add(Member.instrumentToString(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].curInstrument));
-                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].strEmail);
+                            row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].email);
                             row.Add(clsStorage.currentClub.members[clsStorage.currentClub.listTerms[iTerm].members[i]].size.ToString());
                             for (int j = 0; j < clsStorage.currentClub.listTerms[iTerm].sRehearsals; j++)
                             {

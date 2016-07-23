@@ -8,7 +8,11 @@ namespace Marimba
 {
     class Member
     {
-        public string strFName, strLName,strOtherInstrument, strEmail, strOther;
+        public string firstName;
+        public string lastName;
+        public string otherInstrument;
+        public string email;
+        public string comments;
         public Instrument curInstrument;
         public bool[] playsInstrument;
         public MemberType type;
@@ -19,27 +23,27 @@ namespace Marimba
         public ShirtSize size;
         public bool bMultipleInstruments;
 
-        public enum MemberType { UWUnderGrad, UWGrad, UWAlumni, Other };
+        public enum MemberType { UWUnderGrad = 0, UWGrad = 1, UWAlumni = 2, Other = 3 };
         public enum Faculty { AHS, Arts, Engineering, Environment, Mathematics, Science, Unknown = -1 };
         public enum ShirtSize { XS, S, M, L, XL, XXL, Unknown = -1 };
         public enum Instrument { Piccolo, Flute, Oboe, Bassoon, EbClarinet, Clarinet, AltoClarinet, BassClarinet, SopranoSax, AltoSax, TenorSax, BariSax, Trumpet, Cornet, Horn,
         Trombone, BassTrombone, Euphonium, Tuba, StringBass, ElectricBass, Percussion, DrumKit, Timpani, Mallet, Piano, Baton, Other }
 
-        public Member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt)
+        public Member(string firstName, string lastName, MemberType type, uint uiStudentNumber, int iFaculty, string instrument, string otherInstrument, string email, string comments, int iShirt)
         {
             //declare basic information about user
-            this.strFName = strFName;
-            this.strLName = strLName;
-            this.type = (MemberType)iType;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.type = type;
             this.uiStudentNumber = uiStudentNumber;
             this.memberFaculty = (Faculty)iFaculty;
-            this.curInstrument = stringToInstrument(strInstrument);
-            if (this.curInstrument == Instrument.Other && String.IsNullOrEmpty(strOtherInstrument))
-                this.strOtherInstrument = strInstrument;
+            this.curInstrument = stringToInstrument(instrument);
+            if (this.curInstrument == Instrument.Other && String.IsNullOrEmpty(otherInstrument))
+                this.otherInstrument = instrument;
             else
-                this.strOtherInstrument = strOtherInstrument;
-            this.strEmail = strEmail;
-            this.strOther = strOther;
+                this.otherInstrument = otherInstrument;
+            this.email = email;
+            this.comments = comments;
             this.sID = clsStorage.currentClub.iMember;
             this.signupTime = DateTime.Now;
             this.size = (ShirtSize)iShirt;
@@ -48,13 +52,13 @@ namespace Marimba
 
         public Member(StreamReader sr)
         {
-            strFName = sr.ReadLine();
-            strLName = sr.ReadLine();
+            firstName = sr.ReadLine();
+            lastName = sr.ReadLine();
             type = (MemberType)Convert.ToInt32(sr.ReadLine());
             uiStudentNumber = Convert.ToUInt32(sr.ReadLine());
             memberFaculty = (Faculty)Convert.ToInt32(sr.ReadLine());
 
-            strOtherInstrument = sr.ReadLine();
+            otherInstrument = sr.ReadLine();
             curInstrument = (Instrument)Convert.ToInt32(sr.ReadLine());
 
             bMultipleInstruments = Convert.ToBoolean(sr.ReadLine());
@@ -69,28 +73,28 @@ namespace Marimba
                     playsInstrument[j] = Convert.ToBoolean(sr.ReadLine());
             }
 
-            strEmail = sr.ReadLine();
-            strOther = clsStorage.reverseCleanNewLine(sr.ReadLine());
+            email = sr.ReadLine();
+            comments = clsStorage.reverseCleanNewLine(sr.ReadLine());
             sID = Convert.ToInt16(sr.ReadLine());
             signupTime = new DateTime(Convert.ToInt64(sr.ReadLine()));
             size = (ShirtSize)Convert.ToInt32(sr.ReadLine());
         }
 
-        public Member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail, string strOther, int iShirt, bool[] bMultiple)
+        public Member(string firstName, string lastName, MemberType type, uint uiStudentNumber, int iFaculty, string instrument, string otherInstrument, string email, string comment, int iShirt, bool[] bMultiple)
         {
             //declare basic information about user
-            this.strFName = strFName;
-            this.strLName = strLName;
-            this.type = (MemberType)iType;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.type = type;
             this.uiStudentNumber = uiStudentNumber;
             this.memberFaculty = (Faculty)iFaculty;
-            this.curInstrument = stringToInstrument(strInstrument);
-            if (this.curInstrument == Instrument.Other && String.IsNullOrEmpty(strOtherInstrument))
-                this.strOtherInstrument = strInstrument;
+            this.curInstrument = stringToInstrument(instrument);
+            if (this.curInstrument == Instrument.Other && String.IsNullOrEmpty(otherInstrument))
+                this.otherInstrument = instrument;
             else
-                this.strOtherInstrument = strOtherInstrument;
-            this.strEmail = strEmail;
-            this.strOther = strOther;
+                this.otherInstrument = otherInstrument;
+            this.email = email;
+            this.comments = comment;
             this.sID = clsStorage.currentClub.iMember;
             this.signupTime = DateTime.Now;
             this.size = (ShirtSize)iShirt;
@@ -99,13 +103,13 @@ namespace Marimba
             this.playsInstrument = new bool[Enum.GetValues(typeof(Member.Instrument)).Length];
             Array.Copy(bMultiple, this.playsInstrument, Enum.GetValues(typeof(Member.Instrument)).Length);
         }
-        public Member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strEmail,
-            string strOther, short clubID, DateTime time, int iShirt, bool[] bMultiple = null)
+        public Member(string firstName, string lastName, Member.MemberType type, uint uiStudentNumber, int iFaculty, string instrument, string email,
+            string comment, short clubID, DateTime time, int iShirt, bool[] bMultiple = null)
         {
             //declare basic information about user
-            this.strFName = strFName;
-            this.strLName = strLName;
-            this.type = (MemberType)iType;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.type = type;
             this.uiStudentNumber = uiStudentNumber;
             this.memberFaculty = (Faculty)iFaculty;
 
@@ -113,14 +117,14 @@ namespace Marimba
             //let's bring it to the Marimba 2 standards
             //take the members instrument, try to recognize it
             //if we fail, mark it as other
-            this.curInstrument = stringToInstrument(strInstrument);
+            this.curInstrument = stringToInstrument(instrument);
             if (this.curInstrument == Instrument.Other)
-                this.strOtherInstrument = strInstrument;
+                this.otherInstrument = instrument;
             else
-                this.strOtherInstrument = "";
+                this.otherInstrument = "";
 
-            this.strEmail = strEmail;
-            this.strOther = strOther;
+            this.email = email;
+            this.comments = comment;
             this.sID = clubID;
             this.signupTime = time;
             this.size = (ShirtSize)iShirt;
@@ -134,19 +138,18 @@ namespace Marimba
                 Array.Copy(bMultiple, this.playsInstrument, Enum.GetValues(typeof(Member.Instrument)).Length);
             }
         }
-        public Member(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strEmail,
-    string strOther, DateTime time, int iShirt)
+        public Member(string firstName, string lastName, Member.MemberType type, uint uiStudentNumber, int iFaculty, string instrument, string email, string comment, DateTime time, int iShirt)
         {
             //declare basic information about user
-            this.strFName = strFName;
-            this.strLName = strLName;
-            this.type = (MemberType)iType;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.type = type;
             this.uiStudentNumber = uiStudentNumber;
             this.memberFaculty = (Faculty)iFaculty;
-            this.strOtherInstrument = strInstrument;
-            this.curInstrument = stringToInstrument(strInstrument);
-            this.strEmail = strEmail;
-            this.strOther = strOther;
+            this.otherInstrument = instrument;
+            this.curInstrument = stringToInstrument(instrument);
+            this.email = email;
+            this.comments = comment;
             this.sID = clsStorage.currentClub.iMember;
             this.signupTime = time;
             this.size = (ShirtSize)iShirt;
@@ -157,7 +160,7 @@ namespace Marimba
         /// </summary>
         /// <param name="strFName">First name</param>
         /// <param name="strLName">Last name</param>
-        /// <param name="iType">Student/Alumni/Faculty</param>
+        /// <param name="type">Student/Alumni/Faculty</param>
         /// <param name="uiStudentNumber">Student Number</param>
         /// <param name="iFaculty">Faculty</param>
         /// <param name="strInstrument">Instrument</param>
@@ -165,18 +168,18 @@ namespace Marimba
         /// <param name="strOther">Other info</param>
         /// <param name="time">Signup time</param>
         /// <param name="iShirt">Shirt size</param>
-        public void editMember(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strEmail,
+        public void editMember(string strFName, string strLName, MemberType type, uint uiStudentNumber, int iFaculty, string strInstrument, string strEmail,
     string strOther, DateTime time, int iShirt)
         {
-            this.strFName = strFName;
-            this.strLName = strLName;
-            this.type = (MemberType)iType;
+            this.firstName = strFName;
+            this.lastName = strLName;
+            this.type = type;
             this.uiStudentNumber = uiStudentNumber;
             this.memberFaculty = (Faculty)iFaculty;
-            this.strOtherInstrument = "";
+            this.otherInstrument = "";
             this.curInstrument = stringToInstrument(strInstrument);
-            this.strEmail = strEmail;
-            this.strOther = strOther;
+            this.email = strEmail;
+            this.comments = strOther;
             this.signupTime = time;
             this.size = (ShirtSize)iShirt;
         }
@@ -186,7 +189,7 @@ namespace Marimba
         /// </summary>
         /// <param name="strFName">First name</param>
         /// <param name="strLName">Last name</param>
-        /// <param name="iType">Student/Alumni/Faculty</param>
+        /// <param name="type">Student/Alumni/Faculty</param>
         /// <param name="uiStudentNumber">Student Number</param>
         /// <param name="iFaculty">Faculty</param>
         /// <param name="strInstrument">Instrument</param>
@@ -195,18 +198,18 @@ namespace Marimba
         /// <param name="strOther">Other info</param>
         /// <param name="time">Signup time</param>
         /// <param name="iShirt">Shirt size</param>
-        public void editMember(string strFName, string strLName, int iType, uint uiStudentNumber, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail,
+        public void editMember(string strFName, string strLName, MemberType type, uint uiStudentNumber, int iFaculty, string strInstrument, string strOtherInstrument, string strEmail,
     string strOther, DateTime time, int iShirt)
         {
-            this.strFName = strFName;
-            this.strLName = strLName;
-            this.type = (MemberType)iType;
+            this.firstName = strFName;
+            this.lastName = strLName;
+            this.type = type;
             this.uiStudentNumber = uiStudentNumber;
             this.memberFaculty = (Faculty)iFaculty;
-            this.strOtherInstrument = strOtherInstrument;
+            this.otherInstrument = strOtherInstrument;
             this.curInstrument = stringToInstrument(strInstrument);
-            this.strEmail = strEmail;
-            this.strOther = strOther;
+            this.email = strEmail;
+            this.comments = strOther;
             this.signupTime = time;
             this.size = (ShirtSize)iShirt;
         }
@@ -223,7 +226,7 @@ namespace Marimba
         {
             if (low >= high) //found the first differing member
             {
-                if (memberlist1[low].strEmail == memberlist2[low].strEmail)
+                if (memberlist1[low].email == memberlist2[low].email)
                     return low;
                 else
                     return low - 1;
@@ -231,7 +234,7 @@ namespace Marimba
             else
             {
                 int mid = (low + high) / 2;
-                if (memberlist1[low].strEmail == memberlist2[low].strEmail && memberlist1[mid].strEmail == memberlist2[mid].strEmail)
+                if (memberlist1[low].email == memberlist2[low].email && memberlist1[mid].email == memberlist2[mid].email)
                     return lastCommonMember(mid + 1, high, memberlist1, memberlist2);
                 else
                     return lastCommonMember(low, mid - 1, memberlist1, memberlist2);
@@ -246,18 +249,18 @@ namespace Marimba
         {
             List<object> output = new List<object>();
 
-            output.Add(strFName);
-            output.Add(strLName);
+            output.Add(firstName);
+            output.Add(lastName);
             output.Add((int)type);
             output.Add(uiStudentNumber);
             output.Add((int)memberFaculty);
             //Note to self: Eventually... change this to an int to save some space
             if (curInstrument == Instrument.Other)
-                output.Add(strOtherInstrument);
+                output.Add(otherInstrument);
             else
                 output.Add(instrumentToString(curInstrument));
-            output.Add(strEmail);
-            output.Add(strOther);
+            output.Add(email);
+            output.Add(comments);
             output.Add(sID);
             output.Add(signupTime);
             output.Add((int)size);
