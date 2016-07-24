@@ -1,6 +1,6 @@
 ﻿namespace Marimba
 {
-    partial class signin
+    partial class SignInForm
     {
         /// <summary>
         /// Required designer variable.

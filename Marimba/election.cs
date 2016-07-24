@@ -1,89 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Windows.Forms;
-
-namespace Marimba
+﻿namespace Marimba
 {
-    class election
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Windows.Forms;
+
+    /// <summary>
+    /// Manages an election for the club
+    /// </summary>
+    class Election
     {
-        //these variables are for the list
-        public int iElectors;
-        public int iAlmostElectors;
-        public List<elector> electorList;
-        public List<elector> almostElector;
+        public List<Elector> electorList;
 
-        public int iTermIndex;
+        public List<Elector> almostElector;
 
-        public election(club mainClub, int iTermIndex)
+        public int termIndex;
+
+        public Election(Club mainClub, int termIndex)
         {
-            //creating an election is a lot of work!
-            //we have a few special structures just for this
-            //first, create a list of electors
-            //start with the 2 terms back, then do 1 term back
-            //240 is 120*2, the maximum possible number we could handle for an election
-            electorList = new List<elector>();
-            //this is so we can let people who forgot to pay membership fees know that if they want to vote
-            //they need to settle their debts
-            almostElector = new List<elector>();
-            iElectors = 0;
-            iAlmostElectors = 0;
-            this.iTermIndex = iTermIndex;
-            updateElectorList(mainClub);
+            // creating an election is a lot of work!
+            // we have a few special structures just for this
+            // first, create a list of electors
+            // start with the 2 terms back, then do 1 term back
+            this.electorList = new List<Elector>();
+
+            // this is so we can let people who forgot to pay membership fees know that if they want to vote
+            // they need to settle their debts
+            this.almostElector = new List<Elector>();
+            this.termIndex = termIndex;
+            this.UpdateElectorList(mainClub);
         }
 
-        public election(StreamReader sr)
-        {
-            iTermIndex = Convert.ToInt32(sr.ReadLine());
-            elector nextElector = new elector();
-            electorList = new List<elector>();
-            almostElector = new List<elector>();
-
-            /* don't keep track of this anymore */
-
-            iAlmostElectors = Convert.ToInt32(sr.ReadLine());
-            for (int i = 0; i < iAlmostElectors; i++)
-            {
-                nextElector.id = Convert.ToInt32(sr.ReadLine());
-                nextElector.strName = sr.ReadLine();
-                nextElector.strEmail = sr.ReadLine();
-                almostElector.Add(nextElector);
-            }
-            iElectors = Convert.ToInt32(sr.ReadLine());
-            for (int i = 0; i < iElectors; i++)
-            {
-                nextElector.id = Convert.ToInt32(sr.ReadLine());
-                nextElector.strName = sr.ReadLine();
-                nextElector.strEmail = sr.ReadLine();
-
-                /* don't keep track of this anymore */
-                string dummy_strCode = sr.ReadLine();
-
-                electorList.Add(nextElector);
-                //note to self: add id's here
-            }
-
-            /* don't keep track of this anymore */
-            int iPositions = Convert.ToInt32(sr.ReadLine());
-            string[] strPositions = new string[iPositions];
-            for (int i = 0; i < iPositions; i++)
-                strPositions[i] = sr.ReadLine();
-
-            int numCandidates = Convert.ToInt32(sr.ReadLine());
-            for (int i = 0; i < numCandidates; i++)
-            {
-                int dummy_index = Convert.ToInt32(sr.ReadLine());
-                int[] dummy_preferences = new int[iPositions];
-                for (int j = 0; j < iPositions; j++)
-                    dummy_preferences[j] = Convert.ToInt32(sr.ReadLine());
-                string dummy_strBlurb = sr.ReadLine();
-                bool dummy_bElected = Convert.ToBoolean(sr.ReadLine());
-            }
-        }
-
-        public void updateElectorList(club mainClub)
+        public void UpdateElectorList(Club mainClub)
         {
             int term1index, term2index;
             bool term1okay, term2okay;
@@ -91,46 +41,50 @@ namespace Marimba
             {
                 term2index = -1;
                 term2okay = true;
-                term1index = mainClub.listTerms[iTermIndex].memberSearch(i);
-                term1okay = (term1index == -1) || mainClub.listTerms[iTermIndex].limboMembers[term1index] ||
-                        (mainClub.listTerms[iTermIndex].feesPaid[term1index, 0] > 0);
-                if (iTermIndex != 0)//There are two terms to go back to
-                {
-                    term2index = mainClub.listTerms[iTermIndex - 1].memberSearch(i);
-                    term2okay = (term2index == -1) || mainClub.listTerms[iTermIndex - 1].limboMembers[term2index] ||
-                        (mainClub.listTerms[iTermIndex - 1].feesPaid[term2index, 0] > 0);
-                }
-                if (((term1index != -1 && !mainClub.listTerms[iTermIndex].limboMembers[term1index]) ||
-                    (term2index != -1 && !mainClub.listTerms[iTermIndex - 1].limboMembers[term2index]))
-                    && term1okay && term2okay && (clsStorage.currentClub.members[i].type == Member.MemberType.UWUnderGrad || clsStorage.currentClub.members[i].type == Member.MemberType.UWGrad))
-                {
-                    elector temp = new elector();
+                term1index = mainClub.listTerms[termIndex].memberSearch(i);
+                term1okay = (term1index == -1) ||
+                    mainClub.listTerms[termIndex].limboMembers[term1index] ||
+                    mainClub.listTerms[termIndex].feesPaid[term1index, 0] > 0;
 
-                    temp.strName = mainClub.formatedName(i);
+                // There are two terms to go back to
+                if (termIndex != 0)
+                {
+                    term2index = mainClub.listTerms[termIndex - 1].memberSearch(i);
+                    term2okay = (term2index == -1) || mainClub.listTerms[termIndex - 1].limboMembers[term2index] ||
+                        (mainClub.listTerms[termIndex - 1].feesPaid[term2index, 0] > 0);
+                }
+
+                if (((term1index != -1 && !mainClub.listTerms[termIndex].limboMembers[term1index]) ||
+                    (term2index != -1 && !mainClub.listTerms[termIndex - 1].limboMembers[term2index]))
+                    && term1okay && term2okay && (ClsStorage.currentClub.members[i].type == Member.MemberType.UWUnderGrad || ClsStorage.currentClub.members[i].type == Member.MemberType.UWGrad))
+                {
+                    Elector temp = new Elector();
+
+                    temp.strName = mainClub.GetFormattedName(i);
                     temp.strEmail = mainClub.members[i].email;
                     temp.id = i;
 
                     electorList.Add(temp);
-                    iElectors++;
                 }
-                else if ((clsStorage.currentClub.members[i].type == Member.MemberType.UWUnderGrad || clsStorage.currentClub.members[i].type == Member.MemberType.UWGrad) &&
-                    ((term1index != -1 && !mainClub.listTerms[iTermIndex].limboMembers[term1index]) || (term2index != -1 && !mainClub.listTerms[iTermIndex - 1].limboMembers[term2index])))
+                else if ((ClsStorage.currentClub.members[i].type == Member.MemberType.UWUnderGrad || ClsStorage.currentClub.members[i].type == Member.MemberType.UWGrad) &&
+                    ((term1index != -1 && !mainClub.listTerms[termIndex].limboMembers[term1index]) || (term2index != -1 && !mainClub.listTerms[termIndex - 1].limboMembers[term2index])))
                 {
-                    elector temp = new elector();
-                    temp.strName = mainClub.formatedName(i);
+                    Elector temp = new Elector();
+                    temp.strName = mainClub.GetFormattedName(i);
                     temp.strEmail = mainClub.members[i].email;
                     temp.id = i;
 
-                    almostElector.Add(temp);
-                    iAlmostElectors++;
+                    this.almostElector.Add(temp);
                 }
             }
         }
 
-        public class elector
+        public class Elector
         {
             public int id;
+
             public string strName;
+
             public string strEmail;
         }
     }

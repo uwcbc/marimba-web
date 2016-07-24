@@ -14,6 +14,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
     <ExpressionBlendVersion>12.0.50429.0</ExpressionBlendVersion>
+    <StyleCopTreatErrorsAsWarnings>False</StyleCopTreatErrorsAsWarnings>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -103,23 +104,23 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="about.cs">
+    <Compile Include="About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="about.Designer.cs">
-      <DependentUpon>about.cs</DependentUpon>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="addBudgetItem.cs">
+    <Compile Include="BudgetItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="addBudgetItem.Designer.cs">
-      <DependentUpon>addBudgetItem.cs</DependentUpon>
+    <Compile Include="BudgetItemForm.Designer.cs">
+      <DependentUpon>BudgetItemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="addFees.cs">
+    <Compile Include="AddFeesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="addFees.Designer.cs">
-      <DependentUpon>addFees.cs</DependentUpon>
+    <Compile Include="AddFeesForm.Designer.cs">
+      <DependentUpon>AddFeesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="editUser.cs">
       <SubType>Form</SubType>
@@ -129,11 +130,11 @@
     </Compile>
     <Compile Include="Utility\Enumerations.cs" />
     <Compile Include="Utility\ExcelHighlightingInfo.cs" />
-    <Compile Include="viewAssetList.cs">
+    <Compile Include="AssetList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="viewAssetList.Designer.cs">
-      <DependentUpon>viewAssetList.cs</DependentUpon>
+    <Compile Include="AssetList.Designer.cs">
+      <DependentUpon>AssetList.cs</DependentUpon>
     </Compile>
     <Compile Include="Attendance.cs">
       <SubType>Form</SubType>
@@ -153,8 +154,8 @@
     <Compile Include="changePassword.Designer.cs">
       <DependentUpon>changePassword.cs</DependentUpon>
     </Compile>
-    <Compile Include="clsStorage.cs" />
-    <Compile Include="club.cs" />
+    <Compile Include="ClsStorage.cs" />
+    <Compile Include="Club.cs" />
     <Compile Include="CsvRow.cs" />
     <Compile Include="editMultiInstruments.cs">
       <SubType>Form</SubType>
@@ -175,15 +176,15 @@
     <Compile Include="electionForm.Designer.cs">
       <DependentUpon>electionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="email.cs" />
-    <Compile Include="emailBrowser.cs">
+    <Compile Include="Email.cs" />
+    <Compile Include="EmailForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="emailBrowser.Designer.cs">
-      <DependentUpon>emailBrowser.cs</DependentUpon>
+    <Compile Include="EmailForm.Designer.cs">
+      <DependentUpon>EmailForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="excelFile.cs" />
-    <Compile Include="history.cs" />
+    <Compile Include="ExcelFile.cs" />
+    <Compile Include="HistoryItem.cs" />
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -238,26 +239,26 @@
     <Compile Include="Ribbon.xaml.cs">
       <DependentUpon>Ribbon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="sendEmail.cs">
+    <Compile Include="SendEmailForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="sendEmail.Designer.cs">
-      <DependentUpon>sendEmail.cs</DependentUpon>
+    <Compile Include="SendEmailForm.Designer.cs">
+      <DependentUpon>SendEmailForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="signin.cs">
+    <Compile Include="SignInForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="signin.Designer.cs">
-      <DependentUpon>signin.cs</DependentUpon>
+    <Compile Include="SignInForm.Designer.cs">
+      <DependentUpon>SignInForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SignUp.cs">
+    <Compile Include="SignUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SignUp.Designer.cs">
-      <DependentUpon>SignUp.cs</DependentUpon>
+    <Compile Include="SignUpForm.Designer.cs">
+      <DependentUpon>SignUpForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="sound.cs" />
-    <Compile Include="term.cs" />
+    <Compile Include="Sound.cs" />
+    <Compile Include="Term.cs" />
     <Compile Include="termFinancials.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -270,23 +271,23 @@
     <Compile Include="viewHistory.Designer.cs">
       <DependentUpon>viewHistory.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="about.resx">
-      <DependentUpon>about.cs</DependentUpon>
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="addBudgetItem.resx">
-      <DependentUpon>addBudgetItem.cs</DependentUpon>
+    <EmbeddedResource Include="BudgetItemForm.resx">
+      <DependentUpon>BudgetItemForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="addFees.resx">
-      <DependentUpon>addFees.cs</DependentUpon>
+    <EmbeddedResource Include="AddFeesForm.resx">
+      <DependentUpon>AddFeesForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="editUser.resx">
       <DependentUpon>editUser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="viewAssetList.resx">
-      <DependentUpon>viewAssetList.cs</DependentUpon>
+    <EmbeddedResource Include="AssetList.resx">
+      <DependentUpon>AssetList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Attendance.resx">
       <DependentUpon>Attendance.cs</DependentUpon>
@@ -310,8 +311,8 @@
       <DependentUpon>electionForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="emailBrowser.resx">
-      <DependentUpon>emailBrowser.cs</DependentUpon>
+    <EmbeddedResource Include="EmailForm.resx">
+      <DependentUpon>EmailForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -355,16 +356,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="sendEmail.resx">
-      <DependentUpon>sendEmail.cs</DependentUpon>
+    <EmbeddedResource Include="SendEmailForm.resx">
+      <DependentUpon>SendEmailForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="signin.resx">
-      <DependentUpon>signin.cs</DependentUpon>
+    <EmbeddedResource Include="SignInForm.resx">
+      <DependentUpon>SignInForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SignUp.resx">
-      <DependentUpon>SignUp.cs</DependentUpon>
+    <EmbeddedResource Include="SignUpForm.resx">
+      <DependentUpon>SignUpForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="termFinancials.resx">
@@ -387,6 +388,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

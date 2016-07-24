@@ -1,16 +1,17 @@
-﻿using Marimba.Utility;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace Marimba
+﻿namespace Marimba
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+
+    using Marimba.Utility;
+
     public partial class frmEditUser : Form
     {
 
@@ -23,21 +24,21 @@ namespace Marimba
         {
             // for now all we should be able to edit is their privilege
             // should change to something else if we record more user info
-            bool result = clsStorage.currentClub.editUserPrivilege(cboUserID.Text, cboPrivileges.Text);
+            bool result = ClsStorage.currentClub.EditUserPrivilege(cboUserID.Text, cboPrivileges.Text);
             if (result)
             {
                 if (Properties.Settings.Default.playSounds)
-                    sound.success.Play();
+                    Sound.Success.Play();
                 MessageBox.Show("User successfully edited.");
-                clsStorage.currentClub.addHistory(cboUserID.Text, Enumerations.ChangeType.EditUser);
+                ClsStorage.currentClub.AddHistory(cboUserID.Text, ChangeType.EditUser);
 
-                cboUserID.Text = "";
-                cboPrivileges.Text = "";
+                cboUserID.Text = String.Empty;
+                cboPrivileges.Text = String.Empty;
             }
             else
             {
                 if (Properties.Settings.Default.playSounds)
-                    sound.error.Play();
+                    Sound.Error.Play();
                 MessageBox.Show("That user does not exist. Please make sure you have selected a valid user.");
             }
         }
@@ -47,22 +48,22 @@ namespace Marimba
             if (MessageBox.Show("Are you user you want to delete the user " + cboUserID.Text + "?", "Delete this User?", MessageBoxButtons.YesNo)
                  == DialogResult.Yes)
             {
-                bool result = clsStorage.currentClub.deleteUser(cboUserID.Text);
+                bool result = ClsStorage.currentClub.DeleteUser(cboUserID.Text);
                 if (result)
                 {
                     if (Properties.Settings.Default.playSounds)
-                        sound.success.Play();
+                        Sound.Success.Play();
                     MessageBox.Show("User successfully deleted.");
-                    clsStorage.currentClub.addHistory(cboUserID.Text, Enumerations.ChangeType.DeleteUser);
+                    ClsStorage.currentClub.AddHistory(cboUserID.Text, ChangeType.DeleteUser);
 
                     cboUserID.Items.Remove(cboUserID.Text);
-                    cboUserID.Text = "";
-                    cboPrivileges.Text = "";
+                    cboUserID.Text = String.Empty;
+                    cboPrivileges.Text = String.Empty;
                 }
                 else
                 {
                     if (Properties.Settings.Default.playSounds)
-                        sound.error.Play();
+                        Sound.Error.Play();
                     MessageBox.Show("That user does not exist. Please make sure you have selected a valid user.");
                 }
             }
@@ -75,11 +76,11 @@ namespace Marimba
                 return;
             }
 
-            string[] user = clsStorage.currentClub.findUser(cboUserID.Text);
+            string[] user = ClsStorage.currentClub.FindUser(cboUserID.Text);
             if (user == null)
             {
                 if (Properties.Settings.Default.playSounds)
-                    sound.error.Play();
+                    Sound.Error.Play();
                 MessageBox.Show("That user does not exist. Please make sure you have selected a valid user.");
             }
 
@@ -88,7 +89,7 @@ namespace Marimba
 
         private void frmEditUser_Load(object sender, EventArgs e)
         {
-            foreach (string[] user in clsStorage.currentClub.strUsers)
+            foreach (string[] user in ClsStorage.currentClub.strUsers)
             {
                 cboUserID.Items.Add(user[0]);
             }

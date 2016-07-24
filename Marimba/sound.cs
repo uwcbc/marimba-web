@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Media;
-
-namespace Marimba
+﻿namespace Marimba
 {
-    class sound
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Media;
+    using System.Text;
+
+    class Sound
     {
-        
-        public static SoundPlayer error = new SoundPlayer(Properties.Resources.error);
-        public static SoundPlayer click = new SoundPlayer(Properties.Resources.click);
-        public static SoundPlayer hover = new SoundPlayer(Properties.Resources.hover);
-        public static SoundPlayer success = new SoundPlayer(Properties.Resources.success);
-        public static SoundPlayer welcome = new SoundPlayer(Properties.Resources.welcome);
+        public static SoundPlayer Error = new SoundPlayer(Properties.Resources.error);
+        public static SoundPlayer Click = new SoundPlayer(Properties.Resources.click);
+        public static SoundPlayer Hover = new SoundPlayer(Properties.Resources.hover);
+        public static SoundPlayer Success = new SoundPlayer(Properties.Resources.success);
+        public static SoundPlayer Welcome = new SoundPlayer(Properties.Resources.welcome);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Marimba
 {
-    partial class sendEmail
+    partial class SendEmailForm
     {
         /// <summary>
         /// Required designer variable.

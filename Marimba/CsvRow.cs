@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-//note: the entire code for writing to CSVs was borrowed from here: http://www.codeproject.com/Articles/415732/Reading-and-Writing-CSV-Files-in-Csharp
+﻿// note: the entire code for writing to CSVs was borrowed from here: http://www.codeproject.com/Articles/415732/Reading-and-Writing-CSV-Files-in-Csharp
 namespace Marimba
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
     /// Class to store one CSV row
     /// </summary>
     public class CsvRow : List<string>
     {
+        /// <summary>
+        /// Gets or sets a line of CSV text
+        /// </summary>
         public string LineText { get; set; }
     }
 
@@ -20,7 +23,6 @@ namespace Marimba
     /// </summary>
     public class CsvFileWriter : StreamWriter
     {
-
         public CsvFileWriter(string filename)
             : base(filename)
         {
@@ -39,6 +41,7 @@ namespace Marimba
                 // Add separator if this isn't the first value
                 if (!firstColumn)
                     builder.Append(',');
+
                 // Implement special handling for values that contain comma or quote
                 // Enclose in quotes and double up any double quotes
                 if (value.IndexOfAny(new char[] { '"', ',' }) != -1)
@@ -47,8 +50,9 @@ namespace Marimba
                     builder.Append(value);
                 firstColumn = false;
             }
+
             row.LineText = builder.ToString();
-            WriteLine(row.LineText);
+            this.WriteLine(row.LineText);
         }
     }
 
@@ -57,7 +61,6 @@ namespace Marimba
     /// </summary>
     public class CsvFileReader : StreamReader
     {
-
         public CsvFileReader(string filename)
             : base(filename)
         {
@@ -66,11 +69,11 @@ namespace Marimba
         /// <summary>
         /// Reads a row of data from a CSV file
         /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
+        /// <param name="row">The row to add the data we read in</param>
+        /// <returns>Whether any rows were read</returns>
         public bool ReadRow(CsvRow row)
         {
-            row.LineText = ReadLine();
+            row.LineText = this.ReadLine();
             if (String.IsNullOrEmpty(row.LineText))
                 return false;
 
@@ -105,8 +108,10 @@ namespace Marimba
                                 break;
                             }
                         }
+
                         pos++;
                     }
+
                     value = row.LineText.Substring(start, pos - start);
                     value = value.Replace("\"\"", "\"");
                 }
@@ -132,13 +137,13 @@ namespace Marimba
                 if (pos < row.LineText.Length)
                     pos++;
             }
+
             // Delete any unused items
             while (row.Count > rows)
                 row.RemoveAt(rows);
 
             // Return true if any columns read
-            return (row.Count > 0);
+            return row.Count > 0;
         }
     }
-
 }

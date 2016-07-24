@@ -11,7 +11,7 @@ using Marimba.Utility;
 
 namespace Marimba
 {
-    public partial class SignUp : Form
+    public partial class SignUpForm : Form
     {
         int iSignup;
         //these three are used for multiple instruments
@@ -22,7 +22,7 @@ namespace Marimba
         private TextBox txtOtherInstrument;
         private Label lblOtherInstrument;
         bool bOtherInstrument;
-        public SignUp()
+        public SignUpForm()
         {
             InitializeComponent();
         }
@@ -37,13 +37,13 @@ namespace Marimba
                     cbInstrument.Text == "" || cbClass.Text == "" || (bOtherInstrument && txtOtherInstrument.Text == ""))
                 {
                     if (Properties.Settings.Default.playSounds)
-                        sound.error.Play();
+                        Sound.Error.Play();
                     MessageBox.Show("Please fill in the missing information.");
                 }
                 else if ((cbClass.Text == "UW Undergrad Student" || cbClass.Text == "UW Grad Student" ) && txtStudentNumber.Text.Length != 8)
                 {
                     if (Properties.Settings.Default.playSounds)
-                        sound.error.Play();
+                        Sound.Error.Play();
                     MessageBox.Show("The student number entered is not a UW student number. Please correct it.");
                 }
                 else
@@ -63,21 +63,21 @@ namespace Marimba
                         int iNumberofInstruments = Enum.GetValues(typeof(Member.Instrument)).Length;
                         tempPlays = new bool[iNumberofInstruments];
                         for (int i = 0; i < iNumberofInstruments; i++)
-                            tempPlays[(int)Member.stringToInstrument(lvInstruments.Items[i].SubItems[0].Text)] = lvInstruments.Items[i].Checked;
+                            tempPlays[(int)Member.ParseInstrument(lvInstruments.Items[i].SubItems[0].Text)] = lvInstruments.Items[i].Checked;
                     }
 
                     //no missing info, then add the member!
                      //NOTE TO SELF: add functionality to check for duplicate members
                     if (cbClass.Text != "UW Undergrad Student" && cbClass.Text != "UW Grad Student")
                             txtStudentNumber.Text = "0";
-                    if (cbMultiple.Checked && clsStorage.currentClub.addMember(txtFirstName.Text, txtLastName.Text, (Member.MemberType)cbClass.SelectedIndex,
+                    if (cbMultiple.Checked && ClsStorage.currentClub.AddMember(txtFirstName.Text, txtLastName.Text, (Member.MemberType)cbClass.SelectedIndex,
                         Convert.ToUInt32(txtStudentNumber.Text), cbFaculty.SelectedIndex, cbInstrument.Text, tempOtherInstrument, txtEmail.Text,
-                        txtOther.Text, -1, tempPlays) || clsStorage.currentClub.addMember(txtFirstName.Text, txtLastName.Text, (Member.MemberType)cbClass.SelectedIndex,
+                        txtOther.Text, -1, tempPlays) || ClsStorage.currentClub.AddMember(txtFirstName.Text, txtLastName.Text, (Member.MemberType)cbClass.SelectedIndex,
                         Convert.ToUInt32(txtStudentNumber.Text), cbFaculty.SelectedIndex, cbInstrument.Text, tempOtherInstrument, txtEmail.Text,
                         txtOther.Text, -1))
                     {
                         if (Properties.Settings.Default.playSounds)
-                            sound.welcome.Play();
+                            Sound.Welcome.Play();
                         MessageBox.Show("Sign-Up Successful! Check your inbox for an e-mail soon!");
                         iSignup++;
                         cleanup();
@@ -85,7 +85,7 @@ namespace Marimba
                     else //as of writing this comment, this cannot actually fail yet
                     {
                         if (Properties.Settings.Default.playSounds)
-                            sound.success.Play();
+                            Sound.Success.Play();
                         MessageBox.Show("Sign-Up was not completed. Our records show you are already signed up.");
                         cleanup();
                     }
@@ -94,7 +94,7 @@ namespace Marimba
             catch
             {
                 if (Properties.Settings.Default.playSounds)
-                    sound.error.Play();
+                    Sound.Error.Play();
                 MessageBox.Show("Bad input was entered. Make sure the student number entered has only numbers and no spaces.");
             }
         }
@@ -140,7 +140,7 @@ namespace Marimba
         {
             //store history of signup
             if (iSignup > 0)
-                clsStorage.currentClub.addHistory(Convert.ToString(iSignup), Enumerations.ChangeType.Signup);
+                ClsStorage.currentClub.AddHistory(Convert.ToString(iSignup), ChangeType.Signup);
         }
 
         private void cbMultiple_CheckedChanged(object sender, EventArgs e)

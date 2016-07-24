@@ -1,6 +1,6 @@
 ﻿namespace Marimba
 {
-    partial class addFees
+    partial class AddFeesForm
     {
         /// <summary>
         /// Required designer variable.

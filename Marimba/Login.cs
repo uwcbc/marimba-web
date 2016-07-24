@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-
-namespace Marimba
+﻿namespace Marimba
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.Linq;
+    using System.Text;
+    using System.Windows.Forms;
+    using System.IO;
+
     public partial class Login : Form
     {
-        string strLocation = "";
+        string strLocation = String.Empty;
+
         public Login(string strLocation)
         {
             InitializeComponent();
@@ -23,23 +24,23 @@ namespace Marimba
         {
             try
             {
-                //if we opened from a file
+                // if we opened from a file
                 string check = Properties.Settings.Default.FileLocation;
-                if (strLocation != "")
+                if (strLocation != String.Empty)
                 {
-                    clsStorage.currentClub = new club(strLocation);
-                    clsStorage.currentClub.loadClub();
+                    ClsStorage.currentClub = new Club(strLocation);
+                    ClsStorage.currentClub.LoadClub();
                     lblFile.Text = "File: " + strLocation;
                 }
-                //if we have no user preferences or our user preferences point to a file that can't be found
-                else if (Properties.Settings.Default.FileLocation == null || Properties.Settings.Default.FileLocation == "" ||
+                else if (Properties.Settings.Default.FileLocation == null || Properties.Settings.Default.FileLocation == String.Empty ||
                     !File.Exists(Properties.Settings.Default.FileLocation))
                 {
+                    // if we have no user preferences or our user preferences point to a file that can't be found
                     if (ofdOpen.ShowDialog() == DialogResult.OK)
                     {
                         Properties.Settings.Default.FileLocation = ofdOpen.FileName;
-                        clsStorage.currentClub = new club(ofdOpen.FileName);
-                        clsStorage.currentClub.loadClub();
+                        ClsStorage.currentClub = new Club(ofdOpen.FileName);
+                        ClsStorage.currentClub.LoadClub();
                         lblFile.Text = "File: " + ofdOpen.FileName;
                     }
                     else
@@ -48,12 +49,12 @@ namespace Marimba
                 }
                 else
                 {
-                    clsStorage.currentClub = new club(Properties.Settings.Default.FileLocation);
-                    clsStorage.currentClub.loadClub();
+                    ClsStorage.currentClub = new Club(Properties.Settings.Default.FileLocation);
+                    ClsStorage.currentClub.LoadClub();
                     lblFile.Text = "File: " + Properties.Settings.Default.FileLocation;
                 }
             }
-            catch(System.IO.IOException)
+            catch (System.IO.IOException)
             {
                 MessageBox.Show("The file you are trying to load is currently in use. The file cannot be loaded right now.");
             }
@@ -61,24 +62,24 @@ namespace Marimba
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (clsStorage.currentClub.loginUser(txtID.Text, txtPassword.Text))
+            if (ClsStorage.currentClub.LoginUser(txtID.Text, txtPassword.Text))
             {
-                clsStorage.currentClub.loadEncryptedSection();
+                ClsStorage.currentClub.LoadEncryptedSection();
                 Program.home.ribbon1 = new Marimba.Ribbon();
                 Program.home.elementHost1.Child = Program.home.ribbon1;
-                Program.home.moneyMenu.newfees.cbTerm.Items.AddRange(clsStorage.currentClub.termNames());
+                Program.home.moneyMenu.newfees.cbTerm.Items.AddRange(ClsStorage.currentClub.GetTermNames());
                 Program.home.Visible = false;
-                //this line makes Marimba wait until it is fully loaded
+                // this line makes Marimba wait until it is fully loaded
                 Application.DoEvents();
                 if (Properties.Settings.Default.playSounds)
-                    sound.welcome.Play();
-                clsStorage.loggedin = true;
+                    Sound.Welcome.Play();
+                ClsStorage.loggedin = true;
                 this.Close();
             }
             else
             {
                 if (Properties.Settings.Default.playSounds)
-                    sound.error.Play();
+                    Sound.Error.Play();
                 MessageBox.Show("Login failed. Please check credentials.");
             }
         }
@@ -89,12 +90,12 @@ namespace Marimba
             {
                 if (ofdOpen.ShowDialog() == DialogResult.OK)
                 {
-                    clsStorage.currentClub = new club(ofdOpen.FileName);
-                    clsStorage.currentClub.loadClub();
+                    ClsStorage.currentClub = new Club(ofdOpen.FileName);
+                    ClsStorage.currentClub.LoadClub();
                     Properties.Settings.Default.FileLocation = ofdOpen.FileName;
                     lblFile.Text = "File: " + Properties.Settings.Default.FileLocation;
                     if (Properties.Settings.Default.playSounds)
-                        sound.click.Play();
+                        Sound.Click.Play();
                 }
             }
             catch (System.IO.IOException)
@@ -105,16 +106,16 @@ namespace Marimba
 
         private void btnGuest_Click(object sender, EventArgs e)
         {
-            clsStorage.loggedin = true;
+            ClsStorage.loggedin = true;
             this.Close();
         }
 
         private void Login_FormClosed(object sender, FormClosedEventArgs e)
         {
-            //check if a club was loaded
-            //if so, close the filestream
-            if (lblFile.Text != "File: " && !clsStorage.loggedin)
-                clsStorage.currentClub.br.Close();
+            // check if a club was loaded
+            // if so, close the filestream
+            if (lblFile.Text != "File: " && !ClsStorage.loggedin)
+                ClsStorage.currentClub.br.Close();
         }
     }
 }

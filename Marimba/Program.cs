@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-
-namespace Marimba
+﻿namespace Marimba
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows.Forms;
+
     static class Program
     {
         public static MainMenu home;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// <param name="args">The arguments that marimba is run with</param>
         [STAThread]
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

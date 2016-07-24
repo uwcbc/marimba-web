@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace Marimba
+﻿namespace Marimba
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+
     public partial class editSettings : Form
     {
         public editSettings()
@@ -19,8 +19,8 @@ namespace Marimba
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            //preferences
-            //store these on the user's machine
+            // preferences
+            // store these on the user's machine
             Properties.Settings.Default.playSounds = cbSound.Checked;
             Properties.Settings.Default.selectCurrentTerm = cbCurTerm.Checked;
             Properties.Settings.Default.autoSave = cbAutoSave.Checked;
@@ -28,20 +28,20 @@ namespace Marimba
             Properties.Settings.Default.signaturePosition = txtPosition.Text;
             Properties.Settings.Default.attachSig = cbAttachSignature.Checked;
             Properties.Settings.Default.emailPassword = txtEmailPassword.Text;
-            clsStorage.currentClub.clubEmail.changePassword(txtEmailPassword.Text);
+            ClsStorage.currentClub.clubEmail.ChangePassword(txtEmailPassword.Text);
             Properties.Settings.Default.Save();
 
-            //admin settings
-            //these should be stored with the club's file
-            clsStorage.currentClub.strEmail = txtEmail.Text;
-            clsStorage.currentClub.strImap = txtImap.Text;
-            clsStorage.currentClub.bImap = cbSSL.Checked;
-            clsStorage.currentClub.strSmtp = txtSMTP.Text;
-            clsStorage.currentClub.iSmtp = Convert.ToInt32(txtSMTPPort.Text);
-            clsStorage.currentClub.bSmtp = cbSMTP.Checked;
+            // admin settings
+            // these should be stored with the club's file
+            ClsStorage.currentClub.emailAddress = txtEmail.Text;
+            ClsStorage.currentClub.imapServerAddress = txtImap.Text;
+            ClsStorage.currentClub.bImap = cbSSL.Checked;
+            ClsStorage.currentClub.smptServerAddress = txtSMTP.Text;
+            ClsStorage.currentClub.smtpRequiresSSL = Convert.ToInt32(txtSMTPPort.Text);
+            ClsStorage.currentClub.imapRequiresSSL = cbSMTP.Checked;
 
             if (Properties.Settings.Default.playSounds)
-                sound.success.Play();
+                Sound.Success.Play();
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -56,17 +56,17 @@ namespace Marimba
             cbAttachSignature.Checked = Properties.Settings.Default.attachSig;
             txtEmailPassword.Text = Properties.Settings.Default.emailPassword;
 
-            txtEmail.Text = clsStorage.currentClub.strEmail;
-            txtImap.Text = clsStorage.currentClub.strImap;
-            cbSSL.Checked = clsStorage.currentClub.bImap;
-            txtSMTP.Text = clsStorage.currentClub.strSmtp;
-            txtSMTPPort.Text = Convert.ToString(clsStorage.currentClub.iSmtp);
-            cbSMTP.Checked = clsStorage.currentClub.bSmtp;
+            txtEmail.Text = ClsStorage.currentClub.emailAddress;
+            txtImap.Text = ClsStorage.currentClub.imapServerAddress;
+            cbSSL.Checked = ClsStorage.currentClub.bImap;
+            txtSMTP.Text = ClsStorage.currentClub.smptServerAddress;
+            txtSMTPPort.Text = Convert.ToString(ClsStorage.currentClub.smtpRequiresSSL);
+            cbSMTP.Checked = ClsStorage.currentClub.imapRequiresSSL;
             
-            //when ready, email settings will go here
+            // when ready, email settings will go here
 
-            //only admins have access to admin tab
-            if (clsStorage.currentClub.strCurrentUserPrivilege == "Exec")
+            // only admins have access to admin tab
+            if (ClsStorage.currentClub.strCurrentUserPrivilege == "Exec")
                 tpAdmin.Dispose();
         }
 
@@ -78,9 +78,9 @@ namespace Marimba
 
         private void btnChangeKey_Click(object sender, EventArgs e)
         {
-            clsStorage.currentClub.updateKey();
+            ClsStorage.currentClub.UpdateKey();
             if (Properties.Settings.Default.playSounds)
-                sound.success.Play();
+                Sound.Success.Play();
         }
     }
 }

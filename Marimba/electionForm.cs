@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-namespace Marimba
+﻿namespace Marimba
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.Linq;
+    using System.Text;
+    using System.Windows.Forms;
+
     public partial class electionForm : Form
     {
         public electionForm()
@@ -18,49 +18,48 @@ namespace Marimba
 
         private void electionForm_Load(object sender, EventArgs e)
         {
-            cbTerm.Items.AddRange(clsStorage.currentClub.termNames());
+            cbTerm.Items.AddRange(ClsStorage.currentClub.GetTermNames());
 
-            //enable all of the buttons
+            // enable all of the buttons
             btnList.Enabled = true;
 
-            //if we default to selecting current term, do so!
+            // if we default to selecting current term, do so!
             if (Properties.Settings.Default.selectCurrentTerm)
-                cbTerm.SelectedIndex = clsStorage.currentClub.listTerms.Count - 1;
+                cbTerm.SelectedIndex = ClsStorage.currentClub.listTerms.Count - 1;
         }
 
         private void btnList_Click(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.playSounds)
-                sound.click.Play();
+                Sound.Click.Play();
             if (svdSave.ShowDialog() == DialogResult.OK)
             {
-                clsStorage.currentClub.currentElection = new election(clsStorage.currentClub, cbTerm.SelectedIndex);
-                //1 = excel file
+                ClsStorage.currentClub.currentElection = new Election(ClsStorage.currentClub, cbTerm.SelectedIndex);
+
+                // 1 = excel file
                 if (svdSave.FilterIndex == 1)
                 {
-                    //first, set up string array to be sent to Excel
-
-                    //for now, exclude the identifier code, as exporting it is not exactly necessary when Marimba can just e-mail the codes to users
-                    //I also want to avoid exporting the list of codes to Excel when practically the exact same list could be imported with little effort
-
-                    string[,] output = new string[4 + clsStorage.currentClub.currentElection.iElectors + clsStorage.currentClub.currentElection.iAlmostElectors, 3];
+                    // first, set up string array to be sent to Excel
+                    string[,] output = new string[4 + ClsStorage.currentClub.currentElection.electorList.Count + ClsStorage.currentClub.currentElection.almostElector.Count, 3];
                     output[0, 0] = "Name";
                     output[0, 1] = "E-Mail Address";
-                    for (int i = 0; i < clsStorage.currentClub.currentElection.iElectors; i++)
+                    for (int i = 0; i < ClsStorage.currentClub.currentElection.electorList.Count; i++)
                     {
-                        output[i+1,0] = clsStorage.currentClub.currentElection.electorList[i].strName;
-                        output[i+1,1] = clsStorage.currentClub.currentElection.electorList[i].strEmail;
+                        output[i + 1, 0] = ClsStorage.currentClub.currentElection.electorList[i].strName;
+                        output[i + 1, 1] = ClsStorage.currentClub.currentElection.electorList[i].strEmail;
                     }
-                    output[clsStorage.currentClub.currentElection.iElectors+2, 0] = "Members Owing Club Membership Fees";
-                    output[clsStorage.currentClub.currentElection.iElectors + 3, 0] = "Name";
-                    output[clsStorage.currentClub.currentElection.iElectors + 3, 1] = "E-Mail Address";
-                    for (int i = 0; i < clsStorage.currentClub.currentElection.iAlmostElectors; i++)
+
+                    output[ClsStorage.currentClub.currentElection.electorList.Count + 2, 0] = "Members Owing Club Membership Fees";
+                    output[ClsStorage.currentClub.currentElection.electorList.Count + 3, 0] = "Name";
+                    output[ClsStorage.currentClub.currentElection.electorList.Count + 3, 1] = "E-Mail Address";
+                    for (int i = 0; i < ClsStorage.currentClub.currentElection.almostElector.Count; i++)
                     {
-                        output[i+4+clsStorage.currentClub.currentElection.iElectors,0] = clsStorage.currentClub.currentElection.almostElector[i].strName;
-                        output[i + 4 + clsStorage.currentClub.currentElection.iElectors, 1] = clsStorage.currentClub.currentElection.almostElector[i].strEmail;
+                        output[i + 4 + ClsStorage.currentClub.currentElection.electorList.Count, 0] = ClsStorage.currentClub.currentElection.almostElector[i].strName;
+                        output[i + 4 + ClsStorage.currentClub.currentElection.electorList.Count, 1] = ClsStorage.currentClub.currentElection.almostElector[i].strEmail;
                     }
-                    //now that the string array is set up, save it
-                    excelFile.saveExcel(output, svdSave.FileName);
+
+                    // now that the string array is set up, save it
+                    ExcelFile.saveExcel(output, svdSave.FileName);
                 }
                 else if (svdSave.FilterIndex == 2)
                 {
@@ -69,14 +68,13 @@ namespace Marimba
                         CsvRow firstrow = new CsvRow();
                         firstrow.Add("Name");
                         firstrow.Add("E-Mail Address");
-                        //firstrow.Add("Identifier Code");
+                        // firstrow.Add("Identifier Code");
                         writer.WriteRow(firstrow);
-                        for (int i = 0; i < clsStorage.currentClub.currentElection.iElectors; i++)
+                        for (int i = 0; i < ClsStorage.currentClub.currentElection.electorList.Count; i++)
                         {
                             CsvRow row = new CsvRow();
-                            row.Add(clsStorage.currentClub.currentElection.electorList[i].strName);
-                            row.Add(clsStorage.currentClub.currentElection.electorList[i].strEmail);
-                            //row.Add(clsStorage.currentClub.currentElection.electorList[i].strCode);
+                            row.Add(ClsStorage.currentClub.currentElection.electorList[i].strName);
+                            row.Add(ClsStorage.currentClub.currentElection.electorList[i].strEmail);
                             writer.WriteRow(row);
                         }
                         writer.WriteRow(new CsvRow());
@@ -87,16 +85,16 @@ namespace Marimba
                         firstrow.Add("Name");
                         firstrow.Add("E-Mail Address");
                         writer.WriteRow(firstrow);
-                        for (int i = 0; i < clsStorage.currentClub.currentElection.iAlmostElectors; i++)
+                        for (int i = 0; i < ClsStorage.currentClub.currentElection.almostElector.Count; i++)
                         {
                             CsvRow row = new CsvRow();
-                            row.Add(clsStorage.currentClub.currentElection.almostElector[i].strName);
-                            row.Add(clsStorage.currentClub.currentElection.almostElector[i].strEmail);
+                            row.Add(ClsStorage.currentClub.currentElection.almostElector[i].strName);
+                            row.Add(ClsStorage.currentClub.currentElection.almostElector[i].strEmail);
                             writer.WriteRow(row);
                         }
                     }
                     if (Properties.Settings.Default.playSounds)
-                        sound.success.Play();
+                        Sound.Success.Play();
                 }
             }
         }

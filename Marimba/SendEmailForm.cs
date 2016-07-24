@@ -12,29 +12,31 @@ using System.Net.Mail;
 
 namespace Marimba
 {
-    public partial class sendEmail : Form
+    public partial class SendEmailForm : Form
     {
         int loadMore = 40;
-        public sendEmail()
+
+        public SendEmailForm()
         {
             InitializeComponent();
         }
+
         private void btnLoadMore_Click(object sender, EventArgs e)
         {
-            //load 40 more
+            // load 40 more
             loadMore += 40;
-            //don't do more than 480 emails... please
-            //that's too much
+            // don't do more than 480 emails... please
+            // that's too much
             lvEmail.BeginUpdate();
             if (loadMore <= 480)
-                lvEmail.Items.AddRange(clsStorage.currentClub.clubEmail.folderItems(loadMore - 40, loadMore).ToArray());
+                lvEmail.Items.AddRange(ClsStorage.currentClub.clubEmail.folderItems(loadMore - 40, loadMore).ToArray());
             lvEmail.EndUpdate();
         }
 
         private void sendEmail_Load(object sender, EventArgs e)
         {
             Application.DoEvents();
-            lvEmail.Items.AddRange(clsStorage.currentClub.clubEmail.folderItems().ToArray());
+            lvEmail.Items.AddRange(ClsStorage.currentClub.clubEmail.GetFolderItems().ToArray());
         }
 
         private void lvEmail_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -42,9 +44,9 @@ namespace Marimba
             if (lvEmail.SelectedIndices[0] != -1) //something is selected
             {
                 if (Properties.Settings.Default.playSounds)
-                    sound.click.Play();
+                    Sound.Click.Play();
 
-                emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Receive, Convert.ToInt32(lvEmail.SelectedItems[0].SubItems[4].Text));
+                EmailForm webDesign = new EmailForm(EmailPurpose.Receive, Convert.ToInt32(lvEmail.SelectedItems[0].SubItems[4].Text));
                 webDesign.Show();
             }
         }
@@ -58,42 +60,43 @@ namespace Marimba
                 case 0:
                     temp.ShowDialog();
                     //check if something was selected
-                    if (clsStorage.selectedMembersList.Count > 0)
+                    if (ClsStorage.selectedMembersList.Count > 0)
                     {
                         if (Properties.Settings.Default.playSounds)
-                            sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Send, -1, clsStorage.selectedMembersList);
+                            Sound.Click.Play();
+                        EmailForm webDesign = new EmailForm(EmailPurpose.Send, -1, ClsStorage.selectedMembersList);
                         webDesign.ShowDialog();
-                    }                   
+                    }
+
                     break;
                 //BCC Individual Member
                 case 1:
                     temp.ShowDialog();
                     //check if something was selected
-                    if (clsStorage.selectedMembersList.Count > 0)
+                    if (ClsStorage.selectedMembersList.Count > 0)
                     {
                         if (Properties.Settings.Default.playSounds)
-                            sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Bcc, -1, clsStorage.selectedMembersList);
+                            Sound.Click.Play();
+                        EmailForm webDesign = new EmailForm(EmailPurpose.Bcc, -1, ClsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }
                     break;
                 //all active members in current term
                 case 2:
                     //clear the list
-                    clsStorage.selectedMembersList.Clear();
+                    ClsStorage.selectedMembersList.Clear();
 
                     //now, add everyone in the term to it
-                    for(int i = 0; i < clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count-1].sMembers; i++)
-                        if (!clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].checkLimbo(i))
-                            clsStorage.selectedMembersList.Add(clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].members[i]);
+                    for(int i = 0; i < ClsStorage.currentClub.listTerms[ClsStorage.currentClub.listTerms.Count-1].numMembers; i++)
+                        if (!ClsStorage.currentClub.listTerms[ClsStorage.currentClub.listTerms.Count - 1].checkLimbo(i))
+                            ClsStorage.selectedMembersList.Add(ClsStorage.currentClub.listTerms[ClsStorage.currentClub.listTerms.Count - 1].members[i]);
 
                     //check if something was selected
-                    if (clsStorage.selectedMembersList.Count > 0)
+                    if (ClsStorage.selectedMembersList.Count > 0)
                     {
                         if (Properties.Settings.Default.playSounds)
-                            sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Bcc, -1, clsStorage.selectedMembersList);
+                            Sound.Click.Play();
+                        EmailForm webDesign = new EmailForm(EmailPurpose.Bcc, -1, ClsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }
                     
@@ -102,18 +105,18 @@ namespace Marimba
                 //similar idea to case 1 without the check
                 case 3:
                     //clear the list
-                    clsStorage.selectedMembersList.Clear();
+                    ClsStorage.selectedMembersList.Clear();
 
                     //now, add everyone in the term to it
-                    for (int i = 0; i < clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].sMembers; i++)
-                        clsStorage.selectedMembersList.Add(clsStorage.currentClub.listTerms[clsStorage.currentClub.listTerms.Count - 1].members[i]);
+                    for (int i = 0; i < ClsStorage.currentClub.listTerms[ClsStorage.currentClub.listTerms.Count - 1].numMembers; i++)
+                        ClsStorage.selectedMembersList.Add(ClsStorage.currentClub.listTerms[ClsStorage.currentClub.listTerms.Count - 1].members[i]);
 
                     //check if something was selected
-                    if (clsStorage.selectedMembersList.Count > 0)
+                    if (ClsStorage.selectedMembersList.Count > 0)
                     {
                         if (Properties.Settings.Default.playSounds)
-                            sound.click.Play();
-                        emailBrowser webDesign = new emailBrowser(Enumerations.EmailPurpose.Bcc, -1, clsStorage.selectedMembersList);
+                            Sound.Click.Play();
+                        EmailForm webDesign = new EmailForm(EmailPurpose.Bcc, -1, ClsStorage.selectedMembersList);
                         webDesign.ShowDialog();
                     }
 
@@ -122,8 +125,8 @@ namespace Marimba
                 case 4:
                     //check if something was selected
                     if (Properties.Settings.Default.playSounds)
-                        sound.click.Play();
-                    emailBrowser massEmailMaker = new emailBrowser(Enumerations.EmailPurpose.MassEmail);
+                        Sound.Click.Play();
+                    EmailForm massEmailMaker = new EmailForm(EmailPurpose.MassEmail);
                     massEmailMaker.ShowDialog();
                     break;
             }

@@ -1,172 +1,188 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-namespace Marimba
+﻿namespace Marimba
 {
-    class term
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+
+    class Term
     {
-        //strName is the name of the term (e.g. Fall 2010)
+        // strName is the name of the term (e.g. Fall 2010)
         public string strName;
-        //sNumber is the term index (Fall 2010 = 1)
-        //sRehearsals is the number of rehearsals
-        //sMembers counts the number of members here this term (member = attended >= 1 rehearsal)
-        //iOtherFees is the number of other fees
-        public short sNumber, sRehearsals, sMembers;
-        public int iOtherFees;
-        //startDate and endDate are used for cash flow purposes
+
+        // sNumber is the term index (Fall 2010 = 1)
+        // sRehearsals is the number of rehearsals
+        // sMembers counts the number of members here this term (member = attended >= 1 rehearsal)
+        // iOtherFees is the number of other fees
+        public short termIndex, numRehearsals, numMembers;
+
+        public int numOtherFees;
+        
+        // startDate and endDate are used for cash flow purposes
         public DateTime startDate, endDate;
-        //rehearsalDates is the set of rehearsal dates
+        
+        // rehearsalDates is the set of rehearsal dates
         public DateTime[] rehearsalDates;
-        //membershipFees stores the membership fee charged for the term
+        
+        // membershipFees stores the membership fee charged for the term
         public double membershipFees;
-        //dOtherFees and strOtherFees store information on other fees
-        //such as uniform fees
-        public double[] dOtherFees;
-        public string[] strOtherFees;
-        //members is the members for the term
-        //it is effectively a subset of the mailing list
-        //NOTE: a "member" of the term is someone who attended at least one practice that term
-        //they may not be a true fully paid member
-        //assuming no more than 120 unique people show up over the course of the term
-        //this is pretty easy to change if, for whatever reason, the club needed to
+        
+        // dOtherFees and strOtherFees store information on other fees
+        // such as uniform fees
+        public double[] otherFeesAmounts;
+        public string[] otherFeesNames;
+        
+        // members is the members for the term
+        // it is effectively a subset of the mailing list
+        // NOTE: a "member" of the term is someone who attended at least one practice that term
+        // they may not be a true fully paid member
+        // assuming no more than 120 unique people show up over the course of the term
+        // this is pretty easy to change if, for whatever reason, the club needed to
         public short[] members = new short[120];
-        //limboMembers is to track members who come to only a few practices
-        //a limbo member should not be charged membership fees
+        
+        // limboMembers is to track members who come to only a few practices
+        // a limbo member should not be charged membership fees
         public bool[] limboMembers = new bool[120];
-        //iLimbo counts the number of limbo members
-        //obviously, iLimbo <= sMembers
+        
+        // iLimbo counts the number of limbo members
+        // obviously, iLimbo <= sMembers
         public int iLimbo;
-        //Set up a record of attendance for the members
+        
+        // Set up a record of attendance for the members
         public bool[,] attendance;
-        //Store who has paid and how much, and the date (feesPaidDate)
+        
+        // Store who has paid and how much, and the date (feesPaidDate)
         public double[,] feesPaid;
         public DateTime[,] feesPaidDate;
 
-        public term(string strName, short index, short numRehearsals, DateTime start, DateTime end, DateTime[] rehearsalDates, double membershipFees, double[] dOtherFees = null, string[] strOtherFees = null)
+        public Term(string strName, short index, short numRehearsals, DateTime start, DateTime end, DateTime[] rehearsalDates, double membershipFees, double[] dOtherFees = null, string[] strOtherFees = null)
         {
             this.strName = strName;
-            this.sMembers = 0;
-            this.sNumber = index;
-            for(int i = 0; i < 120; i++)
-                members[i] = -1; //set to -1 so we know it does not represent member 0
+            this.numMembers = 0;
+            this.termIndex = index;
+            for (int i = 0; i < 120; i++)
+                members[i] = -1; // set to -1 so we know it does not represent member 0
             this.startDate = start;
             this.endDate = end;
-            this.sRehearsals = numRehearsals;
+            this.numRehearsals = numRehearsals;
             this.rehearsalDates = new DateTime[numRehearsals];
-            for (int i = 0; i < sRehearsals; i++)
+            for (int i = 0; i < numRehearsals; i++)
                 this.rehearsalDates[i] = rehearsalDates[i];
             this.membershipFees = membershipFees;
             if (dOtherFees != null)
             {
-                this.iOtherFees = Convert.ToInt16(dOtherFees.Length);
+                this.numOtherFees = Convert.ToInt16(dOtherFees.Length);
             }
             else
             {
-                this.iOtherFees = 0;
+                this.numOtherFees = 0;
             }
-            this.dOtherFees = new double[iOtherFees];
-            this.strOtherFees = new string[iOtherFees];
-            for (int i = 0; i < iOtherFees; i++)
+
+            this.otherFeesAmounts = new double[numOtherFees];
+            this.otherFeesNames = new string[numOtherFees];
+            for (int i = 0; i < numOtherFees; i++)
             {
-                this.dOtherFees[i] = dOtherFees[i];
-                this.strOtherFees[i] = strOtherFees[i];
+                this.otherFeesAmounts[i] = dOtherFees[i];
+                this.otherFeesNames[i] = strOtherFees[i];
             }
-            //initialize the attendance record
-            //it only means something if the rehearsal has happened and there is a member for that record
-            attendance = new bool[120, sRehearsals];
+
+            // initialize the attendance record
+            // it only means something if the rehearsal has happened and there is a member for that record
+            attendance = new bool[120, numRehearsals];
             for (int i = 0; i < 120; i++)
-                for (int j = 0; j < sRehearsals; j++)
+                for (int j = 0; j < numRehearsals; j++)
                     this.attendance[i, j] = false;
-            this.feesPaid = new double[120, 1 + iOtherFees];
-            this.feesPaidDate = new DateTime[120, 1 + iOtherFees];
+            this.feesPaid = new double[120, 1 + numOtherFees];
+            this.feesPaidDate = new DateTime[120, 1 + numOtherFees];
             checkLimbo();
         }
 
-        public term(StreamReader sr)
+        public Term(StreamReader sr)
         {
             strName = sr.ReadLine();
-            sMembers = Convert.ToInt16(sr.ReadLine());
-            sNumber = Convert.ToInt16(sr.ReadLine());
+            numMembers = Convert.ToInt16(sr.ReadLine());
+            termIndex = Convert.ToInt16(sr.ReadLine());
             for (int i = 0; i < 120; i++)
                 members[i] = Convert.ToInt16(sr.ReadLine());
             startDate = new DateTime(Convert.ToInt64(sr.ReadLine()));
             endDate = new DateTime(Convert.ToInt64(sr.ReadLine()));
-            sRehearsals = Convert.ToInt16(sr.ReadLine());
-            rehearsalDates = new DateTime[sRehearsals];
-            for (int i = 0; i < sRehearsals; i++)
+            numRehearsals = Convert.ToInt16(sr.ReadLine());
+            rehearsalDates = new DateTime[numRehearsals];
+            for (int i = 0; i < numRehearsals; i++)
                 this.rehearsalDates[i] = new DateTime(Convert.ToInt64(sr.ReadLine()));
             membershipFees = Convert.ToDouble(sr.ReadLine());
-            iOtherFees = Convert.ToInt32(sr.ReadLine());
-            dOtherFees = new double[iOtherFees];
-            strOtherFees = new string[iOtherFees];
-            for (int i = 0; i < iOtherFees; i++)
+            numOtherFees = Convert.ToInt32(sr.ReadLine());
+            otherFeesAmounts = new double[numOtherFees];
+            otherFeesNames = new string[numOtherFees];
+            for (int i = 0; i < numOtherFees; i++)
             {
-                dOtherFees[i] = Convert.ToDouble(sr.ReadLine());
-                strOtherFees[i] = sr.ReadLine();
+                otherFeesAmounts[i] = Convert.ToDouble(sr.ReadLine());
+                otherFeesNames[i] = sr.ReadLine();
             }
-            attendance = new bool[120, sRehearsals];
+
+            attendance = new bool[120, numRehearsals];
             for (int i = 0; i < 120; i++)
             {
-                for (int j = 0; j < sRehearsals; j++)
+                for (int j = 0; j < numRehearsals; j++)
                 {
                     attendance[i, j] = Convert.ToBoolean(sr.ReadLine());
                 }
             }
-            feesPaid = new double[120, 1 + iOtherFees];
-            feesPaidDate = new DateTime[120, 1 + iOtherFees];
+
+            feesPaid = new double[120, 1 + numOtherFees];
+            feesPaidDate = new DateTime[120, 1 + numOtherFees];
             for (int i = 0; i < 120; i++)
             {
-                for (int j = 0; j < 1 + iOtherFees; j++)
+                for (int j = 0; j < 1 + numOtherFees; j++)
                 {
                     feesPaid[i, j] = Convert.ToDouble(sr.ReadLine());
                     feesPaidDate[i, j] = new DateTime(Convert.ToInt64(sr.ReadLine()));
                 }
             }
+
             checkLimbo();
         }
 
-        public term()
+        public Term()
         {
-            //really, just make one
+            // really, just make one
         }
 
         /// <summary>
         /// Saves the term data to a .mrb file
         /// </summary>
-        /// <param name="bw">BinaryWriter initialized with save location</param>
+        /// <param name="sw">StreamWriter initialized with save location</param>
         public void saveTerm(StreamWriter sw)
         {
             sw.WriteLine(strName);
-            sw.WriteLine(sMembers);
-            sw.WriteLine(sNumber);
+            sw.WriteLine(numMembers);
+            sw.WriteLine(termIndex);
             for (int i = 0; i < 120; i++)
                 sw.WriteLine(members[i]);
-            //start and end date
+            // start and end date
             sw.WriteLine(startDate.Ticks);
             sw.WriteLine(endDate.Ticks);
-            sw.WriteLine(sRehearsals);
-            for (int i = 0; i < sRehearsals; i++)
+            sw.WriteLine(numRehearsals);
+            for (int i = 0; i < numRehearsals; i++)
                 sw.WriteLine(this.rehearsalDates[i].Ticks);
             sw.WriteLine(membershipFees);
-            sw.WriteLine(iOtherFees);
-            for (int i = 0; i < iOtherFees; i++)
+            sw.WriteLine(numOtherFees);
+            for (int i = 0; i < numOtherFees; i++)
             {
-                sw.WriteLine(dOtherFees[i]);
-                sw.WriteLine(strOtherFees[i]);
+                sw.WriteLine(otherFeesAmounts[i]);
+                sw.WriteLine(otherFeesNames[i]);
             }
             for (int i = 0; i < 120; i++)
             {
-                for (int j = 0; j < sRehearsals; j++)
+                for (int j = 0; j < numRehearsals; j++)
                 {
                     sw.WriteLine(attendance[i, j]);
                 }
             }
             for (int i = 0; i < 120; i++)
             {
-                for (int j = 0; j < 1 + iOtherFees; j++)
+                for (int j = 0; j < 1 + numOtherFees; j++)
                 {
                     sw.WriteLine(feesPaid[i, j]);
                     sw.WriteLine(feesPaidDate[i, j].Ticks);
@@ -181,7 +197,7 @@ namespace Marimba
         /// <returns>Index in term (0 to 119) if found, -1 if not found</returns>
         public int memberSearch(short sID)
         {
-            for (int i = 0; i < sMembers; i++)
+            for (int i = 0; i < numMembers; i++)
                 if (members[i] == sID)
                     return i;
             return -1;
@@ -189,13 +205,13 @@ namespace Marimba
 
         public bool addMember(short sID)
         {
-            //first, make sure the member is not already part of the term
-            //also fail if we have 120 members already this term
-            if (this.memberSearch(sID) != -1 || sMembers == 120)
+            // first, make sure the member is not already part of the term
+            // also fail if we have 120 members already this term
+            if (this.memberSearch(sID) != -1 || numMembers == 120)
                 return false;
-            //at this point, not already a member, so add them to the term
-            members[sMembers] = sID;
-            sMembers++;
+            // at this point, not already a member, so add them to the term
+            members[numMembers] = sID;
+            numMembers++;
             return true;
         }
 
@@ -206,23 +222,23 @@ namespace Marimba
         /// <returns>True if removing member was successful</returns>
         public bool removeMember(short termIndex)
         {
-            //make sure this member indeed exists
-            //and that the member has no attendance
+            // make sure this member indeed exists
+            // and that the member has no attendance
             if (this.members[termIndex] == -1 || iMemberAttendance(termIndex) != 0)
                 return false;
-            //move the reference indices and attendance to the correct member
-            for (int i = termIndex; i < this.sMembers; i++)
+            // move the reference indices and attendance to the correct member
+            for (int i = termIndex; i < this.numMembers; i++)
             {
                 members[i] = members[i + 1];
-                for (int j = 0; j < sRehearsals; j++)
+                for (int j = 0; j < numRehearsals; j++)
                     attendance[i, j] = attendance[i + 1, j];
-                for (int j = 0; j<=iOtherFees;j++)
+                for (int j = 0; j <= numOtherFees; j++)
                 {
                     feesPaid[i, j] = feesPaid[i + 1, j];
                     feesPaidDate[i, j] = feesPaidDate[i + 1, j];
                 }
             }
-            sMembers--;
+            numMembers--;
             return true;
         }
 
@@ -233,7 +249,7 @@ namespace Marimba
         /// <returns>The index of the rehearsal. Returns -1 if date is not found.</returns>
         public int rehearsalIndex(DateTime currentDate)
         {
-            for (int i = 0; i < sRehearsals; i++)
+            for (int i = 0; i < numRehearsals; i++)
                 if (rehearsalDates[i] == currentDate)
                     return i;
             return -1;
@@ -246,8 +262,8 @@ namespace Marimba
         /// <returns>Array containing attendance</returns>
         public bool[] memberAttendance(int iID)
         {
-            bool[] output = new bool[sRehearsals];
-            for (int i = 0; i < sRehearsals; i++)
+            bool[] output = new bool[numRehearsals];
+            for (int i = 0; i < numRehearsals; i++)
                 output[i] = attendance[iID, i];
             return output;
         }
@@ -255,12 +271,12 @@ namespace Marimba
         /// <summary>
         /// Counts the number of rehearsals a member attended in the term
         /// </summary>
-        /// <param name="iID"></param>
-        /// <returns></returns>
+        /// <param name="iID">The ID of the member</param>
+        /// <returns>Number of rehearsals attended, a non-negative integer</returns>
         public int iMemberAttendance(int iID)
         {
             int output = 0;
-            for (int i = 0; i < sRehearsals; i++)
+            for (int i = 0; i < numRehearsals; i++)
                 if (attendance[iID, i])
                     output++;
             return output;
@@ -269,12 +285,12 @@ namespace Marimba
         /// <summary>
         /// Counts the number of people who attended a rehearsal
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <param name="index">Rehearsal index number</param>
+        /// <returns>A non-negative integer</returns>
         public int iRehearsalAttendance(int index)
         {
             int output = 0;
-            for (int i = 0; i < sMembers; i++)
+            for (int i = 0; i < numMembers; i++)
                 if (attendance[i, index])
                     output++;
             return output;
@@ -288,10 +304,10 @@ namespace Marimba
         public int recentRehearsal(DateTime currentDate)
         {
             int i;
-            for (i = 0; i < sRehearsals; i++)
+            for (i = 0; i < numRehearsals; i++)
                 if ((currentDate - rehearsalDates[i]).Days < 0)
-                    return i-1;
-            return sRehearsals-1;
+                    return i - 1;
+            return numRehearsals - 1;
         }
 
         /// <summary>
@@ -302,9 +318,10 @@ namespace Marimba
         /// <param name="term1">First term</param>
         /// <param name="term2">Second term</param>
         /// <returns>Returns index of last common member</returns>
-        public static int lastCommonMember(int low, int high, term term1, term term2)
+        public static int lastCommonMember(int low, int high, Term term1, Term term2)
         {
-            if (low >= high) //found the first differing member
+            // found the first differing member
+            if (low >= high)
             {
                 if (term1.members[low] == term2.members[low])
                     return low;
@@ -328,19 +345,19 @@ namespace Marimba
         /// <returns>True if member is in limbo for term</returns>
         public bool checkLimbo(int iMember)
         {
-            //we need to establish some rules for who is and is not a limbo member
-            //here are the rules I decided
-            //1) Even if someone tells us they will not be returning, we do not mark them as such
+            // we need to establish some rules for who is and is not a limbo member
+            // here are the rules I decided
+            // 1) Even if someone tells us they will not be returning, we do not mark them as such
             //   If someone has attended enough practices, they may vote if they have paid membership dues
             //   Also, we do not let them off the hook if they have attended over half of the practices
             //   They almost certainly used club resources (e.g. attended socials, etc.)
-            //2) As hinted in one, they have attended fewer than half of the rehearsals
-            //3) They have missed three rehearsals in a row, and did not attend any future ones
-            //NOTE: A member may be de-limboed if they attend enough future practices during the term
+            // 2) As hinted in one, they have attended fewer than half of the rehearsals
+            // 3) They have missed three rehearsals in a row, and did not attend any future ones
+            // NOTE: A member may be de-limboed if they attend enough future practices during the term
             int lastRehearsal = recentRehearsal(DateTime.Today);
             if (lastRehearsal >= 2 && (!attendance[iMember, lastRehearsal] && !attendance[iMember, lastRehearsal - 1] && !attendance[iMember, lastRehearsal - 2])
-                && iMemberAttendance(iMember) <= sRehearsals / 2)
-                //member is in limbo
+                && iMemberAttendance(iMember) <= numRehearsals / 2)
+                // member is in limbo
                 return true;
             else
                 return false;
@@ -348,12 +365,12 @@ namespace Marimba
 
         public void checkLimbo()
         {
-            //check limbo for all members and update limbo information
+            // check limbo for all members and update limbo information
             iLimbo = 0;
-            for (int i = 0; i < sMembers; i++)
+            for (int i = 0; i < numMembers; i++)
             {
                 limboMembers[i] = checkLimbo(i);
-                if(limboMembers[i])
+                if (limboMembers[i])
                     iLimbo++;
             }
         }

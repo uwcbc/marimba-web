@@ -21,9 +21,9 @@ namespace Marimba
             List<ListViewItem> historyList = new List<ListViewItem>();
             lvMain.Items.Clear();
             //show the last twenty changes
-            for (int i = clsStorage.currentClub.historyList.Count - 1; i >= 0; i--)
-                historyList.Add(new ListViewItem(new string[2]{clsStorage.currentClub.historyList[i].toString(),
-                    clsStorage.currentClub.historyList[i].time.ToString()}));
+            for (int i = ClsStorage.currentClub.historyList.Count - 1; i >= 0; i--)
+                historyList.Add(new ListViewItem(new string[2]{ClsStorage.currentClub.historyList[i].ToString(),
+                    ClsStorage.currentClub.historyList[i].time.ToString()}));
             lvMain.Items.AddRange(historyList.ToArray());
         }
     }

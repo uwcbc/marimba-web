@@ -21,12 +21,12 @@ namespace Marimba
         private void cbTerm_SelectedIndexChanged(object sender, EventArgs e)
         {
             //update limbo information
-            clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].checkLimbo();
+            ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].checkLimbo();
             btnExport.Enabled = true;
             //balance sheet
             lvBalance.Items.Clear();
             lvBalance.Items.Add("Balance Sheet");
-            lvBalance.Items.Add("As of " + clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.ToLongDateString());
+            lvBalance.Items.Add("As of " + ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.ToLongDateString());
             lvBalance.Items.Add("");
             lvBalance.Items.Add("Assets");
             lvBalance.Items.Add("Current Assets");
@@ -37,24 +37,24 @@ namespace Marimba
             double[] dDep = new double[12];
             string[] strAsset = new string[12];
 
-            foreach (budgetItem item in clsStorage.currentClub.budget)
+            foreach (BudgetItem item in ClsStorage.currentClub.budget)
             {
 
                 //ignore all budget items that take effect after the last date of the term
                 if (item.dateAccount <
-                        clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
+                        ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
                 {
                     //cash
-                    if (item.type == Enumerations.TransactionType.Revenue)
+                    if (item.type == TransactionType.Revenue)
                     {
                         dCash += item.value;
                         dAssets += item.value;
                     }
-                    else if (item.type == Enumerations.TransactionType.Asset)
+                    else if (item.type == TransactionType.Asset)
                     {
                         dCash -= item.value;
                     }
-                    else if (item.type == Enumerations.TransactionType.Expense)
+                    else if (item.type == TransactionType.Expense)
                     {
                         dCash -= item.value;
                         dAssets -= item.value;
@@ -66,9 +66,9 @@ namespace Marimba
                     }
                     //capital assets & depreciation
                     //ignore fully depreciated assets up to this date
-                    if (item.type == Enumerations.TransactionType.Asset && !clsStorage.currentClub.fullyDepreciatedAsset(item, clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
-                        || item.type == Enumerations.TransactionType.Depreciation
-                        && !clsStorage.currentClub.fullyDepreciatedAsset(item.depOfAsset, clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1)))
+                    if (item.type == TransactionType.Asset && !ClsStorage.currentClub.DetermineIsFullyDepreciated(item, ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
+                        || item.type == TransactionType.Depreciation
+                        && !ClsStorage.currentClub.DetermineIsFullyDepreciated(item.depOfAsset, ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1)))
                     {
                         int iIndex = iRevenueSearch(0, 11, item.cat, strAsset, true);
                         if (iIndex == -1) //asset category does not exist
@@ -79,7 +79,7 @@ namespace Marimba
                             for (int j = 9; j > iIndex; j--)
                             {
                                 strAsset[j] = strAsset[j - 1];
-                                if (item.type == Enumerations.TransactionType.Asset)
+                                if (item.type == TransactionType.Asset)
                                     dAsset[j] = dAsset[j - 1];
                                 else
                                     dDep[j] = dDep[j - 1];
@@ -87,14 +87,14 @@ namespace Marimba
 
                             }
                             strAsset[iIndex] = item.cat;
-                            if (item.type == Enumerations.TransactionType.Asset)
+                            if (item.type == TransactionType.Asset)
                                 dAsset[iIndex] = item.value;
                             else
                                 dDep[iIndex] = item.value;
                         }
                         else //asset category already exists
                         {
-                            if (item.type == Enumerations.TransactionType.Asset)
+                            if (item.type == TransactionType.Asset)
                                 dAsset[iIndex] += item.value;
                             else
                                 dDep[iIndex] += item.value;
@@ -136,11 +136,11 @@ namespace Marimba
             //we'll do a separate loop to keep it clean and easier to follow
             lvIncome.Items.Clear();
             lvIncome.Items.Add("Income Statement");
-            lvIncome.Items.Add("For the term " + clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].strName);
+            lvIncome.Items.Add("For the term " + ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].strName);
             lvIncome.Items.Add("");
             //membership and other fees
             double dDiscounts = 0, dUncollected = 0, dLimbo = 0;
-            double[] dOther = new double[clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iOtherFees];
+            double[] dOther = new double[ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].numOtherFees];
             //cost of membership
             double dButtons = 0, dRentalSub = 0, dWMF = 0;
 
@@ -156,30 +156,30 @@ namespace Marimba
             //Waives are a pain
 
             //membership fees
-            for (int i = 0; i < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].sMembers;i++)
+            for (int i = 0; i < ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].numMembers;i++)
             {
                 //not a limbo member and paid nothing
-                if (!clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].limboMembers[i] &&
-                    clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, 0] == 0) //uncollected fee
-                    dUncollected += clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].membershipFees;
+                if (!ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].limboMembers[i] &&
+                    ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, 0] == 0) //uncollected fee
+                    dUncollected += ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].membershipFees;
                 //discounts
                 //we will add membership fee waives later
-                else if (!clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].limboMembers[i] &&
-                    clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, 0] < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].membershipFees)
-                    dDiscounts += clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].membershipFees - clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, 0];
+                else if (!ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].limboMembers[i] &&
+                    ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, 0] < ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].membershipFees)
+                    dDiscounts += ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].membershipFees - ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, 0];
                 //add limbo members who paid membership fees
-                else if (clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].limboMembers[i])
-                    dLimbo += clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, 0];
+                else if (ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].limboMembers[i])
+                    dLimbo += ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, 0];
                 //add up other revenue sources
-                for (int j = 0; j < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iOtherFees; j++)
-                    dOther[j] += clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, j + 1];
+                for (int j = 0; j < ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].numOtherFees; j++)
+                    dOther[j] += ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].feesPaid[i, j + 1];
             }
-            foreach (budgetItem item in clsStorage.currentClub.budget)
+            foreach (BudgetItem item in ClsStorage.currentClub.budget)
             {              
                 //income statement, so ignore anything not affecting term
                 if (item.term == cbTerm.SelectedIndex)
                 {
-                    if (item.type == Enumerations.TransactionType.Revenue)
+                    if (item.type == TransactionType.Revenue)
                     {
                         int iIndex = iRevenueSearch(0, 9, item.cat, strRev, true);
                         if (iIndex == -1) //revenue category does not exist
@@ -198,7 +198,7 @@ namespace Marimba
                         else //revenue category already exists
                             dRev[iIndex] += item.value;
                     }
-                    else if (item.type != Enumerations.TransactionType.Asset)
+                    else if (item.type != TransactionType.Asset)
                     {
                         if (item.cat == "Waived Membership Fee")
                         {
@@ -281,10 +281,10 @@ namespace Marimba
             lvIncome.Items.Add("");
             lvIncome.Items.Add(new ListViewItem(new string[4] { "Net Income", "", "", (dInflow-dOutflow).ToString("C") }));
             lvIncome.Items.Add("");
-            lvIncome.Items.Add(new ListViewItem(new string[4] { "Number of Members", "", "", Convert.ToString(clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].sMembers
-                - clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iLimbo) }));
+            lvIncome.Items.Add(new ListViewItem(new string[4] { "Number of Members", "", "", Convert.ToString(ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].numMembers
+                - ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iLimbo) }));
             lvIncome.Items.Add(new ListViewItem(new string[4] { "Profit per Member", "", "", ((dInflow-dOutflow)/
-                (clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].sMembers - clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iLimbo)).ToString("C") }));
+                (ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].numMembers - ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].iLimbo)).ToString("C") }));
 
             //cash flow statement
             //cash is of course different from revenue
@@ -302,31 +302,31 @@ namespace Marimba
 
             //dValue is a temporary variable to help calculate cash flow for an individual item
             double dValue = 0;
-            foreach (budgetItem item in clsStorage.currentClub.budget)
+            foreach (BudgetItem item in ClsStorage.currentClub.budget)
             {
                 //if occured before the start of the term
                 if (item.dateAccount <
-                    clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].startDate)
+                    ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].startDate)
                 {
-                    if (item.type == Enumerations.TransactionType.Revenue)
+                    if (item.type == TransactionType.Revenue)
                         dBegCash += item.value;
-                    else if (item.type == Enumerations.TransactionType.Asset ||
-                        item.type == Enumerations.TransactionType.Expense)
+                    else if (item.type == TransactionType.Asset ||
+                        item.type == TransactionType.Expense)
                         dBegCash -= item.value;
                 }
                 //occured in this term
-                else if (item.dateAccount < clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
+                else if (item.dateAccount < ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].endDate.AddDays(1))
                 {
                     dValue = item.value;
                     //ignore depreciation
-                    if (item.type == Enumerations.TransactionType.Depreciation)
+                    if (item.type == TransactionType.Depreciation)
                         dValue = 0;
                     //note to self: this section could be improved with arrays
                     //I decided against arrays here because the categories aren't yet final
                     //And the types for each category are also not yet final
                     //And it would cause a lot of headache if I had to add a category later and did not use this less efficient method
 
-                    else if (item.type == Enumerations.TransactionType.Expense || item.type == Enumerations.TransactionType.Asset)
+                    else if (item.type == TransactionType.Expense || item.type == TransactionType.Asset)
                     {
                         if (item.cat == "Waived Membership Fee")
                         {
@@ -391,7 +391,7 @@ namespace Marimba
             //put it all together
             lvCash.Items.Clear();
             lvCash.Items.Add("Cash Flow Statement");
-            lvCash.Items.Add("For the term " + clsStorage.currentClub.listTerms[cbTerm.SelectedIndex].strName);
+            lvCash.Items.Add("For the term " + ClsStorage.currentClub.listTerms[cbTerm.SelectedIndex].strName);
             lvCash.Items.Add("");
             lvCash.Items.Add("Cash Inflow");
             for (int i = 0; i < 10; i++)
@@ -446,10 +446,10 @@ namespace Marimba
 
         private void termFinancials_Load(object sender, EventArgs e)
         {
-            cbTerm.Items.AddRange(clsStorage.currentClub.termNames());
+            cbTerm.Items.AddRange(ClsStorage.currentClub.GetTermNames());
             //if we default to selecting current term, do so!
             if (Properties.Settings.Default.selectCurrentTerm)
-                cbTerm.SelectedIndex = clsStorage.currentClub.listTerms.Count - 1;
+                cbTerm.SelectedIndex = ClsStorage.currentClub.listTerms.Count - 1;
         }
 
         private void btnExport_Click(object sender, EventArgs e)
@@ -485,7 +485,7 @@ namespace Marimba
                         else
                             writeFinancialStatement(lvCash, writer);
                         if (Properties.Settings.Default.playSounds)
-                            sound.success.Play();
+                            Sound.Success.Play();
                     }
                 }
             }
@@ -521,7 +521,7 @@ namespace Marimba
                         output[i, j] = lv.Items[i].SubItems[j].Text;
                 }
             }
-            excelFile.saveFinancialStatement(output, strLocation, true);
+            ExcelFile.saveFinancialStatement(output, strLocation, true);
         }
     }
 }

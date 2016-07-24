@@ -1,6 +1,6 @@
 ﻿namespace Marimba
 {
-    partial class emailBrowser
+    partial class EmailForm
     {
         /// <summary>
         /// Required designer variable.

@@ -1,6 +1,6 @@
 ﻿namespace Marimba
 {
-    partial class about
+    partial class About
     {
         /// <summary>
         /// Required designer variable.

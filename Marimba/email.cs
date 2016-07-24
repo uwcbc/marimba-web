@@ -1,31 +1,39 @@
-﻿using Marimba.Utility;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Documents;
-using System.Xml;
-using ImapX;
-using ImapX.Enums;
-
-namespace Marimba
+﻿namespace Marimba
 {
-    class email
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Mail;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Xml;
+    using System.Windows.Forms;
+    using System.Windows.Documents;
+
+    using Marimba.Utility;
+    using ImapX;
+    using ImapX.Enums;
+
+    class Email
     {
-        ImapClient client;
-        SmtpClient sendClient;
-        string strAddress, strPassword;
         public static System.Drawing.Font unseen = new System.Drawing.Font("Quicksand", 9, System.Drawing.FontStyle.Bold);
+
         public static System.Drawing.Font seen = new System.Drawing.Font("Quicksand", 9);
 
         public bool loggedIn;
-        public email(string strAddress, string strPassword, string imapServer, bool bImapSSL, string smtpServer, int smtpPort, bool bSmtpSSL)
+        
+        private ImapClient client;
+
+        private SmtpClient sendClient;
+
+        private string strAddress;
+
+        private string strPassword;
+
+        public Email(string strAddress, string strPassword, string imapServer, bool bImapSSL, string smtpServer, int smtpPort, bool bSmtpSSL)
         {
             this.strAddress = strAddress;
             this.strPassword = strPassword;
@@ -37,70 +45,90 @@ namespace Marimba
             client.Behavior.AutoDownloadBodyOnAccess = false;
             client.Behavior.AutoPopulateFolderMessages = false;
 
-            //set up the smtp email server ports
-
+            // set up the smtp email server ports
             sendClient.Port = smtpPort;
             sendClient.Credentials = new System.Net.NetworkCredential(strAddress, strPassword);
             sendClient.EnableSsl = bSmtpSSL;
 
-            //no logging in yet, so mark as false
+            // no logging in yet, so mark as false
             loggedIn = false;
         }
 
         public bool login()
         {
             loggedIn = false;
-            //don't even try if there is no password
-            if(strPassword != "")
-                if(client.Connect())
-                {
+
+            // don't even try if there is no password
+            if (strPassword != String.Empty)
+                if (client.Connect())
                     if (client.Login(strAddress, strPassword))
                         loggedIn = true;
-                }
+
             return loggedIn;
         }
 
-        public void changePassword(string strPassword)
+        public void ChangePassword(string strPassword)
         {
             this.strPassword = strPassword;
         }
 
-        public List<ListViewItem> folderItems()
+        public List<ListViewItem> GetFolderItems()
         {
             try
             {
-                //first, we need to figure out how many items there are
-                //this downloads just the numbers
+                // first, we need to figure out how many items there are
+                // this downloads just the numbers
                 client.Folders.Inbox.Messages.Download("ALL", MessageFetchMode.None);
-                //defaults to inbox
+
+                // defaults to inbox
                 int max = Convert.ToInt32(client.Folders.Inbox.Exists);
                 List<ListViewItem> output = new List<ListViewItem>();
                 string[] header = new string[2];
 
                 string strDisplayName;
-                //int totalMessage = client.Folders.Inbox.Messages.Count();
                 for (int i = max - 1; i >= max - 40; i--)
                 {
                     client.Folders.Inbox.Messages[i].Download();
                     if (client.Folders.Inbox.Messages[i].Date != null)
                     {
-                        //check for a display name
-                        //if none is present, show the email address instead
+                        // check for a display name
+                        // if none is present, show the email address instead
                         if (String.IsNullOrEmpty(client.Folders.Inbox.Messages[i].From.DisplayName))
                             strDisplayName = client.Folders.Inbox.Messages[i].From.Address;
                         else
                             strDisplayName = client.Folders.Inbox.Messages[i].From.DisplayName;
 
                         if (client.Folders.Inbox.Messages[i].Seen)
-                            output.Add(new ListViewItem(new string[5] { strDisplayName, client.Folders.Inbox.Messages[i].Subject,
-                client.Folders.Inbox.Messages[i].Date.ToString(), formatFileSize(client.Folders.Inbox.Messages[i].Size), i.ToString()}, -1, System.Drawing.SystemColors.WindowText,
-                    System.Drawing.SystemColors.Window, seen));
+                            output.Add(new ListViewItem(
+                                new string[5]
+                                {
+                                    strDisplayName,
+                                    client.Folders.Inbox.Messages[i].Subject,
+                                    client.Folders.Inbox.Messages[i].Date.ToString(),
+                                    formatFileSize(client.Folders.Inbox.Messages[i].Size),
+                                    i.ToString()
+                                },
+                                -1,
+                                System.Drawing.SystemColors.WindowText,
+                                System.Drawing.SystemColors.Window,
+                                seen));
                         else
-                            output.Add(new ListViewItem(new string[5] { strDisplayName, client.Folders.Inbox.Messages[i].Subject,
-                client.Folders.Inbox.Messages[i].Date.ToString(), formatFileSize(client.Folders.Inbox.Messages[i].Size), i.ToString()}, -1, System.Drawing.SystemColors.WindowText,
-                    System.Drawing.SystemColors.Window, unseen));
+                            output.Add(new ListViewItem(
+                                new string[5]
+                                {
+                                    strDisplayName,
+                                    client.Folders.Inbox.Messages[i].Subject,
+                                    client.Folders.Inbox.Messages[i].Date.ToString(),
+                                    formatFileSize(client.Folders.Inbox.Messages[i].Size),
+                                    i.ToString()
+                                },
+                                -1,
+                                System.Drawing.SystemColors.WindowText,
+                                System.Drawing.SystemColors.Window,
+                                unseen));
                     }
                 }
+
                 return output;
             }
             catch (ArgumentOutOfRangeException)
@@ -113,84 +141,109 @@ namespace Marimba
             }
         }
 
-        public List<ListViewItem> folderItems(int iStart, int iMore)
+        public List<ListViewItem> folderItems(int start, int more)
         {
-            //first, we need to figure out how many items there are
-            //this downloads just the numbers
+            // first, we need to figure out how many items there are
+            // this downloads just the numbers
             client.Folders.Inbox.Messages.Download("ALL", MessageFetchMode.None);
-            //defaults to inbox
+
+            // defaults to inbox
             int max = Convert.ToInt32(client.Folders.Inbox.Exists);
             List<ListViewItem> output = new List<ListViewItem>();
             string[] header = new string[2];
 
             string strDisplayName;
 
-            for (int i = max - iStart - 1; i >= max - iStart - iMore; i--)
+            for (int i = max - start - 1; i >= max - start - more; i--)
             {
                 client.Folders.Inbox.Messages[i].Download();
-                //check for a display name
-                //if none is present, show the email address instead
+
+                // check for a display name
+                // if none is present, show the email address instead
                 if (String.IsNullOrEmpty(client.Folders.Inbox.Messages[i].From.DisplayName))
                     strDisplayName = client.Folders.Inbox.Messages[i].From.Address;
                 else
                     strDisplayName = client.Folders.Inbox.Messages[i].From.DisplayName;
 
-                if(client.Folders.Inbox.Messages[i].Seen)
-                    output.Add(new ListViewItem(new string[5] { strDisplayName, client.Folders.Inbox.Messages[i].Subject,
-                client.Folders.Inbox.Messages[i].Date.ToString(), formatFileSize(client.Folders.Inbox.Messages[i].Size), i.ToString()}, -1, System.Drawing.SystemColors.WindowText,
-                System.Drawing.SystemColors.Window, seen));
+                if (client.Folders.Inbox.Messages[i].Seen)
+                    output.Add(new ListViewItem(
+                        new string[5]
+                        {
+                            strDisplayName,
+                            client.Folders.Inbox.Messages[i].Subject,
+                            client.Folders.Inbox.Messages[i].Date.ToString(),
+                            formatFileSize(client.Folders.Inbox.Messages[i].Size),
+                            i.ToString()
+                        },
+                        -1,
+                        System.Drawing.SystemColors.WindowText,
+                        System.Drawing.SystemColors.Window,
+                        seen));
                 else
-                    output.Add(new ListViewItem(new string[5] { strDisplayName, client.Folders.Inbox.Messages[i].Subject,
-                client.Folders.Inbox.Messages[i].Date.ToString(), formatFileSize(client.Folders.Inbox.Messages[i].Size), i.ToString()}, -1, System.Drawing.SystemColors.WindowText,
-                System.Drawing.SystemColors.Window, unseen));
+                    output.Add(new ListViewItem(
+                        new string[5]
+                        {
+                            strDisplayName,
+                            client.Folders.Inbox.Messages[i].Subject,
+                            client.Folders.Inbox.Messages[i].Date.ToString(),
+                            formatFileSize(client.Folders.Inbox.Messages[i].Size),
+                            i.ToString()
+                        },
+                        -1,
+                        System.Drawing.SystemColors.WindowText,
+                        System.Drawing.SystemColors.Window,
+                        unseen));
             }
+
             return output;
         }
 
         public ImapX.Message returnMessage(int messageIndex)
         {
-            //download the entire message, then return it
+            // download the entire message, then return it
             client.Folders.Inbox.Messages[messageIndex].Download(ImapX.Enums.MessageFetchMode.Basic);
-            //mark the message as having been seen
+
+            // mark the message as having been seen
             client.Folders.Inbox.Messages[messageIndex].Seen = true;
             return client.Folders.Inbox.Messages[messageIndex];
         }
 
-        public bool sendMessage(string[] toAddress, string[] toName, string strSubject, string strHTML, Enumerations.EmailPurpose purpose = Enumerations.EmailPurpose.Send)
+        public bool SendMessage(string[] toAddress, string[] toName, string strSubject, string strHTML, EmailPurpose purpose = EmailPurpose.Send)
         {
-            //set up a try, catch thing... sending emails is tricky business
+            // set up a try, catch thing... sending emails is tricky business
             try
             {
                 MailMessage mail = new MailMessage();
-                //Note to self: change this
-                mail.From = new System.Net.Mail.MailAddress(strAddress,clsStorage.currentClub.strName);
 
-                //check that the address and name arrays are the same
+                // Note to self: change this
+                mail.From = new System.Net.Mail.MailAddress(strAddress, ClsStorage.currentClub.strName);
+
+                // check that the address and name arrays are the same
                 int iLength = toAddress.Length;
                 if (iLength != toName.Length)
                     return false;
                 else
                 {
-                    //add the to names
-                    //if bcc'ing, then only bcc
-                    if (purpose == Enumerations.EmailPurpose.Send || purpose == Enumerations.EmailPurpose.Forward || purpose == Enumerations.EmailPurpose.Reply)
+                    // add the to names
+                    // if bcc'ing, then only bcc
+                    if (purpose == EmailPurpose.Send || purpose == EmailPurpose.Forward || purpose == EmailPurpose.Reply)
                         for (int i = 0; i < iLength; i++)
                             mail.To.Add(new System.Net.Mail.MailAddress(toAddress[i], toName[i]));
                     else
                         for (int i = 0; i < iLength; i++)
                             mail.Bcc.Add(new System.Net.Mail.MailAddress(toAddress[i], toName[i]));
 
-                    //now set the meat of the message
+                    // now set the meat of the message
                     mail.Subject = strSubject;
                     mail.IsBodyHtml = true;
                     mail.Body = strHTML;
 
-                    //send it!
+                    // send it!
                     sendClient.Send(mail);
-                    //success!
+
+                    // success!
                     return true;
-                }                   
-                
+                }          
             }
             catch
             {
@@ -207,8 +260,7 @@ namespace Marimba
             }
             catch
             {
-                //if this fails, it is because of timeout issues
-                //in my opinion, this is not an issue
+                // if this fails, it is because of timeout issues; in my opinion, this is not an issue
             }
         }
 
@@ -218,13 +270,10 @@ namespace Marimba
                 return bytes + " B";
 
             bytes = bytes / 1024;
-
             if (bytes < 1024)
                 return bytes + " KB";
 
             bytes = bytes / 1024;
-
-
             return bytes + " MB";
         }
 
@@ -232,55 +281,49 @@ namespace Marimba
         /// Creates signature to attach at the end of the email
         /// </summary>
         /// <returns>HTML code of the signature</returns>
-        public string createSignature()
+        public string CreateSignature()
         {
             string output = "<div><p class=\"ecxMsoNormal\"><span style=\"font-size:12.0pt;font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;;color:#1F497D;\">--- <br><b>~" + Properties.Settings.Default.signatureName;
             if (!String.IsNullOrEmpty(Properties.Settings.Default.signaturePosition))
                 output += "<br>" + Properties.Settings.Default.signaturePosition;
-            output += "<br>UW Concert Band Club</b><br><a href=\"mailto:uwconcertbandclub@gmail.com\" target=\"_blank\">uwconcertbandclub@gmail.com</a><br><a href=\"http://uwcbc.uwaterloo.ca/\" target=\""+
-                "_blank\">http://uwcbc.uwaterloo.ca</a><br><a href=\"http://tinyurl.com/uwcbc\" target=\"_blank\">Facebook</a><br><br></span><span style=\"font-size:7.5pt;font-family:&quot;Calibri&quot;,"+
-                "&quot;sans-serif&quot;;color:#1F497D;\">UW Concert Band Club does not represent the <a href=\"http://feds.ca/\" target=\"_blank\">Federation of Students (FEDs)</a>.<br>To remove yourself "+
-                "from this mailing list, <a href=\"mailto:uwconcertbandclub@gmail.com?subject=Unsubscribe\" target=\"_blank\">send an email to this account</a> with 'Unsubscribe' as the subject</span>"+
+            output += "<br>UW Concert Band Club</b><br><a href=\"mailto:uwconcertbandclub@gmail.com\" target=\"_blank\">uwconcertbandclub@gmail.com</a><br><a href=\"http://uwcbc.uwaterloo.ca/\" target=\"" +
+                "_blank\">http://uwcbc.uwaterloo.ca</a><br><a href=\"http://tinyurl.com/uwcbc\" target=\"_blank\">Facebook</a><br><br></span><span style=\"font-size:7.5pt;font-family:&quot;Calibri&quot;," +
+                "&quot;sans-serif&quot;;color:#1F497D;\">UW Concert Band Club does not represent the <a href=\"http://feds.ca/\" target=\"_blank\">Federation of Students (FEDs)</a>.<br>To remove yourself " +
+                "from this mailing list, <a href=\"mailto:uwconcertbandclub@gmail.com?subject=Unsubscribe\" target=\"_blank\">send an email to this account</a> with 'Unsubscribe' as the subject</span>" +
                 "<span style=\"font-size:12.0pt;font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;;color:#1F497D;\">.</span></p></div>";
             return output;
         }
 
-        public static string replyHeader(string strFromAddress, string strFromName, DateTime timeSent, string strTo, string strSubject, Enumerations.EmailPurpose use)
+        public static string replyHeader(string strFromAddress, string strFromName, DateTime timeSent, string strTo, string strSubject, EmailPurpose use)
         {
-            //go through the various elements and implement them
+            // go through the various elements and implement them
             string output = "<p class=MsoNormal><span style='color:#1F497D'><o:p>&nbsp;</o:p></span></p><div><div style='border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0cm 0cm 0cm'><p class=MsoNormal><b>";
             output += "<span lang=EN-US style='mso-fareast-language:EN-CA'>From:</span></b><span lang=EN-US style='mso-fareast-language:EN-CA'>";
             output += String.Format(" {0} [mailto:{1}] <br>", strFromName, strFromAddress);
             output += "<b>Sent:</b> " + timeSent.ToLongDateString() + " " + timeSent.ToLongTimeString() + "<br>";
             output += "<b>To:</b> " + strTo + "<br><b>Subject:</b> ";
-            //correctly mark whether this is a reply or forwarding
+
+            // correctly mark whether this is a reply or forwarding
             output += replySubject(strSubject, use);
             output += strSubject + "<o:p></o:p></span></p>";
             return output;
         }
 
-        public static string replySubject(string strSubject, Enumerations.EmailPurpose use)
+        public static string replySubject(string strSubject, EmailPurpose use)
         {
-            if (use == Enumerations.EmailPurpose.Reply && !strSubject.StartsWith("re:", true, null))
+            if (use == EmailPurpose.Reply && !strSubject.StartsWith("re:", true, null))
                 return "RE: " + strSubject;
-            else if (use == Enumerations.EmailPurpose.Forward && !strSubject.StartsWith("fw:", true, null))
+            else if (use == EmailPurpose.Forward && !strSubject.StartsWith("fw:", true, null))
                 return "FW: " + strSubject;
             else
                 return strSubject;
         }
     }
 
+    // Note: I borrowed the code to do this from here: http://code.msdn.microsoft.com/windowsdesktop/Converting-between-RTF-and-aaa02a6e/sourcecode?fileId=21412&pathId=403327065
 
-
-
-
-
-    //Note: I borrowed the code to do this from here: http://code.msdn.microsoft.com/windowsdesktop/Converting-between-RTF-and-aaa02a6e/sourcecode?fileId=21412&pathId=403327065
-
-
-     /// <summary> 
-    /// RTFtoHTML is a static class that takes an HTML string 
-    /// and converts it into XAML 
+    /// <summary> 
+    /// RTFtoHTML is a static class that takes an HTML string and converts it into XAML
     /// </summary> 
     public static class RTFtoHTML
     { 
@@ -288,20 +331,18 @@ namespace Marimba
         // 
         // Internal Methods 
         // 
-        // --------------------------------------------------------------------- 
- 
+        // ---------------------------------------------------------------------
         #region Internal Methods 
+
+        private const string FlowDocumentFormat = "<FlowDocument>{0}</FlowDocument>";
  
         /// <summary> 
         /// Main entry point for Xaml-to-Html converter. 
         /// Converts a xaml string into html string. 
         /// </summary> 
-        /// <param name="xamlString"> 
-        /// Xaml strinng to convert. 
-        /// </param> 
-        /// <returns> 
-        /// Html string produced from a source xaml. 
-        /// </returns> 
+        /// <param name="xamlString">Xaml string to convert</param>
+        /// <param name="asFullDocument">Whether to write as full document</param>
+        /// <returns>Html string produced from a source xaml.</returns> 
         public static string ConvertXamlToHtml(string xamlString, bool asFullDocument) 
         { 
             XmlTextReader xamlReader; 
@@ -314,8 +355,8 @@ namespace Marimba
             htmlWriter = new XmlTextWriter(new StringWriter(htmlStringBuilder)); 
  
             if (!WriteFlowDocument(xamlReader, htmlWriter, asFullDocument)) 
-            { 
-                return ""; 
+            {
+                return String.Empty; 
             } 
  
             string htmlString = htmlStringBuilder.ToString(); 
@@ -326,7 +367,8 @@ namespace Marimba
         public static string ConvertRtfToXaml(string rtfText)
         {
             var richTextBox = new System.Windows.Controls.RichTextBox();
-            if (string.IsNullOrEmpty(rtfText)) return "";
+            if (string.IsNullOrEmpty(rtfText))
+                return String.Empty;
             var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
             using (var rtfMemoryStream = new MemoryStream())
             {
@@ -338,6 +380,7 @@ namespace Marimba
                     textRange.Load(rtfMemoryStream, DataFormats.Rtf);
                 }
             }
+
             using (var rtfMemoryStream = new MemoryStream())
             {
                 textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
@@ -349,8 +392,6 @@ namespace Marimba
                 }
             }
         }
-
-        private const string FlowDocumentFormat = "<FlowDocument>{0}</FlowDocument>";
 
         public static string ConvertRtfToHtml(string rtfText)
         {
@@ -371,47 +412,42 @@ namespace Marimba
         /// <summary> 
         /// Processes a root level element of XAML (normally it's FlowDocument element). 
         /// </summary> 
-        /// <param name="xamlReader"> 
-        /// XmlTextReader for a source xaml. 
-        /// </param> 
-        /// <param name="htmlWriter"> 
-        /// XmlTextWriter producing resulting html 
-        /// </param> 
+        /// <param name="xamlReader">XmlTextReader for a source xaml</param>
+        /// <param name="htmlWriter">XmlTextWriter producing resulting html</param>
+        /// <param name="asFullDocument">Whether to write as full document</param>
+        /// <returns>Whether writing the flow document was successful</returns>
         private static bool WriteFlowDocument(XmlTextReader xamlReader, XmlTextWriter htmlWriter, bool asFullDocument) 
-        { 
-            if (!ReadNextToken(xamlReader)) 
-            { 
-                // Xaml content is empty - nothing to convert 
-                return false; 
-            } 
- 
-            if (xamlReader.NodeType != XmlNodeType.Element || xamlReader.Name != "FlowDocument") 
-            { 
-                // Root FlowDocument elemet is missing 
-                return false; 
-            } 
- 
-            // Create a buffer StringBuilder for collecting css properties for inline STYLE attributes 
-            // on every element level (it will be re-initialized on every level). 
-            StringBuilder inlineStyle = new StringBuilder(); 
- 
-            if (asFullDocument) 
-            { 
-                htmlWriter.WriteStartElement("HTML"); 
-                htmlWriter.WriteStartElement("BODY"); 
-            } 
-            WriteFormattingProperties(xamlReader, htmlWriter, inlineStyle); 
- 
-            WriteElementContent(xamlReader, htmlWriter, inlineStyle); 
- 
-            if (asFullDocument) 
-            { 
-                htmlWriter.WriteEndElement(); 
-                htmlWriter.WriteEndElement(); 
-            } 
-            return true; 
-        } 
- 
+        {
+            // Xaml content is empty - nothing to convert
+            if (!ReadNextToken(xamlReader))
+                return false;
+
+            // Root FlowDocument elemet is missing
+            if (xamlReader.NodeType != XmlNodeType.Element || xamlReader.Name != "FlowDocument")
+                return false;
+
+            // Create a buffer StringBuilder for collecting css properties for inline STYLE attributes
+            // on every element level (it will be re-initialized on every level).
+            StringBuilder inlineStyle = new StringBuilder();
+
+            if (asFullDocument)
+            {
+                htmlWriter.WriteStartElement("HTML");
+                htmlWriter.WriteStartElement("BODY");
+            }
+
+            WriteFormattingProperties(xamlReader, htmlWriter, inlineStyle);
+            WriteElementContent(xamlReader, htmlWriter, inlineStyle);
+
+            if (asFullDocument)
+            {
+                htmlWriter.WriteEndElement();
+                htmlWriter.WriteEndElement();
+            }
+
+            return true;
+        }
+
         /// <summary> 
         /// Reads attributes of the current xaml element and converts 
         /// them into appropriate html attributes or css styles. 
@@ -430,7 +466,7 @@ namespace Marimba
         /// </param> 
         private static void WriteFormattingProperties(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle) 
         { 
-            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element); 
+            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element, "Ensure we're looking at an element."); 
  
             // Clear string builder for the inline style 
             inlineStyle.Remove(0, inlineStyle.Length); 
@@ -558,20 +594,21 @@ namespace Marimba
             } 
  
             // Return the xamlReader back to element level 
-            xamlReader.MoveToElement(); 
-            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element); 
+            xamlReader.MoveToElement();
+            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element, "Ensure we're looking at an element."); 
         } 
- 
-        private static string ParseXamlColor(string color) 
-        { 
-            if (color.StartsWith("#")) 
-            { 
-                // Remove transparancy value 
-                color = "#" + color.Substring(3); 
-            } 
-            return color; 
-        } 
- 
+
+        private static string ParseXamlColor(string color)
+        {
+            if (color.StartsWith("#"))
+            {
+                // Remove transparancy value
+                color = "#" + color.Substring(3);
+            }
+
+            return color;
+        }
+
         private static string ParseXamlThickness(string thickness) 
         { 
             string[] values = thickness.Split(','); 
@@ -608,94 +645,100 @@ namespace Marimba
  
             return cssThickness; 
         } 
+
+        /// <summary>
+        /// Reads a content of current xaml element, converts it
+        /// </summary>
+        /// <param name="xamlReader">
+        /// XmlTextReader which is expected to be at XmlNodeType.Element
+        /// (opening element tag) position.
+        /// </param>
+        /// <param name="htmlWriter">
+        /// May be null, in which case we are skipping the xaml element;
+        /// without producing any output to html.
+        /// </param>
+        /// <param name="inlineStyle">
+        /// StringBuilder used for collecting css properties for inline STYLE attribute.
+        /// </param>
+        private static void WriteElementContent(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle)
+        {
+            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element, "Ensure we're looking at an element.");
+
+            bool elementContentStarted = false;
+
+            if (xamlReader.IsEmptyElement)
+            {
+                if (htmlWriter != null && !elementContentStarted && inlineStyle.Length > 0)
+                {
+                    // Output STYLE attribute and clear inlineStyle buffer.
+                    htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString());
+                    inlineStyle.Remove(0, inlineStyle.Length);
+                }
+
+                elementContentStarted = true;
+            }
+            else
+            {
+                while (ReadNextToken(xamlReader) && xamlReader.NodeType != XmlNodeType.EndElement)
+                {
+                    switch (xamlReader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            if (xamlReader.Name.Contains("."))
+                            {
+                                AddComplexProperty(xamlReader, inlineStyle);
+                            }
+                            else
+                            {
+                                if (htmlWriter != null && !elementContentStarted && inlineStyle.Length > 0)
+                                {
+                                    // Output STYLE attribute and clear inlineStyle buffer.
+                                    htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString());
+                                    inlineStyle.Remove(0, inlineStyle.Length);
+                                }
+
+                                elementContentStarted = true;
+                                WriteElement(xamlReader, htmlWriter, inlineStyle);
+                            }
+
+                            Debug.Assert(
+                                xamlReader.NodeType == XmlNodeType.EndElement || xamlReader.NodeType == XmlNodeType.Element && xamlReader.IsEmptyElement,
+                                "Ensure we're looking at the end of an element.");
+                            break;
+                        case XmlNodeType.Comment:
+                            if (htmlWriter != null)
+                            {
+                                if (!elementContentStarted && inlineStyle.Length > 0)
+                                    htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString());
+                                htmlWriter.WriteComment(xamlReader.Value);
+                            }
+
+                            elementContentStarted = true;
+                            break;
+                        case XmlNodeType.CDATA:
+                        case XmlNodeType.Text:
+                        case XmlNodeType.SignificantWhitespace:
+                            if (htmlWriter != null)
+                            {
+                                if (!elementContentStarted && inlineStyle.Length > 0)
+                                {
+                                    htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString());
+                                }
+
+                                htmlWriter.WriteString(xamlReader.Value);
+                            }
+
+                            elementContentStarted = true;
+                            break;
+                    }
+                }
+
+                Debug.Assert(xamlReader.NodeType == XmlNodeType.EndElement, "Ensure we're looking at an element.");
+            }
+        }
  
         /// <summary> 
-        /// Reads a content of current xaml element, converts it 
-        /// </summary> 
-        /// <param name="xamlReader"> 
-        /// XmlTextReader which is expected to be at XmlNodeType.Element 
-        /// (opening element tag) position. 
-        /// </param> 
-        /// <param name="htmlWriter"> 
-        /// May be null, in which case we are skipping the xaml element; 
-        /// witout producing any output to html. 
-        /// </param> 
-        /// <param name="inlineStyle"> 
-        /// StringBuilder used for collecting css properties for inline STYLE attribute. 
-        /// </param> 
-        private static void WriteElementContent(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle) 
-        { 
-            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element); 
- 
-            bool elementContentStarted = false; 
- 
-            if (xamlReader.IsEmptyElement) 
-            { 
-                if (htmlWriter != null && !elementContentStarted && inlineStyle.Length > 0) 
-                { 
-                    // Output STYLE attribute and clear inlineStyle buffer. 
-                    htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString()); 
-                    inlineStyle.Remove(0, inlineStyle.Length); 
-                } 
-                elementContentStarted = true; 
-            } 
-            else 
-            { 
-                while (ReadNextToken(xamlReader) && xamlReader.NodeType != XmlNodeType.EndElement) 
-                { 
-                    switch (xamlReader.NodeType) 
-                    { 
-                        case XmlNodeType.Element: 
-                            if (xamlReader.Name.Contains(".")) 
-                            { 
-                                AddComplexProperty(xamlReader, inlineStyle); 
-                            } 
-                            else 
-                            { 
-                                if (htmlWriter != null && !elementContentStarted && inlineStyle.Length > 0) 
-                                { 
-                                    // Output STYLE attribute and clear inlineStyle buffer. 
-                                    htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString()); 
-                                    inlineStyle.Remove(0, inlineStyle.Length); 
-                                } 
-                                elementContentStarted = true; 
-                                WriteElement(xamlReader, htmlWriter, inlineStyle); 
-                            } 
-                            Debug.Assert(xamlReader.NodeType == XmlNodeType.EndElement || xamlReader.NodeType == XmlNodeType.Element && xamlReader.IsEmptyElement); 
-                            break; 
-                        case XmlNodeType.Comment: 
-                            if (htmlWriter != null) 
-                            { 
-                                if (!elementContentStarted && inlineStyle.Length > 0) 
-                                { 
-                                    htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString()); 
-                                } 
-                                htmlWriter.WriteComment(xamlReader.Value); 
-                            } 
-                            elementContentStarted = true; 
-                            break; 
-                        case XmlNodeType.CDATA: 
-                        case XmlNodeType.Text: 
-                        case XmlNodeType.SignificantWhitespace: 
-                            if (htmlWriter != null) 
-                            { 
-                                if (!elementContentStarted && inlineStyle.Length > 0) 
-                                { 
-                                    htmlWriter.WriteAttributeString("STYLE", inlineStyle.ToString()); 
-                                } 
-                                htmlWriter.WriteString(xamlReader.Value); 
-                            } 
-                            elementContentStarted = true; 
-                            break; 
-                    } 
-                } 
- 
-                Debug.Assert(xamlReader.NodeType == XmlNodeType.EndElement); 
-            } 
-        } 
- 
-        /// <summary> 
-        /// Conberts an element notation of complex property into 
+        /// Converts an element notation of complex property into 
         /// </summary> 
         /// <param name="xamlReader"> 
         /// On entry this XmlTextReader must be on Element start tag; 
@@ -705,8 +748,8 @@ namespace Marimba
         /// StringBuilder containing a value for STYLE attribute. 
         /// </param> 
         private static void AddComplexProperty(XmlTextReader xamlReader, StringBuilder inlineStyle) 
-        { 
-            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element); 
+        {
+            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element, "Ensure we're looking at an element."); 
  
             if (inlineStyle != null && xamlReader.Name.EndsWith(".TextDecorations")) 
             { 
@@ -732,8 +775,8 @@ namespace Marimba
         /// StringBuilder used for collecting css properties for inline STYLE attributes on every level. 
         /// </param> 
         private static void WriteElement(XmlTextReader xamlReader, XmlTextWriter htmlWriter, StringBuilder inlineStyle) 
-        { 
-            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element); 
+        {
+            Debug.Assert(xamlReader.NodeType == XmlNodeType.Element, "Ensure we're looking at an element."); 
  
             if (htmlWriter == null) 
             { 
@@ -746,66 +789,62 @@ namespace Marimba
  
                 switch (xamlReader.Name) 
                 { 
-                    case "Run" : 
-                    case "Span": 
-                        htmlElementName = "SPAN"; 
-                        break; 
-                    case "InlineUIContainer": 
-                        htmlElementName = "SPAN"; 
-                        break; 
-                    case "Bold": 
-                        htmlElementName = "B"; 
-                        break; 
-                    case "Italic" : 
-                        htmlElementName = "I"; 
-                        break; 
-                    case "Paragraph" : 
-                        htmlElementName = "P"; 
-                        break; 
-                    case "BlockUIContainer": 
-                        htmlElementName = "DIV"; 
-                        break; 
-                    case "Section": 
-                        htmlElementName = "DIV"; 
-                        break; 
-                    case "Table": 
-                        htmlElementName = "TABLE"; 
-                        break; 
-                    case "TableColumn": 
-                        htmlElementName = "COL"; 
-                        break; 
-                    case "TableRowGroup" : 
-                        htmlElementName = "TBODY"; 
-                        break; 
-                    case "TableRow" : 
-                        htmlElementName = "TR"; 
-                        break; 
-                    case "TableCell" : 
-                        htmlElementName = "TD"; 
-                        break; 
-                    case "List" : 
-                        string marker = xamlReader.GetAttribute("MarkerStyle"); 
-                        if (marker == null || marker == "None" || marker == "Disc" || marker == "Circle" || marker == "Square" || marker == "Box") 
-                        { 
-                            htmlElementName = "UL"; 
-                        } 
-                        else 
-                        { 
-                            htmlElementName = "OL"; 
-                        } 
-                        break; 
-                    case "ListItem" : 
-                        htmlElementName = "LI"; 
-                        break; 
-                    case "Hyperlink": 
-                        htmlElementName = "A"; 
+                    case "Run":
+                    case "Span":
+                        htmlElementName = "SPAN";
+                        break;
+                    case "InlineUIContainer":
+                        htmlElementName = "SPAN";
+                        break;
+                    case "Bold":
+                        htmlElementName = "B";
+                        break;
+                    case "Italic":
+                        htmlElementName = "I";
+                        break;
+                    case "Paragraph":
+                        htmlElementName = "P";
+                        break;
+                    case "BlockUIContainer":
+                        htmlElementName = "DIV";
+                        break;
+                    case "Section":
+                        htmlElementName = "DIV";
+                        break;
+                    case "Table":
+                        htmlElementName = "TABLE";
+                        break;
+                    case "TableColumn":
+                        htmlElementName = "COL";
+                        break;
+                    case "TableRowGroup":
+                        htmlElementName = "TBODY";
+                        break;
+                    case "TableRow":
+                        htmlElementName = "TR";
+                        break;
+                    case "TableCell":
+                        htmlElementName = "TD";
+                        break;
+                    case "List":
+                        string marker = xamlReader.GetAttribute("MarkerStyle");
+                        if (marker == null || marker == "None" || marker == "Disc" || marker == "Circle" || marker == "Square" || marker == "Box")
+                            htmlElementName = "UL";
+                        else
+                            htmlElementName = "OL";
+                        break;
+                    case "ListItem":
+                        htmlElementName = "LI";
+                        break;
+                    case "Hyperlink":
+                        htmlElementName = "A";
                         break;
                     case "LineBreak":
                         htmlElementName = "BR";
                         break;
-                    default : 
-                        htmlElementName = null; // Ignore the element 
-                        break; 
+                    default:
+                        htmlElementName = null; // Ignore the element
+                        break;
                 } 
  
                 if (htmlWriter != null && htmlElementName != null) 
@@ -858,15 +897,16 @@ namespace Marimba
                         { 
                             return true; 
                         } 
+
                         // ignore insignificant whitespace 
                         break; 
  
                     case XmlNodeType.EndEntity: 
                     case XmlNodeType.EntityReference: 
-                        //  Implement entity reading 
-                        //xamlReader.ResolveEntity(); 
-                        //xamlReader.Read(); 
-                        //ReadChildNodes( parent, parentBaseUri, xamlReader, positionInfo); 
+                        // Implement entity reading 
+                        // xamlReader.ResolveEntity(); 
+                        // xamlReader.Read(); 
+                        // ReadChildNodes( parent, parentBaseUri, xamlReader, positionInfo); 
                         break; // for now we ignore entities as insignificant stuff 
  
                     case XmlNodeType.Comment: 
@@ -877,8 +917,9 @@ namespace Marimba
                     default: 
                         // Ignorable stuff 
                         break; 
-                } 
-            } 
+                }
+            }
+
             return false; 
         } 
  
@@ -889,31 +930,8 @@ namespace Marimba
         // Private Fields 
         // 
         // --------------------------------------------------------------------- 
- 
         #region Private Fields 
  
         #endregion Private Fields 
     }
-
-    public interface IMarkupConverter
-    {
-        string ConvertXamlToHtml(string xamlText);
-        string ConvertHtmlToXaml(string htmlText);
-        string ConvertRtfToHtml(string rtfText);
-        string ConvertHtmlToRtf(string htmlText);
-    }
-
-    /*
-    public class MarkupConverter : IMarkupConverter
-    {
-        public string ConvertXamlToHtml(string xamlText)
-        {
-            return RTFtoHTML.ConvertXamlToHtml(xamlText, false);
-        }
-
-        public string ConvertRtfToHtml(string rtfText)
-        {
-            return RTFtoHTML.ConvertRtfToHtml(rtfText);
-        }
-    }*/
 } 
