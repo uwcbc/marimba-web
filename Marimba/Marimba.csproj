@@ -110,6 +110,7 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="BudgetItem.cs" />
     <Compile Include="BudgetItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
