@@ -9,7 +9,7 @@
     /// <summary>
     /// Type of transaction performed
     /// </summary>
-    public enum TransactionType { Asset = 0, Depreciation = 1, Expense = 1, Revenue = 2 }
+    public enum TransactionType { Asset = 0, Depreciation = 1, Expense = 2, Revenue = 3 }
 
     /// <summary>
     /// An enumeration to keep track of what task the email browser is doing
