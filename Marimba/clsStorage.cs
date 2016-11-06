@@ -35,7 +35,7 @@
         /// <returns>The cleaned string without newlines</returns>
         public static string CleanNewLine(string input)
         {
-            return input.Replace("\r\n", "\\R\\N");
+            return input.Replace("\r\n", "\\N").Replace("\n", "\\N");
         }
 
         /// <summary>
@@ -45,7 +45,7 @@
         /// <returns>An uncleaned string with newlines</returns>
         public static string ReverseCleanNewLine(string input)
         {
-            return input.Replace("\\R\\N", "\r\n");
+            return input.Replace("\\N", "\r\n");
         }
 
         /// <summary>
