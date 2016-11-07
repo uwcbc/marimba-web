@@ -197,7 +197,7 @@
             this.br = new BinaryReader(fs);
             fileVersion = this.br.ReadDouble(); // read the version number, needed for reading legacy file formats
             this.strName = this.br.ReadString();
-            int iUser = this.br.ReadInt32();
+            int iUser = this.br.ReadInt16();
 
             // this next part is for importing old files
             int numUsers;
@@ -351,7 +351,7 @@
             // this will be useful later on if .mrb files are siginificantly modified
             bw.Write(FileVersion);
             bw.Write(strName);
-            bw.Write(strUsers.Count);
+            bw.Write((short)strUsers.Count);
 
             // write the users (i.e. exec account information)
             foreach (string[] user in strUsers)
