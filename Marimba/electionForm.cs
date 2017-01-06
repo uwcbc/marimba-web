@@ -98,5 +98,10 @@
                 }
             }
         }
+
+        private void electionForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            cbTerm.Items.Clear();
+        }
     }
 }

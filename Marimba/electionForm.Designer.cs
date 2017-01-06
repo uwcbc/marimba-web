@@ -102,6 +102,7 @@
             this.Name = "electionForm";
             this.ShowInTaskbar = false;
             this.Text = "Marimba";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.electionForm_FormClosed);
             this.Load += new System.EventHandler(this.electionForm_Load);
             this.gbStep1.ResumeLayout(false);
             this.ResumeLayout(false);
