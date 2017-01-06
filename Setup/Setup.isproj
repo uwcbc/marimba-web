@@ -29,10 +29,5 @@
 	</ItemGroup>
 	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2015Limited\InstallShield.targets"/>
 	<ItemGroup/>
-	<ItemGroup>
-		<ProjectReference Include="..\Marimba\Marimba.csproj">
-			<Name>Marimba</Name>
-			<Project>{E5307D7C-B845-46FA-801E-F0D08ADC5F91}</Project>
-		</ProjectReference>
-	</ItemGroup>
+	<ItemGroup/>
 </Project>

@@ -4415,7 +4415,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{E147570B-CC21-4F44-892F-F36F9DBF3D8D}</td><td/></row>
 		<row><td>ProductName</td><td>Marimba</td><td/></row>
-		<row><td>ProductVersion</td><td>2.2.2.1</td><td/></row>
+		<row><td>ProductVersion</td><td>2.3.0.0</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
 		<row><td>ProgressType2</td><td>installed</td><td/></row>
