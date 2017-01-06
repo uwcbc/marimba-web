@@ -121,8 +121,41 @@ namespace Marimba
                     }
 
                     break;
-                //To Entire Mailing List
+                // paying members in selected terms
+                // open a new window to allow selection of terms
                 case 4:
+                    ClsStorage.selectedMembersList.Clear();
+
+                    SelectTermForm selectTerms = new SelectTermForm();
+                    selectTerms.ShowDialog();
+
+                    IList<Term> terms = ClsStorage.getSelectedTerms();
+                    foreach (Term currentTerm in terms)
+                    {
+                        for (int termIndex = 0; termIndex < currentTerm.numMembers; termIndex++)
+                        {
+                            // paid fees, in the current term and not a duplicate
+                            if (currentTerm.feesPaid[termIndex, 0] > 0 &&
+                                ClsStorage.currentClub.members[currentTerm.members[termIndex]].IsSubscribed() &&
+                                !ClsStorage.selectedMembersList.Contains(currentTerm.members[termIndex]))
+                            {
+                                ClsStorage.selectedMembersList.Add(currentTerm.members[termIndex]);
+                            }
+                        }
+                    }
+
+                    // check if something was selected
+                    if (ClsStorage.selectedMembersList.Count > 0)
+                    {
+                        if (Properties.Settings.Default.playSounds)
+                            Sound.Click.Play();
+                        EmailForm webDesign = new EmailForm(EmailPurpose.Bcc, -1, ClsStorage.selectedMembersList);
+                        webDesign.ShowDialog();
+                    }
+
+                    break;
+                //To Entire Mailing List
+                case 5:
                     //check if something was selected
                     if (Properties.Settings.Default.playSounds)
                         Sound.Click.Play();

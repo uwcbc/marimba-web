@@ -59,7 +59,7 @@
             for (int i = 0; i < ClsStorage.currentClub.iMember; i++)
             {
                 //skip if it is an unsubscribed member or deactivated member
-                if (ClsStorage.currentClub.members[i].firstName != "♪Unsubscribed" && ClsStorage.currentClub.members[i].email != "")
+                if (ClsStorage.currentClub.members[i].IsSubscribed() && ClsStorage.currentClub.members[i].email != "")
                 {
                     if (ClsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
                         temp = new ListViewItem(new string[6] {ClsStorage.currentClub.GetFirstAndLastName(i), Member.instrumentToString(ClsStorage.currentClub.members[i].curInstrument),
@@ -339,7 +339,7 @@
                 for (int i = 0; i < ClsStorage.currentClub.iMember; i++)
                 {
                     //skip if it is an unsubscribed member
-                    if (ClsStorage.currentClub.members[i].firstName != "♪Unsubscribed" && ClsStorage.currentClub.members[i].email != "")
+                    if (ClsStorage.currentClub.members[i].IsSubscribed() && ClsStorage.currentClub.members[i].email != "")
                     {
                         if (ClsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
                             temp = new ListViewItem(new string[6] {ClsStorage.currentClub.GetFirstAndLastName(i), Member.instrumentToString(ClsStorage.currentClub.members[i].curInstrument),

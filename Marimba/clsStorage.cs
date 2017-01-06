@@ -13,11 +13,18 @@
     {
         public static Club currentClub;
         public static bool loggedin = false;
-        /*
-         * this variable is used for holding a list of selected members
-         * currently used for emails and adding users to a term
-         */
+
+        /// <summary>
+        /// The currently selected members. Used for inter-Form communication.
+        /// Currently used for emails and adding users to a term.
+        /// </summary>
         public static IList<int> selectedMembersList = new List<int>();
+
+        /// <summary>
+        /// The currently selected terms; used for inter-Form communication.
+        /// </summary>
+        private static IList<Term> selectedTerms;
+
         public static bool unsavedChanges = false;
 
         public const string receiptSubject = "Membership Fee Receipt";
@@ -60,6 +67,16 @@
             for (int i = 0; i < b1.Length; i++)
                 output[i] = (byte)(b1[i] ^ b2[i]);
             return output;
+        }
+
+        public static void setSelectedTerms(IList<Term> terms)
+        {
+            selectedTerms = terms;
+        }
+
+        public static IList<Term> getSelectedTerms()
+        {
+            return selectedTerms;
         }
     }
 }

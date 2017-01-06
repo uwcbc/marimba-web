@@ -133,13 +133,14 @@
             "BCC Individual Member(s)",
             "To Active Members in Current Term",
             "To All Members in Current Term",
+            "BCC Paying Members in Selected Term(s)",
             "BCC To Entire Mailing List"});
             this.cbTo.Location = new System.Drawing.Point(143, 9);
             this.cbTo.Name = "cbTo";
             this.cbTo.Size = new System.Drawing.Size(334, 22);
             this.cbTo.TabIndex = 22;
             // 
-            // sendEmail
+            // SendEmailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -148,7 +149,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = global::Marimba.Properties.Resources.Marimba_logo;
             this.MaximizeBox = false;
-            this.Name = "sendEmail";
+            this.Name = "SendEmailForm";
             this.ShowInTaskbar = false;
             this.Text = "Marimba";
             this.Load += new System.EventHandler(this.sendEmail_Load);

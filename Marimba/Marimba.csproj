@@ -129,6 +129,12 @@
     <Compile Include="editUser.Designer.cs">
       <DependentUpon>editUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="SelectTermForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectTermForm.Designer.cs">
+      <DependentUpon>SelectTermForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utility\Enumerations.cs" />
     <Compile Include="Utility\ExcelHighlightingInfo.cs" />
     <Compile Include="AssetList.cs">
@@ -357,6 +363,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SelectTermForm.resx">
+      <DependentUpon>SelectTermForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SendEmailForm.resx">
       <DependentUpon>SendEmailForm.cs</DependentUpon>
       <SubType>Designer</SubType>

@@ -48,8 +48,7 @@
                     int j = 0;
                     for (int i = 0; i < ClsStorage.currentClub.iMember; i++)
                     {
-                        // skip over unsubscribed members
-                        if (ClsStorage.currentClub.members[i].firstName != "♪Unsubscribed")
+                        if (ClsStorage.currentClub.members[i].IsSubscribed())
                         {
                             
                             output[j + 1, 0] = ClsStorage.currentClub.members[i].firstName;
@@ -91,7 +90,7 @@
                         for (int i = 0; i < ClsStorage.currentClub.iMember; i++)
                         {
                             // skip over unsubscribed members
-                            if (ClsStorage.currentClub.members[i].firstName != "♪Unsubscribed")
+                            if (ClsStorage.currentClub.members[i].IsSubscribed())
                             {
                                 CsvRow row = new CsvRow();
                                 row.Add(ClsStorage.currentClub.members[i].firstName);

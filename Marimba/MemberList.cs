@@ -46,8 +46,7 @@
             // fill up the list with members
             for (int i = 0; i < ClsStorage.currentClub.iMember; i++)
             {
-                // skip if it is an unsubscribed member
-                if (ClsStorage.currentClub.members[i].firstName != "♪Unsubscribed")
+                if (ClsStorage.currentClub.members[i].IsSubscribed())
                 {
                     if (ClsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
                         memberlist.Add(new ListViewItem(
@@ -188,7 +187,7 @@
                 {
                     // skip if it is an unsubscribed member
                     // also check for if we are only considering members in the current term
-                    if (ClsStorage.currentClub.members[i].firstName != "♪Unsubscribed" && (!cbCurrentTerm.Checked || ClsStorage.currentClub.listTerms[ClsStorage.currentClub.listTerms.Count - 1].memberSearch(Convert.ToInt16(i)) >= 0))
+                    if (ClsStorage.currentClub.members[i].IsSubscribed() && (!cbCurrentTerm.Checked || ClsStorage.currentClub.listTerms[ClsStorage.currentClub.listTerms.Count - 1].memberSearch(Convert.ToInt16(i)) >= 0))
                     {
                         if (ClsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
                             temp = new ListViewItem(
@@ -254,7 +253,7 @@
                     memberprofile.ShowDialog();
 
                     // if someone was unsubscribed, remove them
-                    if (ClsStorage.currentClub.members[Convert.ToInt32(lvMain.SelectedItems[0].SubItems[5].Text)].firstName == "♪Unsubscribed")
+                    if (!ClsStorage.currentClub.members[Convert.ToInt32(lvMain.SelectedItems[0].SubItems[5].Text)].IsSubscribed())
                         lvMain.Items.RemoveAt(lvMain.SelectedIndices[0]);
                 }
                 else
@@ -300,8 +299,7 @@
                 ListViewItem temp;
                 for (int i = 0; i < ClsStorage.currentClub.iMember; i++)
                 {
-                    // skip if it is an unsubscribed member
-                    if (ClsStorage.currentClub.members[i].firstName != "♪Unsubscribed")
+                    if (ClsStorage.currentClub.members[i].IsSubscribed())
                     {
                         if (ClsStorage.currentClub.members[i].curInstrument != Member.Instrument.Other)
                             temp = new ListViewItem(

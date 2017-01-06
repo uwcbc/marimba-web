@@ -627,5 +627,10 @@
             // for any other instrument, just return the music stand
             return "Other";
         }
+
+        public bool IsSubscribed()
+        {
+            return this.firstName != "♪Unsubscribed";
+        }
     }
 }
