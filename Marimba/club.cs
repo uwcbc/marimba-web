@@ -95,7 +95,7 @@
         public string strCurrentUserPrivilege;
 
         /// <summary>
-        /// stores the information about the terms
+        /// listTerms contains all of the terms in the loaded Marimba file
         /// </summary>
         public List<Term> listTerms;
 
