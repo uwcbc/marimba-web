@@ -1,4 +1,5 @@
-import * as express from 'express';
+import express = require('express');
+import mysql = require('mysql');
 
 class Server {
 	private express : express.Application;
@@ -15,5 +16,10 @@ class Server {
 		});
 		this.express.use('/', router);
 	}
+
+	public start() : void {
+		this.express.listen(3000);
+	}
 }
 
+export = Server;
