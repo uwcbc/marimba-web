@@ -1,0 +1,16 @@
+{
+  "name": "marimba-web",
+  "version": "1.0.0",
+  "description": "Runs the UWCBC Marimba webapp.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Zhou",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "whiskers": "^0.4.0"
+  }
+}
