@@ -3,6 +3,11 @@
         "emitDecoratorMetadata": true,
         "target": "es5",
         "module": "commonjs",
-        "sourceMap": true
+        "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "cas-authentication": [ "external-declarations/cas-authentication" ],
+            "whiskers": [ "external-declarations/whiskers" ]
+        }
     }
 }
