@@ -37,15 +37,19 @@ class Server {
 		});
 
 		router.get('/home', (req, resp) => {
+			let user = req.session[ self.cas.session_name ];
+			let loggedIn = user != null;
 			resp.render(
 				'page-template.html',
 				{
 					partials: {
 						header: 'header.html',
-						body: 'homepage-not-loggedin.html'
+						body: loggedIn ? 'homepage-loggedin.html' : 'homepage-not-loggedin.html'
 					},
 					title: 'Marimba Home',
-					user: null
+					user: null,
+					nextRehearsalDate: loggedIn ? 'tomorrow' : null,
+					history: loggedIn ? [ 'history 1', 'history 2' ] : null
 				}
 			);
 		});

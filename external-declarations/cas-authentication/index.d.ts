@@ -1,6 +1,8 @@
 import express = require("express");
 
 declare class CASAuthentication {
+    public session_name: string;
+
     constructor (options: {
             cas_url: string,
             service_url: string,
