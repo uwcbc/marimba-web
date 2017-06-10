@@ -1,16 +1,17 @@
 import express = require('express');
+import session = require('express-session');
 import mysql = require('mysql');
 import CASAuthentication = require('cas-authentication');
 import whiskers = require('whiskers');
 
 class Server {
 	private express : express.Application;
-	private cas;
+	private cas: CASAuthentication;
 
 	constructor() {
 		this.configureExpress();
-		this.configureRoutes();
 		this.configureCAS();
+		this.configureRoutes();
 	}
 
 	private configureExpress() : void {
@@ -20,18 +21,22 @@ class Server {
 		this.express.engine('.html', whiskers.__express);
 		this.express.set('views', __dirname + '/templates');
 
+		// Express sessions setup
+		this.express.use(session({ secret: 'lololololol', resave: false, saveUninitialized: false }));
+
 		// Static resource setup
 		this.express.use(express.static('resources'));
 	}
 
 	private configureRoutes() : void {
 		let router = express.Router();
+		let self = this;
 
-		router.get('/', (req, resp, next) => {
+		router.get('/', (req, resp) => {
 			resp.redirect('/home');
 		});
 
-		router.get('/home', (req, resp, next) => {
+		router.get('/home', (req, resp) => {
 			resp.render(
 				'page-template.html',
 				{
@@ -45,13 +50,17 @@ class Server {
 			);
 		});
 
+		router.get('/login', self.cas.bounce, (req, resp) => {
+			resp.redirect('/home');
+		});
+
 		this.express.use('/', router);
 	}
 
 	private configureCAS() : void {
 		this.cas = new CASAuthentication({
 			cas_url: 'https://cas-dev.uwaterloo.ca/cas',
-			service_url: 'https://redir-loo.com',
+			service_url: 'http://localhost:3000',
 			cas_version: '2.0'
 		});
 	}
