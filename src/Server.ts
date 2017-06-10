@@ -15,7 +15,13 @@ class Server {
 
 	private configureExpress() : void {
 		this.express = express();
+		
+		// Whiskers JS setup
 		this.express.engine('.html', whiskers.__express);
+		this.express.set('views', __dirname + '/templates');
+
+		// Static resource setup
+		this.express.use(express.static('resources'));
 	}
 
 	private configureRoutes() : void {
@@ -26,7 +32,17 @@ class Server {
 		});
 
 		router.get('/home', (req, resp, next) => {
-			resp.send('Hello world!');
+			resp.render(
+				'page-template.html',
+				{
+					partials: {
+						header: 'header.html',
+						body: 'homepage-not-loggedin.html'
+					},
+					title: 'Marimba Home',
+					user: null
+				}
+			);
 		});
 
 		this.express.use('/', router);
