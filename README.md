@@ -10,4 +10,4 @@ This is the webapp port of the administrative software Marimba that's used by th
 -links to MVC tutorials
 
 ## Credits
-This project was started in Fall 2019 with the following team members:
+This project was started by Victor Zhou and picked up in Fall 2019 by the following team:
