@@ -4,6 +4,9 @@ Setup/Setup
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Master branch
+Marimba/
+
 # User-specific files
 *.rsuser
 *.suo
