@@ -7,6 +7,7 @@ namespace marimba_web.Models
 {
     public class Term
     {
+        private string name; // i.e. W2020
         private IList<Member> members;
         private IList<Member> limboMembers;
         private IList<Rehearsal> rehearsals;
