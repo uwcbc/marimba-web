@@ -12,5 +12,6 @@ namespace marimba_web.Models
         private IList<Rehearsal> rehearsals;
         private DateTime startDate;
         private DateTime endDate;
+        private decimal feeAmount;
     }
 }

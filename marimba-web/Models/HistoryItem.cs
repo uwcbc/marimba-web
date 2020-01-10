@@ -7,5 +7,8 @@ namespace marimba_web.Models
 {
     public class HistoryItem
     {
+        private Member who;
+        private DateTime when;
+        private string what;
     }
 }
