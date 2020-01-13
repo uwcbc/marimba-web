@@ -7,7 +7,7 @@ namespace marimba_web.Models
 {
     public class Rehearsal
     {
-        private DateTime date;
-        private IList<Member> members;
+        public DateTime date { get; set; }
+        public IList<Member> members { get; set; }
     }
 }

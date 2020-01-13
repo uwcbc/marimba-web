@@ -19,14 +19,14 @@ namespace marimba_web.Models
         }
 
 
-        private decimal value;
-        private string name; // using name as per architecture, but think we should use Member class
-        private DateTime transactionDate;
-        private DateTime processedDate;
-        private FinanceCategory financeCategory;
-        private FinanceType financeType;
-        private Term term;
-        private string comment;
+        public decimal value { get; set; }
+        public string name { get; set; } // using name as per architecture, but think we should use Member class
+        public DateTime transactionDate { get; set; }
+        public DateTime processedDate { get; set; }
+        public FinanceCategory financeCategory { get; set; }
+        public FinanceType financeType { get; set; }
+        public Term term { get; set; }
+        public string comment { get; set; }
         // TODO: depreciation
     }
 }
