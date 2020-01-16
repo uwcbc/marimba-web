@@ -7,6 +7,9 @@ Setup/Setup
 # Master branch
 Marimba/
 
+# App settings
+appsettings.*
+
 # User-specific files
 *.rsuser
 *.suo
