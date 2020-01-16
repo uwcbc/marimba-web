@@ -49,17 +49,17 @@ namespace marimba_web.Models
             Exec,
             Admin
         }
-        private Guid id;
-        private string firstName;
-        private string lastname;
-        private StudentType category;
-        private int studentId;
-        private Faculty faculty;
-        private Instrument instrument;
-        private MailAddress email;
-        private ShirtSize shirtSize;
-        private MemberType memberType;
-        private DateTime signupTime;
-        private bool isPaid;
+        public Guid id { get; set; }
+        public string firstName { get; set; }
+        public string lastname { get; set; }
+        public StudentType category { get; set; }
+        public int studentId { get; set; }
+        public Faculty faculty { get; set; }
+        public Instrument instrument { get; set; }
+        public MailAddress email { get; set; }
+        public ShirtSize shirtSize { get; set; }
+        public MemberType memberType { get; set; }
+        public DateTime signupTime { get; set; }
+        public bool isPaid { get; set; }
     }
 }
