@@ -10,7 +10,7 @@ namespace marimba_web.Models
     // useful stuff: https://stackoverflow.com/questions/43767933/entity-framework-core-using-multiple-dbcontexts
     public class MarimbaDbContext : DbContext
     {
-        public MarimbaDbContext(DbContextOptions<MarimbaDbContext> options) : base()
+        public MarimbaDbContext(DbContextOptions<MarimbaDbContext> options) : base(options)
         {
         }
     }
