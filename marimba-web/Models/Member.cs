@@ -14,9 +14,9 @@ namespace marimba_web.Models
  
         public Guid id { get; set; }
         public string firstName { get; set; }
-        public string lastname { get; set; }
+        public string lastName { get; set; }
         public Marimba.StudentType category { get; set; }
-        public int studentId { get; set; }
+        public uint studentId { get; set; }
         public Marimba.Faculty faculty { get; set; }
         public Marimba.Instrument instrument { get; set; }
         public MailAddress email { get; set; }

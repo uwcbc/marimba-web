@@ -7,7 +7,8 @@ namespace marimba_web.Common
 {
     public class Marimba
     {
-
+        // keeping names FinanceType and FinanceCategory since they are now in a common file, might
+        // want other categories/types in here
         public enum FinanceType
         {
             Asset,
