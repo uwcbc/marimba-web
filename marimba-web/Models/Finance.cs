@@ -16,8 +16,8 @@ namespace marimba_web.Models
         public string name { get; set; } // using name as per architecture, but think we should use Member class
         public DateTime transactionDate { get; set; }
         public DateTime processedDate { get; set; }
-        public Marimba.FinanceCategory financeCategory { get; set; }
-        public Marimba.FinanceType financeType { get; set; }
+        public Marimba.FinanceCategory category { get; set; }
+        public Marimba.FinanceType type { get; set; }
         public Term term { get; set; }
         public string comment { get; set; }
         // TODO: depreciation
