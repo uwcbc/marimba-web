@@ -67,10 +67,13 @@ namespace marimba_web.Common
 
         public enum ShirtSize
         {
-            Small,
-            Medium,
-            Large
-            // XL?
+            XS,
+            S, 
+            M, 
+            L, 
+            XL, 
+            XXL, 
+            Unknown = -1
         }
 
         public enum MemberType
