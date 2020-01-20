@@ -17,10 +17,25 @@ namespace marimba_web.Common
             Revenue
         }
 
-        // TODO: not sure what differs category from type
         public enum FinanceCategory
         {
-
+            AdminFees,
+            Advertising,
+            Buttons,
+            Clothing,
+            CopyrightFees,
+            Donations,
+            EquipmentRentals,
+            FedsSettlement,
+            FoodOrBeverages,
+            Instruments,
+            Maintenance,
+            Miscellaneous,
+            MusicEquipment,
+            Printing,
+            RentalSubsidy,
+            SheetMusic,
+            WaivedMembershipFee
         }
 
         public enum StudentType
