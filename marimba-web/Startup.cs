@@ -30,9 +30,9 @@ namespace marimba_web
         {
             services.AddDbContextPool<MarimbaDbContext>(options =>
                 options.UseMySql(
-                    Configuration.GetConnectionString(Configuration.GetConnectionString("MarimbaConnection"))));
+                    Configuration.GetConnectionString("MarimbaConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<MarimbaDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
