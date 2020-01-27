@@ -26,6 +26,21 @@ namespace marimba_web.Models
         public bool isPaid { get; set; }
         public bool isSubscribed { get; private set; }
 
+        /// <summary>
+        /// Subscribes the member
+        /// </summary>
+        public void subscribe()
+        {
+            isSubscribed = true;
+        }
+
+        /// <summary>
+        /// Unsubscribes the member
+        /// </summary>
+        public void unsubscribe()
+        {
+            isSubscribed = false;
+        }
 
         /// <summary>
         /// Creates an instance of the Member class

@@ -88,6 +88,7 @@ namespace marimba_web.Common
             L, 
             XL, 
             XXL, 
+            None,
             Unknown = -1
         }
 
