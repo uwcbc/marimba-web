@@ -15,6 +15,7 @@ namespace marimba_web.Models
         public DateTime endDate { get; set; }
         public decimal feeAmount { get; set; }
 
+        // Internal structures for faster lookup by GUID.
         private Dictionary<Guid, Member> memberDict;
         private Dictionary<Guid, Member> limboMemberDict;
 
@@ -32,6 +33,10 @@ namespace marimba_web.Models
             InitializeDicts();
         }
 
+        /*
+         * Initialize Guid-to-Member dictionaries for all members and limbo members.
+         * Used for more efficient lookup of Members by GUID.
+         */
         private void InitializeDicts()
         {
             memberDict = new Dictionary<Guid, Member>();
@@ -47,31 +52,49 @@ namespace marimba_web.Models
             }
         }
 
+        /*
+         * Get member with the given GUID, returning null if no such member exists.
+         */
         public Member GetMemberByGuid(Guid id)
         {
             return memberDict.GetValueOrDefault(id, null);
         }
 
+        /*
+         * Return true if member with given GUID exists in term, otherwise false.
+         */ 
         public bool IsMember(Guid id)
         {
             return memberDict.ContainsKey(id);
         }
 
+        /*
+         * Return true if member with given GUID is limbo, otherwise false.
+         */
         public bool IsLimboMember(Guid id)
         {
             return limboMemberDict.ContainsKey(id);
         }
 
+        /*
+         * Return set of all member GUIDs.
+         */
         public HashSet<Guid> GetAllMemberIds()
         {
             return memberDict.Keys.ToHashSet();
         }
 
+        /*
+         * Return set of all limbo member GUIDs.
+         */
         public HashSet<Guid> GetLimboMemberIds()
         {
             return limboMemberDict.Keys.ToHashSet();
         }
 
+        /*
+         * Return set of all non-limbo member GUIDs.
+         */
         public HashSet<Guid> GetNonLimboMemberIds()
         {
             return memberDict.Keys.Except(limboMemberDict.Keys).ToHashSet();

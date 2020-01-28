@@ -27,22 +27,6 @@ namespace marimba_web.Models
         public bool isSubscribed { get; private set; }
 
         /// <summary>
-        /// Subscribes the member
-        /// </summary>
-        public void subscribe()
-        {
-            isSubscribed = true;
-        }
-
-        /// <summary>
-        /// Unsubscribes the member
-        /// </summary>
-        public void unsubscribe()
-        {
-            isSubscribed = false;
-        }
-
-        /// <summary>
         /// Creates an instance of the Member class
         /// </summary>
         /// <param name="firstName">The member's first name</param>
@@ -105,6 +89,33 @@ namespace marimba_web.Models
             this.isPaid = isPaid;
         }
 
+        /// <summary>
+        /// Subscribes the member
+        /// </summary>
+        public void subscribe()
+        {
+            isSubscribed = true;
+        }
+
+        /// <summary>
+        /// Unsubscribes the member
+        /// </summary>
+        public void unsubscribe()
+        {
+            isSubscribed = false;
+        }
+
+        /*
+         * Return whether member is a UW student (undergraduate or graduate).
+         */
+        public bool isUWStudent()
+        {
+            return studentType == Marimba.StudentType.Grad || studentType == Marimba.StudentType.Undergrad;
+        }
+
+        /*
+         * Return string containing member's full name.
+         */
         public string GetFullName()
         {
             return String.Format("{0} {1}", firstName, lastName);

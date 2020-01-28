@@ -21,6 +21,7 @@ namespace marimba_web.Models
             this.isMembershipPaid = isMembershipPaid;
         }
 
+        // Setters
         public void SetName(string name)
         {
             this.name = name;
