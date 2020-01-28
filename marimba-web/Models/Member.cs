@@ -71,6 +71,7 @@ namespace marimba_web.Models
             this.memberType = memberType;
             this.signupTime = DateTime.Now;
             this.isPaid = isPaid;
+            this.isSubscribed = true;
         }
 
         /// <summary>
