@@ -44,26 +44,21 @@ namespace marimba_web.Models
                 return new List<Elector>();
             }
 
-            // Previous term members
-            Dictionary<Guid, Member> prevTermMemberDict = lastTwoTerms[0].ConstructMembersDict();
-            // Previous term inactive member IDs
-            HashSet<Guid> prevTermLimboMemberIds = lastTwoTerms[0].ConstructLimboMemberIds();
-            // Current term members
-            Dictionary<Guid, Member> curTermMemberDict = lastTwoTerms[1].ConstructMembersDict();
-            // Current term inactive member IDs
-            HashSet<Guid> curTermLimboMemberIds = lastTwoTerms[1].ConstructLimboMemberIds();
+            Term previousTerm = lastTwoTerms[0];
+            Term currentTerm = lastTwoTerms[1];
+
             // All member IDs in last two terms
-            IEnumerable<Guid> allMemberIds = prevTermMemberDict.Keys.Union(curTermMemberDict.Keys);
+            var allMemberIds = previousTerm.GetAllMemberIds().Union(currentTerm.GetAllMemberIds());
 
             // Check eligiblity of every member in last two terms
             foreach (Guid guid in allMemberIds)
             {
                 // Member must be present in one of the two terms
-                Member member = curTermMemberDict.GetValueOrDefault(guid, null) ?? prevTermMemberDict[guid];
-                bool wasMemberPrevTerm = prevTermMemberDict.ContainsKey(guid);
-                bool wasLimboPrevTerm = prevTermLimboMemberIds.Contains(guid);
-                bool isMemberCurTerm = curTermMemberDict.ContainsKey(guid);
-                bool isLimboCurTerm = curTermLimboMemberIds.Contains(guid);
+                Member member = currentTerm.GetMemberByGuid(guid) ?? previousTerm.GetMemberByGuid(guid);
+                bool wasMemberPrevTerm = previousTerm.IsMember(guid);
+                bool wasLimboPrevTerm = previousTerm.IsLimboMember(guid);
+                bool isMemberCurTerm = currentTerm.IsMember(guid);
+                bool isLimboCurTerm = currentTerm.IsLimboMember(guid);
                 bool isEligible = false;
 
                 // Member was in both terms
@@ -84,13 +79,7 @@ namespace marimba_web.Models
 
                 if (isEligible)
                 {
-                    Elector elector = new Elector
-                    {
-                        name = member.GetFullName(),
-                        email = member.email,
-                        isMembershipPaid = member.debtsOwed == 0m
-                    };
-
+                    Elector elector = new Elector(member.GetFullName(), member.instrument, member.email, member.debtsOwed == 0m);
                     eligibleElectors.Add(elector);
                 }
             }
