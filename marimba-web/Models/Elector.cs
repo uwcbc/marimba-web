@@ -1,8 +1,8 @@
-using CsvHelper.Configuration;
+using System.Net.Mail;
 
-using System;
-﻿using System.Net.Mail;
 using marimba_web.Common;
+
+using CsvHelper.Configuration;
 
 namespace marimba_web.Models
 {

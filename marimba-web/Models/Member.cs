@@ -25,6 +25,7 @@ namespace marimba_web.Models
         public DateTime signupTime { get; set; }
         public bool isPaid { get; set; }
         public bool isSubscribed { get; private set; }
+        public decimal debtsOwed { get; set; }
 
         /// <summary>
         /// Creates an instance of the Member class
@@ -41,9 +42,9 @@ namespace marimba_web.Models
         /// <param name="isPaid">Whether the member has paid membership fees</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId, 
             Marimba.Faculty faculty, Marimba.Instrument instrument, MailAddress email, Marimba.ShirtSize shirtSize,
-            Marimba.MemberType memberType = Marimba.MemberType.General, bool isPaid = false)
+            Marimba.MemberType memberType = Marimba.MemberType.General, bool isPaid = false, decimal debtsOwed = 0m)
         {
-            this.id = new Guid();
+            this.id = Guid.NewGuid();
             this.firstName = firstName;
             this.lastName = lastName;
             this.studentType = studentType;
@@ -55,6 +56,7 @@ namespace marimba_web.Models
             this.memberType = memberType;
             this.signupTime = DateTime.Now;
             this.isPaid = isPaid;
+            this.debtsOwed = debtsOwed;
             this.isSubscribed = true;
         }
 
@@ -73,9 +75,9 @@ namespace marimba_web.Models
         /// <param name="isPaid">Whether the member has paid membership fees</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId,
             Marimba.Faculty faculty, Marimba.Instrument instrument, MailAddress email, Marimba.ShirtSize shirtSize, DateTime signupTime,
-            Marimba.MemberType memberType = Marimba.MemberType.General, bool isPaid = false)
+            Marimba.MemberType memberType = Marimba.MemberType.General, bool isPaid = false, decimal debtsOwed = 0m)
         {
-            this.id = new Guid();
+            this.id = Guid.NewGuid();
             this.firstName = firstName;
             this.lastName = lastName;
             this.studentType = studentType;
@@ -87,12 +89,13 @@ namespace marimba_web.Models
             this.memberType = memberType;
             this.signupTime = signupTime;
             this.isPaid = isPaid;
+            this.debtsOwed = debtsOwed;
         }
 
         /// <summary>
         /// Subscribes the member
         /// </summary>
-        public void subscribe()
+        public void Subscribe()
         {
             isSubscribed = true;
         }
@@ -100,7 +103,7 @@ namespace marimba_web.Models
         /// <summary>
         /// Unsubscribes the member
         /// </summary>
-        public void unsubscribe()
+        public void Unsubscribe()
         {
             isSubscribed = false;
         }
@@ -108,7 +111,7 @@ namespace marimba_web.Models
         /*
          * Return whether member is a UW student (undergraduate or graduate).
          */
-        public bool isUWStudent()
+        public bool IsUWStudent()
         {
             return studentType == Marimba.StudentType.Grad || studentType == Marimba.StudentType.Undergrad;
         }

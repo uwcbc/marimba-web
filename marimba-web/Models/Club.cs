@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+
+using CsvHelper;
 
 namespace marimba_web.Models
 {
-    public static class Club
+    public class Club
     {
         public List<Term> termList { get; set; }
 
@@ -64,17 +67,17 @@ namespace marimba_web.Models
                 // Member was in both terms
                 if (wasMemberPrevTerm && isMemberCurTerm)
                 {
-                    isEligible = !(wasLimboPrevTerm && isLimboCurTerm) && member.isUWStudent();
+                    isEligible = !(wasLimboPrevTerm && isLimboCurTerm) && member.IsUWStudent();
                 }
                 // Member was in previous term but not this term
                 else if (wasMemberPrevTerm)
                 {
-                    isEligible = !wasLimboPrevTerm && member.isUWStudent();
+                    isEligible = !wasLimboPrevTerm && member.IsUWStudent();
                 }
                 // Member is in this term but not last term
                 else if (isMemberCurTerm)
                 {
-                    isEligible = !isLimboCurTerm && member.isUWStudent();
+                    isEligible = !isLimboCurTerm && member.IsUWStudent();
                 }
 
                 if (isEligible)
