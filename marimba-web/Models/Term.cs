@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace marimba_web.Models
 {
@@ -19,6 +18,16 @@ namespace marimba_web.Models
         private Dictionary<Guid, Member> memberDict;
         private Dictionary<Guid, Member> limboMemberDict;
 
+        /// <summary>
+        /// Creates an instance of the Term class
+        /// </summary>
+        /// <param name="name">The term name</param>
+        /// <param name="allMembers">List of all members in the term</param>
+        /// <param name="limboMembers">List of all limbo members in the term</param>
+        /// <param name="rehearsals">List of rehearsals in the term</param>
+        /// <param name="startDate">Start date of the term</param>
+        /// <param name="endDate">End date of the term</param>
+        /// <param name="feeAmount">Membership fee amount</param>
         public Term(string name, IList<Member> allMembers, IList<Member> limboMembers, IList<Rehearsal> rehearsals,
             DateTime startDate, DateTime endDate, decimal feeAmount)
         {
@@ -33,10 +42,10 @@ namespace marimba_web.Models
             InitializeDicts();
         }
 
-        /*
-         * Initialize Guid-to-Member dictionaries for all members and limbo members.
-         * Used for more efficient lookup of Members by GUID.
-         */
+        /// <summary>
+        /// Initialize Guid-to-Member dictionaries for all members and limbo members.
+        /// Used for more efficient lookup of Members by GUID.
+        /// </summary>
         private void InitializeDicts()
         {
             memberDict = new Dictionary<Guid, Member>();
@@ -51,50 +60,50 @@ namespace marimba_web.Models
                 limboMemberDict.Add(m.id, m);
             }
         }
-
-        /*
-         * Get member with the given GUID, returning null if no such member exists.
-         */
+        
+        /// <summary>
+        /// Get member with the given GUID, returning null if no such member exists.
+        /// </summary>
         public Member GetMemberByGuid(Guid id)
         {
             return memberDict.GetValueOrDefault(id, null);
         }
-
-        /*
-         * Return true if member with given GUID exists in term, otherwise false.
-         */ 
+        
+        /// <summary>
+        /// Return true if member with given GUID exists in term, otherwise false.
+        /// </summary>
         public bool IsMember(Guid id)
         {
             return memberDict.ContainsKey(id);
         }
-
-        /*
-         * Return true if member with given GUID is limbo, otherwise false.
-         */
+        
+        /// <summary>
+        /// Return true if member with given GUID is limbo, otherwise false.
+        /// </summary>
         public bool IsLimboMember(Guid id)
         {
             return limboMemberDict.ContainsKey(id);
         }
 
-        /*
-         * Return set of all member GUIDs.
-         */
+        /// <summary>
+        /// Return set of all member GUIDs.
+        /// </summary>
         public HashSet<Guid> GetAllMemberIds()
         {
             return memberDict.Keys.ToHashSet();
         }
 
-        /*
-         * Return set of all limbo member GUIDs.
-         */
+        /// <summary>
+        /// Return set of all limbo member GUIDs.
+        /// </summary>
         public HashSet<Guid> GetLimboMemberIds()
         {
             return limboMemberDict.Keys.ToHashSet();
         }
 
-        /*
-         * Return set of all non-limbo member GUIDs.
-         */
+        /// <summary>
+        /// Return set of all non-limbo member GUIDs.
+        /// </summary>
         public HashSet<Guid> GetNonLimboMemberIds()
         {
             return memberDict.Keys.Except(limboMemberDict.Keys).ToHashSet();

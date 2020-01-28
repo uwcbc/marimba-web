@@ -12,9 +12,10 @@ namespace marimba_web.Models
     {
         public List<Term> termList { get; set; }
 
-        /*
-         * Export list of eligible electors to CSV.
-         */
+        /// <summary>
+        /// Export list of eligible electors to CSV.
+        /// </summary>
+        /// <param name="pathToCsv">File path to CSV file</param>
         public void ExportEligibleElectorsToCsv(string pathToCsv)
         {
             List<Elector> electorList = GetEligibleElectors();
@@ -25,13 +26,13 @@ namespace marimba_web.Models
             csv.WriteRecords(electorList);
         }
 
-        /*
-         * Construct list of eligible electors, according to the Constitution:
-         *
-         * To be eligible to vote in the UW Concert Band Club elections, a person must be
-         * a University of Waterloo student, an active member of the club in one of the
-         * past two terms, and must not have any outstanding debts with the club.
-         */
+        /// <summary>
+        /// Construct list of eligible electors, according to the Constitution:
+        /// 
+        /// To be eligible to vote in the UW Concert Band Club elections, a person must be
+        /// a University of Waterloo student, an active member of the club in one of the
+        /// past two terms, and must not have any outstanding debts with the club.
+        /// </summary>
         private List<Elector> GetEligibleElectors()
         {
             List<Elector> eligibleElectors = new List<Elector>();
@@ -90,9 +91,10 @@ namespace marimba_web.Models
             return eligibleElectors;
         }
 
-        /*
-         * Get last X terms in chronological order (earliest to most recent).
-         */
+        /// <summary>
+        /// Get the latest terms in chronological order (earliest to most recent).
+        /// </summary>
+        /// <param name="numTerms">Number of terms to retrieve</param>
         private List<Term> GetLatestTerms(int numTerms)
         {
             if (termList.Count < numTerms)

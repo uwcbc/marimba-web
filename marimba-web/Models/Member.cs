@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
-using System.Threading.Tasks;
+
 using marimba_web.Common;
 
 namespace marimba_web.Models
 {
-    
-
     public class Member
     {
- 
         public Guid id { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
@@ -40,6 +35,7 @@ namespace marimba_web.Models
         /// <param name="shirtSize">The member's shirt size</param>
         /// <param name="memberType">The type of member in band</param>
         /// <param name="isPaid">Whether the member has paid membership fees</param>
+        /// <param name="debtsOwed">Amount of debt (e.g. from fees) owed</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId, 
             Marimba.Faculty faculty, Marimba.Instrument instrument, MailAddress email, Marimba.ShirtSize shirtSize,
             Marimba.MemberType memberType = Marimba.MemberType.General, bool isPaid = false, decimal debtsOwed = 0m)
@@ -73,6 +69,7 @@ namespace marimba_web.Models
         /// <param name="shirtSize">The member's shirt size</param>
         /// <param name="memberType">The type of member in band</param>
         /// <param name="isPaid">Whether the member has paid membership fees</param>
+        /// <param name="debtsOwed">Amount of debt (e.g. from fees) owed</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId,
             Marimba.Faculty faculty, Marimba.Instrument instrument, MailAddress email, Marimba.ShirtSize shirtSize, DateTime signupTime,
             Marimba.MemberType memberType = Marimba.MemberType.General, bool isPaid = false, decimal debtsOwed = 0m)
@@ -108,17 +105,17 @@ namespace marimba_web.Models
             isSubscribed = false;
         }
 
-        /*
-         * Return whether member is a UW student (undergraduate or graduate).
-         */
+        /// <summary>
+        /// Return whether member is a UW student (undergraduate or graduate).
+        /// </summary>
         public bool IsUWStudent()
         {
             return studentType == Marimba.StudentType.Grad || studentType == Marimba.StudentType.Undergrad;
         }
 
-        /*
-         * Return string containing member's full name.
-         */
+        /// <summary>
+        /// Return string containing member's full name.
+        /// </summary>
         public string GetFullName()
         {
             return String.Format("{0} {1}", firstName, lastName);

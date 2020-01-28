@@ -13,6 +13,13 @@ namespace marimba_web.Models
         public MailAddress email { get; set; }
         public bool isMembershipPaid { get; set; }
 
+        /// <summary>
+        /// Creates an instance of the Elector class
+        /// </summary>
+        /// <param name="name">Elector name</param>
+        /// <param name="instrument">Elector instrument</param>
+        /// <param name="email">Elector email</param>
+        /// <param name="isMembershipPaid">Whether elector has paid off all membership fees</param>
         public Elector(string name, Marimba.Instrument instrument, MailAddress email, bool isMembershipPaid)
         {
             this.name = name;
@@ -21,22 +28,33 @@ namespace marimba_web.Models
             this.isMembershipPaid = isMembershipPaid;
         }
 
-        // Setters
+        /// <summary>
+        /// Sets the elector name
+        /// </summary>
         public void SetName(string name)
         {
             this.name = name;
         }
 
+        /// <summary>
+        /// Sets the elector instrument
+        /// </summary>
         public void SetInstrument(Marimba.Instrument instrument)
         {
             this.instrument = instrument;
         }
 
+        /// <summary>
+        /// Sets the elector email
+        /// </summary>
         public void SetEmail(MailAddress email)
         {
             this.email = email;
         }
 
+        /// <summary>
+        /// Sets whether elector has paid all membership fees
+        /// </summary>
         public void SetMembershipPaid(bool isMembershipPaid)
         {
             this.isMembershipPaid = isMembershipPaid;
