@@ -10,12 +10,16 @@ namespace marimba_web.Models
         public List<Term> termList { get; set; }
 
         /*
-         * Write list of eligible electors to CSV.
+         * Export list of eligible electors to CSV.
          */
-        public void WriteEligibleElectorsToCsv(string pathToCsv)
+        public void ExportEligibleElectorsToCsv(string pathToCsv)
         {
             List<Elector> electorList = GetEligibleElectors();
-            WriteElectorsToCsv(electorList, pathToCsv);
+
+            using var writer = new StreamWriter(pathToCsv);
+            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.Configuration.RegisterClassMap<ElectorMap>();
+            csv.WriteRecords(electorList);
         }
 
         /*
@@ -82,7 +86,7 @@ namespace marimba_web.Models
                 {
                     Elector elector = new Elector
                     {
-                        name = member.GetFullNameAndInstrument(),
+                        name = member.GetFullName(),
                         email = member.email,
                         isMembershipPaid = member.debtsOwed == 0m
                     };
@@ -106,17 +110,6 @@ namespace marimba_web.Models
 
             List<Term> sortedTerms = termList.OrderBy(t => t.startDate).ToList();
             return sortedTerms.GetRange(sortedTerms.Count - numTerms, numTerms);
-        }
-
-        /*
-         * Write list of electors to CSV.
-         */
-        private void WriteElectorsToCsv(List<Elector> electorList, string pathToCsv)
-        {
-            using var writer = new StreamWriter(pathToCsv);
-            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csv.Configuration.RegisterClassMap<ElectorMap>();
-            csv.WriteRecords(electorList);
         }
     }
 }

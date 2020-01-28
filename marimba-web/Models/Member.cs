@@ -89,7 +89,7 @@ namespace marimba_web.Models
         /// <param name="isPaid">Whether the member has paid membership fees</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId,
             Marimba.Faculty faculty, Marimba.Instrument instrument, MailAddress email, Marimba.ShirtSize shirtSize, DateTime signupTime,
-            Marimba.MemberType memberType = Marimba.MemberType.General,  bool isPaid = false)
+            Marimba.MemberType memberType = Marimba.MemberType.General, bool isPaid = false)
         {
             this.id = new Guid();
             this.firstName = firstName;
@@ -103,6 +103,11 @@ namespace marimba_web.Models
             this.memberType = memberType;
             this.signupTime = signupTime;
             this.isPaid = isPaid;
+        }
+
+        public string GetFullName()
+        {
+            return String.Format("{0} {1}", firstName, lastName);
         }
     }
 }
