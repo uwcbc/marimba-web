@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 
 using CsvHelper;
+
+using marimba_web.Common;
 
 namespace marimba_web.Models
 {
@@ -105,5 +108,40 @@ namespace marimba_web.Models
             List<Term> sortedTerms = termList.OrderBy(t => t.startDate).ToList();
             return sortedTerms.GetRange(sortedTerms.Count - numTerms, numTerms);
         }
+
+        public void AddMembersCSV(string pathToCsv){
+            FileStream file = new FileStream(pathToCsv, FileMode.Open, FileAccess.Read);
+            using(StreamReader reader = new StreamReader(file)){
+                while(!reader.EndOfStream){
+                    string line = reader.ReadLine();
+                    string[] values = line.Split(',');
+
+                    DateTime signupTime = new DateTime(UInt32.Parse(values[0]));// should be DateTime?
+                    string firstName = values[1];
+                    string lastName = values[2];
+                    uint studentID = UInt32.Parse(values[3]);
+                    string email = values[4];
+                    uint instrument = UInt32.Parse(values[5]);
+                    uint faculty = UInt32.Parse(values[6]);
+                    uint shirtSize = UInt32.Parse(values[7]);
+
+                    Member bandMember= new Member(
+                        firstName,
+                        lastName,
+                        (Marimba.StudentType) 0,
+                        studentID, 
+                        (Marimba.Faculty)faculty, 
+                        (Marimba.Instrument)instrument,
+                        new MailAddress(email),
+                        (Marimba.ShirtSize )shirtSize
+                        // nothing for signupTime?
+                        );
+
+                    //add and save to database
+
+                }
+            }
+        }
+
     }
 }
