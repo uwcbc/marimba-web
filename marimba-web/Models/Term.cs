@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 
 using CsvHelper;
@@ -53,7 +55,7 @@ namespace marimba_web.Models
             memberDict = AllMembers.ToDictionary(member => member.id, member => member);
             limboMemberDict = LimboMembers.ToDictionary(member => member.id, member => member);
         }
-        
+
         /// <summary>
         /// Get member with the given GUID, returning null if no such member exists.
         /// </summary>
@@ -61,7 +63,7 @@ namespace marimba_web.Models
         {
             return memberDict.GetValueOrDefault(id, null);
         }
-        
+
         /// <summary>
         /// Return true if member with given GUID exists in term, otherwise false.
         /// </summary>
@@ -69,7 +71,7 @@ namespace marimba_web.Models
         {
             return memberDict.ContainsKey(id);
         }
-        
+
         /// <summary>
         /// Return true if member with given GUID is limbo, otherwise false.
         /// </summary>
@@ -100,6 +102,24 @@ namespace marimba_web.Models
         public HashSet<Guid> GetNonLimboMemberIds()
         {
             return memberDict.Keys.Except(limboMemberDict.Keys).ToHashSet();
+        }
+
+        public void GenerateMemberCSV(string csvPath)
+        {
+            using StreamWriter writer = new StreamWriter(csvPath);
+            using CsvWriter csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.Configuration.RegisterClassMap<MemberMap>();
+            //csv.WriteRecords(); // TODO this will be implemented.
+        }
+
+        /// <summary>
+        /// Gets a list of all non-limbo (active) members for this term.
+        /// </summary>
+        /// <returns>List of all active members in this term.</returns>
+        public List<Member> GetActiveMembers()
+        {
+            // Take the current list of members and filter out all limbo members to get active members.
+            return new List<Member>(AllMembers.Where(member => !limboMemberDict.ContainsKey(member.id)));
         }
     }
 }
