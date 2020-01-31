@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Mail;
-
+using CsvHelper.Configuration;
 using marimba_web.Common;
 
 namespace marimba_web.Models
@@ -119,6 +119,18 @@ namespace marimba_web.Models
         public string GetFullName()
         {
             return String.Format("{0} {1}", firstName, lastName);
+        }
+    }
+
+    public sealed class MemberMap : ClassMap<Member> {
+        public MemberMap()
+        {
+            Map(m => m.firstName).Index(0).Name("FirstName");
+            Map(m => m.lastName).Index(1).Name("LastName");
+            Map(m => m.debtsOwed).Index(2).Name("Debts");
+            Map(m => m.isPaid).Index(3).Name("IsPaid");
+            Map(m => m.firstName).Index(4).Name("ShirtSize");
+            Map(m => m.memberType).Index(5).Name("Role");
         }
     }
 }
