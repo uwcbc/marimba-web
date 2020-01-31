@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using CsvHelper;
+
 namespace marimba_web.Models
 {
     public class Term
     {
-        public string name { get; set; } // i.e. W2020
-        public IList<Member> allMembers { get; set; }
-        public IList<Member> limboMembers { get; set; } // Subset of allMembers
-        public IList<Rehearsal> rehearsals { get; set; }
-        public DateTime startDate { get; set; }
-        public DateTime endDate { get; set; }
-        public decimal feeAmount { get; set; }
+        public string Name { get; set; } // i.e. W2020
+        public IList<Member> AllMembers { get; set; }
+        public IList<Member> LimboMembers { get; set; } // Subset of allMembers
+        public IList<Rehearsal> Rehersals { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public decimal FeeAmount { get; set; }
 
         // Internal structures for faster lookup by GUID.
         private Dictionary<Guid, Member> memberDict;
@@ -31,13 +33,13 @@ namespace marimba_web.Models
         public Term(string name, IList<Member> allMembers, IList<Member> limboMembers, IList<Rehearsal> rehearsals,
             DateTime startDate, DateTime endDate, decimal feeAmount)
         {
-            this.name = name;
-            this.allMembers = allMembers;
-            this.limboMembers = limboMembers;
-            this.rehearsals = rehearsals;
-            this.startDate = startDate;
-            this.endDate = endDate;
-            this.feeAmount = feeAmount;
+            this.Name = name;
+            this.AllMembers = allMembers;
+            this.LimboMembers = limboMembers;
+            this.Rehersals = rehearsals;
+            this.StartDate = startDate;
+            this.EndDate = endDate;
+            this.FeeAmount = feeAmount;
 
             InitializeDicts();
         }
@@ -48,17 +50,8 @@ namespace marimba_web.Models
         /// </summary>
         private void InitializeDicts()
         {
-            memberDict = new Dictionary<Guid, Member>();
-            foreach (var m in allMembers)
-            {
-                memberDict.Add(m.id, m);
-            }
-
-            limboMemberDict = new Dictionary<Guid, Member>();
-            foreach (var m in limboMembers)
-            {
-                limboMemberDict.Add(m.id, m);
-            }
+            memberDict = AllMembers.ToDictionary(member => member.id, member => member);
+            limboMemberDict = LimboMembers.ToDictionary(member => member.id, member => member);
         }
         
         /// <summary>

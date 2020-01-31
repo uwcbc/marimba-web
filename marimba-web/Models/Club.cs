@@ -102,7 +102,7 @@ namespace marimba_web.Models
                 throw new InvalidOperationException("Not enough terms");
             }
 
-            List<Term> sortedTerms = termList.OrderBy(t => t.startDate).ToList();
+            List<Term> sortedTerms = termList.OrderBy(t => t.StartDate).ToList();
             return sortedTerms.GetRange(sortedTerms.Count - numTerms, numTerms);
         }
     }
