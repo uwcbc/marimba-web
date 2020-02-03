@@ -108,7 +108,7 @@ namespace marimba_web.Models
             this.email = email;
             this.shirtSize = shirtSize;
             this.memberType = memberType;
-            this.signupTime = DateTime.Now;
+            this.signupTime = DateTime.Today;
             this.isPaid = isPaid;
             this.debtsOwed = debtsOwed;
             this.isSubscribed = true;
