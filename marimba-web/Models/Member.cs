@@ -5,22 +5,80 @@ using marimba_web.Common;
 
 namespace marimba_web.Models
 {
+    /// <summary>
+    /// Model for Members of the band
+    /// </summary>
     public class Member
     {
-        public Guid id { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        public Marimba.StudentType studentType { get; set; }
+        /// <summary>
+        /// The database ID of the Member
+        /// </summary>
+        public Guid id { get; private set; }
+
+        /// <summary>
+        /// The first name of the Member
+        /// </summary>
+        public string firstName { get; private set; }
+
+        /// <summary>
+        /// The last name of the Member
+        /// </summary>
+        public string lastName { get; private set; }
+
+        /// <summary>
+        /// The type of student the Member is
+        /// </summary>
+        public Marimba.StudentType studentType { get; private set; }
+
+        /// <summary>
+        /// The Member's UW student ID (0 if not a UW student)
+        /// </summary>
         public uint studentId { get; private set; }
-        public Marimba.Faculty faculty { get; set; }
-        public Marimba.Instrument instrument { get; set; }
-        public MailAddress email { get; set; }
-        public Marimba.ShirtSize shirtSize { get; set; }
-        public Marimba.MemberType memberType { get; set; }
-        public DateTime signupTime { get; set; }
-        public bool isPaid { get; set; }
+
+        /// <summary>
+        /// The Member's faculty
+        /// </summary>
+        public Marimba.Faculty faculty { get; private set; }
+
+        /// <summary>
+        /// The primary instrument the Member plays in band
+        /// </summary>
+        public Marimba.Instrument instrument { get; private set; }
+
+        /// <summary>
+        /// The Member's email address
+        /// </summary>
+        public MailAddress email { get; private set; }
+
+        /// <summary>
+        /// The Member's shirt size
+        /// </summary>
+        public Marimba.ShirtSize shirtSize { get; private set; }
+
+        /// <summary>
+        /// The type of the Member (i.e. general, exec, etc.)
+        /// </summary>
+        public Marimba.MemberType memberType { get; private set; }
+
+        /// <summary>
+        /// The time that the Member signed up for band
+        /// </summary>
+        public DateTime signupTime { get; private set; }
+
+        /// <summary>
+        /// Value indicating whether the Member has paid for the current term
+        /// </summary>
+        public bool isPaid { get; private set; }
+
+        /// <summary>
+        /// Value indicating whether the Member is subscribed for emails
+        /// </summary>
         public bool isSubscribed { get; private set; }
-        public decimal debtsOwed { get; set; }
+
+        /// <summary>
+        /// The debt that the Member owes to the band
+        /// </summary>
+        public decimal debtsOwed { get; private set; }
 
         /// <summary>
         /// Creates an instance of the Member class

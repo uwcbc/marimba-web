@@ -4,15 +4,45 @@ using System.Linq;
 
 namespace marimba_web.Models
 {
+    /// <summary>
+    /// Model for a Term
+    /// </summary>
     public class Term
     {
-        public string name { get; set; } // i.e. W2020
-        public IList<Member> allMembers { get; set; }
-        public IList<Member> limboMembers { get; set; } // Subset of allMembers
-        public IList<Rehearsal> rehearsals { get; set; }
-        public DateTime startDate { get; set; }
-        public DateTime endDate { get; set; }
-        public decimal feeAmount { get; set; }
+        /// <summary>
+        /// The name of the term (i.e. W2020
+        /// </summary>
+        public string name { get; private set; }
+
+        /// <summary>
+        /// List of all Members in the Term
+        /// </summary>
+        public IList<Member> allMembers { get; private set; }
+
+        /// <summary>
+        /// List of all Members in limbo in the Term(subset of allMembers)
+        /// </summary>
+        public IList<Member> limboMembers { get; private set; }
+
+        /// <summary>
+        /// List of all rehearsals in the Term
+        /// </summary>
+        public IList<Rehearsal> rehearsals { get; private set; }
+
+        /// <summary>
+        /// Start date of the term
+        /// </summary>
+        public DateTime startDate { get; private set; }
+
+        /// <summary>
+        /// End date of the Term
+        /// </summary>
+        public DateTime endDate { get; private set; }
+
+        /// <summary>
+        /// Fee amount to be paid by Members in this term
+        /// </summary>
+        public decimal feeAmount { get; private set; }
 
         // Internal structures for faster lookup by GUID.
         private Dictionary<Guid, Member> memberDict;
