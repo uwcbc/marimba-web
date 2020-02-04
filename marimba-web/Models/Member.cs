@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Net.Mail;
-
+using CsvHelper.Configuration;
 using marimba_web.Common;
+using marimba_web.Models.Converters;
 
 namespace marimba_web.Models
 {
@@ -79,6 +80,14 @@ namespace marimba_web.Models
         /// The debt that the Member owes to the band
         /// </summary>
         public decimal debtsOwed { get; private set; }
+
+        /// <summary>
+        /// Parameterless constructor, which is needed for parsing CSV files.
+        /// </summary>
+        public Member() {
+            // Always generate GUID instantiating new Member
+            this.id = Guid.NewGuid();
+        }
 
         /// <summary>
         /// Creates an instance of the Member class
@@ -176,7 +185,27 @@ namespace marimba_web.Models
         /// </summary>
         public string GetFullName()
         {
-            return String.Format("{0} {1}", firstName, lastName);
+            return string.Format("{0} {1}", firstName, lastName);
+        }
+    }
+
+    public sealed class MemberCsvMap : ClassMap<Member>
+    {
+        public MemberCsvMap()
+        {
+            Map(m => m.signupTime).Index(0);
+            Map(m => m.firstName).Index(1);
+            Map(m => m.lastName).Index(2);
+            Map(m => m.studentId).Index(3);
+            Map(m => m.studentType).Index(4);
+            Map(m => m.email).Index(5).TypeConverter<EmailConverter>();
+            /*
+             * The fields below are all enums. CsvHelper will automatically parse
+             * these as ints (enum value) or strings (enum name).
+             */
+            Map(m => m.instrument).Index(6);
+            Map(m => m.faculty).Index(7);
+            Map(m => m.shirtSize).Index(8);
         }
     }
 }
