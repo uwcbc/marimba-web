@@ -23,6 +23,17 @@ namespace marimba_web.Models
         public decimal debtsOwed { get; set; }
 
         /// <summary>
+        /// The full name of the member.
+        /// </summary>
+        public string FullName
+        {
+            get
+            {
+                return string.Format("{0} {1}", firstName, lastName);
+            }
+        }
+
+        /// <summary>
         /// Creates an instance of the Member class
         /// </summary>
         /// <param name="firstName">The member's first name</param>
@@ -112,25 +123,36 @@ namespace marimba_web.Models
         {
             return studentType == Marimba.StudentType.Grad || studentType == Marimba.StudentType.Undergrad;
         }
+    }
 
-        /// <summary>
-        /// Return string containing member's full name.
-        /// </summary>
-        public string GetFullName()
+    // These mappings for CSV could be done as attributes to the properties, but done explicitly for more control.
+    public sealed class MemberProfileMap : ClassMap<Member> {
+        public MemberProfileMap()
         {
-            return String.Format("{0} {1}", firstName, lastName);
+            // Could have auto-mapped but this specifies the order and names explicitly.
+            Map(m => m.firstName).Index(0).Name("FirstName");
+            Map(m => m.lastName).Index(1).Name("LastName");
+            Map(m => m.email).Index(2).Name("Email");
+            Map(m => m.faculty).Index(3).Name("Faculty");
+            Map(m => m.isSubscribed).Index(4).Name("isSubscribed");
+            Map(m => m.studentId).Index(5).Name("Student ID");
+            Map(m => m.debtsOwed).Index(6).Name("Debts");
+            Map(m => m.isPaid).Index(7).Name("Paid?");
+            Map(m => m.shirtSize).Index(8).Name("Shirt Size");
+            Map(m => m.studentType).Index(9).Name("Student Type");
+            Map(m => m.instrument).Index(10).Name("Instrument");
+            Map(m => m.signupTime).Index(11).Name("Signup Time");
         }
     }
 
-    public sealed class MemberMap : ClassMap<Member> {
-        public MemberMap()
+    public sealed class MemberFinancialMap : ClassMap<Member>
+    {
+        public MemberFinancialMap()
         {
-            Map(m => m.firstName).Index(0).Name("FirstName");
-            Map(m => m.lastName).Index(1).Name("LastName");
+            Map(m => m.FullName).Index(0).Name("Full Name");
+            Map(m => m.email).Index(1).Name("Email");
             Map(m => m.debtsOwed).Index(2).Name("Debts");
-            Map(m => m.isPaid).Index(3).Name("IsPaid");
-            Map(m => m.firstName).Index(4).Name("ShirtSize");
-            Map(m => m.memberType).Index(5).Name("Role");
+            Map(m => m.isPaid).Index(3).Name("Paid?");
         }
     }
 }

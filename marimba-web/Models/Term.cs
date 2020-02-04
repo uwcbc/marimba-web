@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 
 using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace marimba_web.Models
 {
@@ -104,12 +105,46 @@ namespace marimba_web.Models
             return memberDict.Keys.Except(limboMemberDict.Keys).ToHashSet();
         }
 
-        public void GenerateMemberCSV(string csvPath)
+        /// <summary>
+        /// Generates a CSV file containing all active member profile data.
+        /// </summary>
+        /// <param name="csvPath">String path to the CSV file to be exported.</param>
+        public void GenerateActiveMemberCSV(string csvPath)
+        {
+            GenerateMemberCSV<MemberProfileMap>(GetActiveMembers(), csvPath);
+        }
+
+        /// <summary>
+        /// Generates a CSV file containing both inactive and active members.
+        /// </summary>
+        /// <param name="csvPath">String path to the CSV to be exported.</param>
+        public void GenerateAllMemberCSV(string csvPath)
+        {
+            GenerateMemberCSV<MemberProfileMap>(AllMembers, csvPath);
+        }
+
+        /// <summary>
+        /// Exports a CSV of the aggregated financial information on members.
+        /// </summary>
+        /// <param name="csvPath">String path to the export CSV location.</param>
+        public void GenerateMemberFinancialCSV(string csvPath)
+        {
+            GenerateMemberCSV<MemberFinancialMap>(GetActiveMembers(), csvPath);
+        }
+
+        /// <summary>
+        /// Generates a CSV file of the data of the given members to be exported. Properties are mapped
+        /// according to the passed in ClassMap type.
+        /// </summary>
+        /// <typeparam name="T">The type of mapping to perform on the members.</typeparam>
+        /// <param name="membersToExport">The list of members to be exported.</param>
+        /// <param name="csvPath">String path to the CSV file export location.</param>
+        public void GenerateMemberCSV<T>(IEnumerable<Member> membersToExport, string csvPath) where T : ClassMap<Member>
         {
             using StreamWriter writer = new StreamWriter(csvPath);
             using CsvWriter csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csv.Configuration.RegisterClassMap<MemberMap>();
-            //csv.WriteRecords(); // TODO this will be implemented.
+            csv.Configuration.RegisterClassMap<T>();
+            csv.WriteRecords(membersToExport);
         }
 
         /// <summary>
