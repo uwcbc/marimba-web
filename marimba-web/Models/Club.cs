@@ -3,17 +3,56 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.Mail;
 
 using CsvHelper;
-
-using marimba_web.Common;
 
 namespace marimba_web.Models
 {
     public class Club
     {
-        public List<Term> termList { get; set; }
+        public IList<Term> terms { get; private set; }
+        public IList<Member> members { get; private set; }
+        private Dictionary<Guid, Member> memberDict { get; set; }
+
+        public Club(IList<Term> terms, IList<Member> members) {
+            this.terms = terms;
+            this.members = members;
+            memberDict = new Dictionary<Guid, Member>();
+
+            foreach (var m in members)
+            {
+                memberDict.Add(m.id, m);
+            }
+        }
+
+        /// <summary>
+        /// Get member with the given GUID, returning null if no such member exists.
+        /// </summary>
+        public Member GetMemberByGuid(Guid id)
+        {
+            return memberDict.GetValueOrDefault(id, null);
+        }
+
+        /// <summary>
+        /// Import members from CSV into database.
+        /// </summary>
+        /// <param name="pathToCsv">Path to CSV file</param>
+        /// <param name="hasHeaders">Whether CSV includes headers</param>
+        public void ImportMembersFromCSV(string pathToCsv, bool hasHeaders)
+        {
+            using var reader = new StreamReader(pathToCsv);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            // Use the defined Member CSV mapping class
+            csv.Configuration.RegisterClassMap<MemberCsvMap>();
+            // Whether the csv file has headers
+            csv.Configuration.HasHeaderRecord = hasHeaders;
+            // Since Member model has private set, this needs to be true
+            csv.Configuration.IncludePrivateMembers = true;
+
+            var records = csv.GetRecords<Member>().ToList();
+
+            // TODO: Handle saving to database
+        }
 
         /// <summary>
         /// Export list of eligible electors to CSV.
@@ -33,8 +72,10 @@ namespace marimba_web.Models
         /// Construct list of eligible electors, according to the Constitution:
         /// 
         /// To be eligible to vote in the UW Concert Band Club elections, a person must be
-        /// a University of Waterloo student, an active member of the club in one of the
+        /// a University of Waterloo student, an *active* member of the club in one of the
         /// past two terms, and must not have any outstanding debts with the club.
+        ///
+        /// TODO: Clarify what constitutes "active"
         /// </summary>
         private List<Elector> GetEligibleElectors()
         {
@@ -55,34 +96,15 @@ namespace marimba_web.Models
             Term currentTerm = lastTwoTerms[1];
 
             // All member IDs in last two terms
-            var allMemberIds = previousTerm.GetAllMemberIds().Union(currentTerm.GetAllMemberIds());
+            var allMemberIds = previousTerm.members.Union(currentTerm.members);
 
             // Check eligiblity of every member in last two terms
             foreach (Guid guid in allMemberIds)
             {
-                // Member must be present in one of the two terms
-                Member member = currentTerm.GetMemberByGuid(guid) ?? previousTerm.GetMemberByGuid(guid);
-                bool wasMemberPrevTerm = previousTerm.IsMember(guid);
-                bool wasLimboPrevTerm = previousTerm.IsLimboMember(guid);
-                bool isMemberCurTerm = currentTerm.IsMember(guid);
-                bool isLimboCurTerm = currentTerm.IsLimboMember(guid);
-                bool isEligible = false;
-
-                // Member was in both terms
-                if (wasMemberPrevTerm && isMemberCurTerm)
-                {
-                    isEligible = !(wasLimboPrevTerm && isLimboCurTerm) && member.IsUWStudent();
-                }
-                // Member was in previous term but not this term
-                else if (wasMemberPrevTerm)
-                {
-                    isEligible = !wasLimboPrevTerm && member.IsUWStudent();
-                }
-                // Member is in this term but not last term
-                else if (isMemberCurTerm)
-                {
-                    isEligible = !isLimboCurTerm && member.IsUWStudent();
-                }
+                Member member = GetMemberByGuid(guid);
+                bool wasActiveMemberPrevTerm = previousTerm.HasActiveMember(guid);
+                bool isActiveMemberCurTerm = currentTerm.HasActiveMember(guid);
+                bool isEligible = (wasActiveMemberPrevTerm || isActiveMemberCurTerm) && member.IsUWStudent();
 
                 if (isEligible)
                 {
@@ -100,48 +122,13 @@ namespace marimba_web.Models
         /// <param name="numTerms">Number of terms to retrieve</param>
         private List<Term> GetLatestTerms(int numTerms)
         {
-            if (termList.Count < numTerms)
+            if (terms.Count < numTerms)
             {
                 throw new InvalidOperationException("Not enough terms");
             }
 
-            List<Term> sortedTerms = termList.OrderBy(t => t.startDate).ToList();
+            List<Term> sortedTerms = terms.OrderBy(t => t.startDate).ToList();
             return sortedTerms.GetRange(sortedTerms.Count - numTerms, numTerms);
         }
-
-        public void AddMembersCSV(string pathToCsv){
-            FileStream file = new FileStream(pathToCsv, FileMode.Open, FileAccess.Read);
-            using(StreamReader reader = new StreamReader(file)){
-                while(!reader.EndOfStream){
-                    string line = reader.ReadLine();
-                    string[] values = line.Split(',');
-
-                    DateTime signupTime = new DateTime(UInt32.Parse(values[0]));// should be DateTime?
-                    string firstName = values[1];
-                    string lastName = values[2];
-                    uint studentID = UInt32.Parse(values[3]);
-                    string email = values[4];
-                    uint instrument = UInt32.Parse(values[5]);
-                    uint faculty = UInt32.Parse(values[6]);
-                    uint shirtSize = UInt32.Parse(values[7]);
-
-                    Member bandMember= new Member(
-                        firstName,
-                        lastName,
-                        (Marimba.StudentType) 0,
-                        studentID, 
-                        (Marimba.Faculty)faculty, 
-                        (Marimba.Instrument)instrument,
-                        new MailAddress(email),
-                        (Marimba.ShirtSize )shirtSize
-                        // nothing for signupTime?
-                        );
-
-                    //add and save to database
-
-                }
-            }
-        }
-
     }
 }
