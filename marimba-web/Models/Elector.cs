@@ -6,12 +6,30 @@ using CsvHelper.Configuration;
 
 namespace marimba_web.Models
 {
+    /// <summary>
+    /// Model for Elector, used for election purposes.
+    /// </summary>
     public class Elector
     {
-        public string name { get; set; }
-        public Marimba.Instrument instrument { get; set; } 
-        public MailAddress email { get; set; }
-        public bool isMembershipPaid { get; set; }
+        /// <summary>
+        /// Elector full name
+        /// </summary>
+        public string name { get; private set; }
+
+        /// <summary>
+        /// Elector instrument
+        /// </summary>
+        public Marimba.Instrument instrument { get; private set; }
+
+        /// <summary>
+        /// Elector email
+        /// </summary>
+        public MailAddress email { get; private set; }
+
+        /// <summary>
+        /// Whether elector has paid all their membership fees
+        /// </summary>
+        public bool isMembershipPaid { get; private set; }
 
         /// <summary>
         /// Creates an instance of the Elector class
@@ -27,44 +45,14 @@ namespace marimba_web.Models
             this.email = email;
             this.isMembershipPaid = isMembershipPaid;
         }
-
-        /// <summary>
-        /// Sets the elector name
-        /// </summary>
-        public void SetName(string name)
-        {
-            this.name = name;
-        }
-
-        /// <summary>
-        /// Sets the elector instrument
-        /// </summary>
-        public void SetInstrument(Marimba.Instrument instrument)
-        {
-            this.instrument = instrument;
-        }
-
-        /// <summary>
-        /// Sets the elector email
-        /// </summary>
-        public void SetEmail(MailAddress email)
-        {
-            this.email = email;
-        }
-
-        /// <summary>
-        /// Sets whether elector has paid all membership fees
-        /// </summary>
-        public void SetMembershipPaid(bool isMembershipPaid)
-        {
-            this.isMembershipPaid = isMembershipPaid;
-        }
     }
-    
-    // CSV column index mapping
-    public sealed class ElectorMap : ClassMap<Elector>
+
+    /// <summary>
+    /// Class that maps Elector fields to CSV fields.
+    /// </summary>
+    public sealed class ElectorCsvMap : ClassMap<Elector>
     {
-        public ElectorMap()
+        public ElectorCsvMap()
         {
             Map(m => m.name).Index(0).Name("name");
             Map(m => m.instrument).Index(1).Name("instrument");

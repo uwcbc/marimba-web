@@ -189,6 +189,9 @@ namespace marimba_web.Models
         }
     }
 
+    /// <summary>
+    /// Class that maps Member fields to CSV fields.
+    /// </summary>
     public sealed class MemberCsvMap : ClassMap<Member>
     {
         public MemberCsvMap()

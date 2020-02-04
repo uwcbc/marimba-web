@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace marimba_web.Models
 {
@@ -67,11 +66,21 @@ namespace marimba_web.Models
             // TODO: Populate activeMembers list?
         }
 
+        /// <summary>
+        /// Returns whether the Member with given GUID has attended at least one rehearsal this term.
+        /// </summary>
+        /// <param name="memberId">Member GUID</param>
+        /// <returns>true if member is present, otherwise false</returns>
         public bool HasMember(Guid memberId)
         {
             return members.Contains(memberId);
         }
 
+        /// <summary>
+        /// Returns whether the Member with given GUID is an active member this term.
+        /// </summary>
+        /// <param name="memberId">Member GUID</param>
+        /// <returns>true if member is present and active, otherwise false</returns>
         public bool HasActiveMember(Guid memberId)
         {
             return activeMembers.Contains(memberId);
