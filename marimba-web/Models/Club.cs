@@ -8,12 +8,32 @@ using CsvHelper;
 
 namespace marimba_web.Models
 {
+    /// <summary>
+    /// Club class.
+    /// Handles accesses to database and updates to members and terms.
+    /// </summary>
     public class Club
     {
+        /// <summary>
+        /// List of all Terms
+        /// </summary>
         public IList<Term> terms { get; private set; }
+
+        /// <summary>
+        /// List of all Members
+        /// </summary>
         public IList<Member> members { get; private set; }
+
+        /// <summary>
+        /// Dictionary that maps Member GUIDs to Member objects for easy lookup
+        /// </summary>
         private Dictionary<Guid, Member> memberDict { get; set; }
 
+        /// <summary>
+        /// Initializes new instance of Club.
+        /// </summary>
+        /// <param name="terms">List of Terms</param>
+        /// <param name="members">List of Members</param>
         public Club(IList<Term> terms, IList<Member> members) {
             this.terms = terms;
             this.members = members;
@@ -26,8 +46,10 @@ namespace marimba_web.Models
         }
 
         /// <summary>
-        /// Get member with the given GUID, returning null if no such member exists.
+        /// Retrieve the Member with the given GUID.
         /// </summary>
+        /// <param name="id">Member GUID</param>
+        /// <returns>Member with given GUID if exists, otherwise returns null.
         public Member GetMemberByGuid(Guid id)
         {
             return memberDict.GetValueOrDefault(id, null);
@@ -64,7 +86,7 @@ namespace marimba_web.Models
 
             using var writer = new StreamWriter(pathToCsv);
             using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csv.Configuration.RegisterClassMap<ElectorMap>();
+            csv.Configuration.RegisterClassMap<ElectorCsvMap>();
             csv.WriteRecords(electorList);
         }
 
@@ -75,8 +97,9 @@ namespace marimba_web.Models
         /// a University of Waterloo student, an *active* member of the club in one of the
         /// past two terms, and must not have any outstanding debts with the club.
         ///
-        /// TODO: Clarify what constitutes "active"
+        /// TODO: Clarify what constitutes being an "active" member
         /// </summary>
+        /// <returns>List of eligible Electors</returns>
         private List<Elector> GetEligibleElectors()
         {
             List<Elector> eligibleElectors = new List<Elector>();
@@ -120,6 +143,7 @@ namespace marimba_web.Models
         /// Get the latest terms in chronological order (earliest to most recent).
         /// </summary>
         /// <param name="numTerms">Number of terms to retrieve</param>
+        /// <returns>List of the last `numTerms` Terms</returns>
         private List<Term> GetLatestTerms(int numTerms)
         {
             if (terms.Count < numTerms)

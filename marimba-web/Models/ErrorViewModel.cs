@@ -1,5 +1,3 @@
-using System;
-
 namespace marimba_web.Models
 {
     public class ErrorViewModel
