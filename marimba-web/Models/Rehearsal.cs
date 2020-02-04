@@ -16,8 +16,8 @@ namespace marimba_web.Models
         public DateTime date { get; private set; }
 
         /// <summary>
-        /// List of Members who attended the rehearsal
+        /// List of GUIDs of members who attended the rehearsal
         /// </summary>
-        public IList<Member> members { get; private set; }
+        public IList<Guid> members { get; private set; }
     }
 }
