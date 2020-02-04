@@ -67,11 +67,6 @@ namespace marimba_web.Models
         public DateTime signupTime { get; private set; }
 
         /// <summary>
-        /// Value indicating whether the Member has paid for the current term
-        /// </summary>
-        public bool isPaid { get; private set; }
-
-        /// <summary>
         /// Value indicating whether the Member is subscribed for emails
         /// </summary>
         public bool isSubscribed { get; private set; }
@@ -101,11 +96,10 @@ namespace marimba_web.Models
         /// <param name="email">The member's email</param>
         /// <param name="shirtSize">The member's shirt size</param>
         /// <param name="memberType">The type of member in band</param>
-        /// <param name="isPaid">Whether the member has paid membership fees</param>
         /// <param name="debtsOwed">Amount of debt (e.g. from fees) owed</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId, 
             Marimba.Faculty faculty, Marimba.Instrument instrument, MailAddress email, Marimba.ShirtSize shirtSize,
-            Marimba.MemberType memberType = Marimba.MemberType.General, bool isPaid = false, decimal debtsOwed = 0m)
+            Marimba.MemberType memberType = Marimba.MemberType.General, decimal debtsOwed = 0m)
         {
             this.id = Guid.NewGuid();
             this.firstName = firstName;
@@ -118,7 +112,6 @@ namespace marimba_web.Models
             this.shirtSize = shirtSize;
             this.memberType = memberType;
             this.signupTime = DateTime.Today;
-            this.isPaid = isPaid;
             this.debtsOwed = debtsOwed;
             this.isSubscribed = true;
         }
@@ -135,11 +128,10 @@ namespace marimba_web.Models
         /// <param name="email">The member's email</param>
         /// <param name="shirtSize">The member's shirt size</param>
         /// <param name="memberType">The type of member in band</param>
-        /// <param name="isPaid">Whether the member has paid membership fees</param>
         /// <param name="debtsOwed">Amount of debt (e.g. from fees) owed</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId,
             Marimba.Faculty faculty, Marimba.Instrument instrument, MailAddress email, Marimba.ShirtSize shirtSize, DateTime signupTime,
-            Marimba.MemberType memberType = Marimba.MemberType.General, bool isPaid = false, decimal debtsOwed = 0m)
+            Marimba.MemberType memberType = Marimba.MemberType.General, decimal debtsOwed = 0m)
         {
             this.id = Guid.NewGuid();
             this.firstName = firstName;
@@ -152,7 +144,6 @@ namespace marimba_web.Models
             this.shirtSize = shirtSize;
             this.memberType = memberType;
             this.signupTime = signupTime;
-            this.isPaid = isPaid;
             this.debtsOwed = debtsOwed;
         }
 
