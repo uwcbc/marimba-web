@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using marimba_web.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace marimba_web.Data
     // useful stuff: https://stackoverflow.com/questions/43767933/entity-framework-core-using-multiple-dbcontexts
     public class MarimbaDbContext : DbContext
     {
+        public DbSet<Member> Members { get; set; }
+
         public MarimbaDbContext(DbContextOptions<MarimbaDbContext> options) : base(options)
         {
         }
