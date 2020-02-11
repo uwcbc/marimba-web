@@ -17,5 +17,19 @@ namespace marimba_web.Models
         /// List of GUIDs of members who attended the rehearsal
         /// </summary>
         public IList<Guid> members { get; private set; }
+
+        public Rehearsal( DateTime date, IList<Guid> members )
+        {
+           this.date = date;
+           this.members = members;
+        }
+        public void UpdateRehearsal( DateTime date, IList<Guid> members )
+        {
+           this.date = date;
+           this.members = members;
+        }
+
     }
-}
+
+   
+}    
