@@ -27,6 +27,10 @@ namespace marimba_web.Controllers
         {
             return View();
         }
+        public IActionResult Members()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
