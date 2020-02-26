@@ -108,8 +108,8 @@ namespace marimba_web.Models
 
         }
         public void SetCategory(Marimba.FinanceCategory category){
-        
-            this.category = category
+
+            this.category = category;
 
         }
         public void SetTransactionDate(Marimba.FinanceType type){

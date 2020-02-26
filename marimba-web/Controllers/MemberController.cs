@@ -13,6 +13,31 @@ namespace marimba_web.Controllers
     {
         private readonly MarimbaDbContext context;
 
+        public IActionResult Attendance()
+        {
+            return View();
+        }
+
+        public IActionResult Directory()
+        {
+            return View();
+        }
+
+        public IActionResult Records()
+        {
+            return View();
+        }
+
+        public IActionResult Drive()
+        {
+            return View();
+        }
+
+        public IActionResult Elections()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             return View();

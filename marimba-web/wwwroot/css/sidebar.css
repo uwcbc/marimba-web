@@ -5,6 +5,7 @@
 
 .wrapper {
     display: flex;
+    float: left;
 }
 
 #sidebar {
@@ -19,6 +20,13 @@
 .sidebar-header {
     height: 15vh;
 }
+
+.bar {
+    min-width: 10px;
+    height: 100vh;
+    background-color: #69C29D
+}
+
 
 .list-unstyled {
     list-style: none;
