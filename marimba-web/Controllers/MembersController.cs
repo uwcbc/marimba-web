@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace marimba_web.Controllers
 {
-    public class MemberController : Controller
+    public class MembersController : Controller
     {
         private readonly MarimbaDbContext context;
 
@@ -53,7 +53,7 @@ namespace marimba_web.Controllers
             return await context.Members.ToListAsync();
         }
 
-        public MemberController(MarimbaDbContext context)
+        public MembersController(MarimbaDbContext context)
         {
             this.context = context;
         }

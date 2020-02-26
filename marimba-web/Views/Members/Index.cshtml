@@ -1,8 +1,6 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
-    ViewData["Title"] = "Members";
+    ViewData["Title"] = "Index";
 }
 
 <head>
@@ -10,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] | Members - Marimba</title>
     <link rel="stylesheet" href="~/css/Members.css" />
-    <link rel="stylesheet" href="~/css/sidebar.css"/>
+    <link rel="stylesheet" href="~/css/sidebar.css" />
 </head>
 
 <body>
@@ -19,29 +17,28 @@
             <nav class="navbar-nav">
                 <ul class="navbar-list">
                     <li class="header-item">
-                        <a class="header-link" asp-area="" asp-controller="Home" asp-action="Members">Attendance</a>
+                        <a class="header-link" asp-area="" asp-controller="Members" asp-action="Attendance">Attendance</a>
                     </li>
                     <li class="header-item">
-                        <a class="header-link" asp-area="" asp-controller="Home" asp-action="Members">Member Directory</a>
+                        <a class="header-link" asp-area="" asp-controller="Members" asp-action="Directory">Member Directory</a>
                     </li>
                     <li class="header-item">
-                        <a class="header-link" asp-area="" asp-controller="Home" asp-action="Members">Rehearsal Records</a>
+                        <a class="header-link" asp-area="" asp-controller="Members" asp-action="Rehearsal">Rehearsal Records</a>
                     </li>
                     <li class="header-item">
-                        <a class="header-link" asp-area="" asp-controller="Home" asp-action="Members">Imports from Google Drive</a>
+                        <a class="header-link" asp-area="" asp-controller="Members" asp-action="Drive">Imports from Google Drive</a>
                     </li>
                     <li class="header-item">
-                        <a class="header-link" asp-area="" asp-controller="Home" asp-action="Members">Elections</a>
+                        <a class="header-link" asp-area="" asp-controller="Members" asp-action="Elections">Elections</a>
                     </li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <section >
+    <section>
         <div class="content-container">
 
         </div>
     </section>
 </body>
-
