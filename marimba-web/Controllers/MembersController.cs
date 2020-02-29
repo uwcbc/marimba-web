@@ -43,6 +43,8 @@ namespace marimba_web.Controllers
             return View();
         }
 
+        // NOTE: To view the front-end, comment out lines 48-61 until we figure out how to deal with the database 
+
         /// <summary>
         /// Gets a list of all members from the database
         /// </summary>
