@@ -131,7 +131,7 @@ namespace marimba_web.Models
 
                 if (isEligible)
                 {
-                    Elector elector = new Elector(member.GetFullName(), member.instrument, member.email, member.debtsOwed == 0m);
+                    Elector elector = new Elector(member.FullName, member.instrument, member.email, member.debtsOwed == 0m);
                     eligibleElectors.Add(elector);
                 }
             }

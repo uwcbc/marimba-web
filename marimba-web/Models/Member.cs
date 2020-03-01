@@ -81,6 +81,14 @@ namespace marimba_web.Models
         /// </summary>
         public decimal debtsOwed { get; private set; }
 
+        public string FullName
+        {
+            get
+            {
+                return string.Format("{0} {1}", firstName, lastName);
+            }
+        }
+
         /// <summary>
         /// Parameterless constructor, which is needed for parsing CSV files.
         /// </summary>
@@ -174,14 +182,6 @@ namespace marimba_web.Models
         public bool IsUWStudent()
         {
             return studentType == Marimba.StudentType.Grad || studentType == Marimba.StudentType.Undergrad;
-        }
-
-        /// <summary>
-        /// Return string containing member's full name.
-        /// </summary>
-        public string GetFullName()
-        {
-            return string.Format("{0} {1}", firstName, lastName);
         }
     }
 
