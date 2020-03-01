@@ -62,6 +62,11 @@ namespace marimba_web.Models
         public Marimba.MemberType memberType { get; private set; }
 
         /// <summary>
+        /// True if this member is a conductor, false otherwise.
+        /// </summary>
+        public bool IsConductor { get; internal set; } = false;
+
+        /// <summary>
         /// The time that the Member signed up for band
         /// </summary>
         public DateTime signupTime { get; private set; }
@@ -200,6 +205,7 @@ namespace marimba_web.Models
             Map(m => m.instrument).Index(6);
             Map(m => m.faculty).Index(7);
             Map(m => m.shirtSize).Index(8);
+            Map(m => m.IsConductor).Index(9);
         }
     }
 }
