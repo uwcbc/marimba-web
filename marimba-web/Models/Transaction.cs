@@ -85,51 +85,47 @@ namespace marimba_web.Models
             this.comment = comment;
         }
 
-        public void SetValue(decimal value){
-        
+        public void SetValue(decimal value)
+        {
             this.value = value;
-
         }
 
-        public void SetName(string name){
-        
+        public void SetName(string name)
+        {
             this.name = name;
-
         }
 
-        public void SetTransactionDate(DateTime transactionDate){
-        
+        public void SetTransactionDate(DateTime transactionDate)
+        {
             this.transactionDate = transactionDate;
-
         }
-        public void SetProcessedDate(DateTime processedDate){
-        
+
+        public void SetProcessedDate(DateTime processedDate)
+        {
             this.processedDate = processedDate;
-
         }
-        public void SetCategory(Marimba.FinanceCategory category){
 
+        public void SetCategory(Marimba.FinanceCategory category)
+        {
             this.category = category;
-
         }
-        public void SetTransactionDate(Marimba.FinanceType type){
-        
+
+        public void SetType(Marimba.FinanceType type)
+        {
            this.type = type;
-
         }
-        public void SetTerm(Term term){
-        
+
+        public void SetTerm(Term term)
+        {
            this.term = term;
-
         }
-        public void SetComment(string comment){
-        
+
+        public void SetComment(string comment)
+        {
            this.comment = comment;
         }
 
-        
-
-         public void UpdateAll(
+        public void UpdateAll(
             decimal value, 
             string name, 
             DateTime transactionDate, 
