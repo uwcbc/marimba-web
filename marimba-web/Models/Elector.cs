@@ -3,6 +3,7 @@ using System.Net.Mail;
 using marimba_web.Common;
 
 using CsvHelper.Configuration;
+using System.Collections.Generic;
 
 namespace marimba_web.Models
 {
@@ -19,7 +20,7 @@ namespace marimba_web.Models
         /// <summary>
         /// Elector instrument
         /// </summary>
-        public Marimba.Instrument instrument { get; private set; }
+        public List<Marimba.Instrument> instruments { get; private set; }
 
         /// <summary>
         /// Elector email
@@ -35,13 +36,13 @@ namespace marimba_web.Models
         /// Creates an instance of the Elector class
         /// </summary>
         /// <param name="name">Elector name</param>
-        /// <param name="instrument">Elector instrument</param>
+        /// <param name="instruments">Elector instrument</param>
         /// <param name="email">Elector email</param>
         /// <param name="isMembershipPaid">Whether elector has paid off all membership fees</param>
-        public Elector(string name, Marimba.Instrument instrument, MailAddress email, bool isMembershipPaid)
+        public Elector(string name, IEnumerable<Marimba.Instrument> instruments, MailAddress email, bool isMembershipPaid)
         {
             this.name = name;
-            this.instrument = instrument;
+            this.instruments = new List<Marimba.Instrument>(instruments);
             this.email = email;
             this.isMembershipPaid = isMembershipPaid;
         }
@@ -55,7 +56,7 @@ namespace marimba_web.Models
         public ElectorCsvMap()
         {
             Map(m => m.name).Index(0).Name("name");
-            Map(m => m.instrument).Index(1).Name("instrument");
+            Map(m => m.instruments).Index(1).Name("instrument");
             Map(m => m.email).Index(2).Name("email");
             Map(m => m.isMembershipPaid).Index(3).Name("ismembershippaid");
         }

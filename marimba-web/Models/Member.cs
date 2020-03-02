@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Mail;
 using CsvHelper.Configuration;
 using marimba_web.Common;
@@ -41,10 +43,15 @@ namespace marimba_web.Models
         /// </summary>
         public Marimba.Faculty faculty { get; private set; }
 
+        private List<Marimba.Instrument> instruments;
         /// <summary>
         /// The primary instrument the Member plays in band
         /// </summary>
-        public Marimba.Instrument instrument { get; private set; }
+        public ReadOnlyCollection<Marimba.Instrument> Instruments { get
+            {
+                return instruments.AsReadOnly();
+            }
+          }
 
         /// <summary>
         /// The Member's email address
@@ -105,13 +112,13 @@ namespace marimba_web.Models
         /// <param name="studentType">The type of student that the member is</param>
         /// <param name="studentId">The member's Waterloo student id</param>
         /// <param name="faculty">The faculty that the member belongs to</param>
-        /// <param name="instrument">The instrument that the member plays in band</param>
+        /// <param name="instruments">The instrument that the member plays in band</param>
         /// <param name="email">The member's email</param>
         /// <param name="shirtSize">The member's shirt size</param>
         /// <param name="memberType">The type of member in band</param>
         /// <param name="debtsOwed">Amount of debt (e.g. from fees) owed</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId, 
-            Marimba.Faculty faculty, Marimba.Instrument instrument, MailAddress email, Marimba.ShirtSize shirtSize,
+            Marimba.Faculty faculty, IEnumerable<Marimba.Instrument> instruments, MailAddress email, Marimba.ShirtSize shirtSize,
             Marimba.MemberType memberType = Marimba.MemberType.General, decimal debtsOwed = 0m)
         {
             this.id = Guid.NewGuid();
@@ -120,7 +127,7 @@ namespace marimba_web.Models
             this.studentType = studentType;
             this.studentId = studentId;
             this.faculty = faculty;
-            this.instrument = instrument;
+            this.instruments = new List<Marimba.Instrument>(instruments);
             this.email = email;
             this.shirtSize = shirtSize;
             this.memberType = memberType;
@@ -137,13 +144,13 @@ namespace marimba_web.Models
         /// <param name="studentType">The type of student that the member is</param>
         /// <param name="studentId">The member's Waterloo student id</param>
         /// <param name="faculty">The faculty that the member belongs to</param>
-        /// <param name="instrument">The instrument that the member plays in band</param>
+        /// <param name="instruments">The instrument that the member plays in band</param>
         /// <param name="email">The member's email</param>
         /// <param name="shirtSize">The member's shirt size</param>
         /// <param name="memberType">The type of member in band</param>
         /// <param name="debtsOwed">Amount of debt (e.g. from fees) owed</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId,
-            Marimba.Faculty faculty, Marimba.Instrument instrument, MailAddress email, Marimba.ShirtSize shirtSize, DateTime signupTime,
+            Marimba.Faculty faculty, IEnumerable<Marimba.Instrument> instruments, MailAddress email, Marimba.ShirtSize shirtSize, DateTime signupTime,
             Marimba.MemberType memberType = Marimba.MemberType.General, decimal debtsOwed = 0m)
         {
             this.id = Guid.NewGuid();
@@ -152,7 +159,7 @@ namespace marimba_web.Models
             this.studentType = studentType;
             this.studentId = studentId;
             this.faculty = faculty;
-            this.instrument = instrument;
+            this.instruments = new List<Marimba.Instrument>(instruments);
             this.email = email;
             this.shirtSize = shirtSize;
             this.memberType = memberType;
@@ -183,6 +190,16 @@ namespace marimba_web.Models
         {
             return studentType == Marimba.StudentType.Grad || studentType == Marimba.StudentType.Undergrad;
         }
+
+        /// <summary>
+        /// Determines if this member plays the given instrument or not.
+        /// </summary>
+        /// <param name="instrument">The instrument to check for.</param>
+        /// <returns>True if this member plays that instrument, false otherwise.</returns>
+        public bool DoesPlayInstrument(Marimba.Instrument instrument)
+        {
+            return Instruments.Contains(instrument);
+        }
     }
 
     /// <summary>
@@ -202,7 +219,7 @@ namespace marimba_web.Models
              * The fields below are all enums. CsvHelper will automatically parse
              * these as ints (enum value) or strings (enum name).
              */
-            Map(m => m.instrument).Index(6);
+            Map(m => m.Instruments).Index(6);
             Map(m => m.faculty).Index(7);
             Map(m => m.shirtSize).Index(8);
             Map(m => m.IsConductor).Index(9);
