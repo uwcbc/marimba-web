@@ -56,7 +56,7 @@ namespace marimba_web.Models
         /// <summary>
         /// The Member's email address
         /// </summary>
-        public MailAddress email { get; private set; }
+        public string email { get; private set; }
 
         /// <summary>
         /// The Member's shirt size
@@ -117,8 +117,8 @@ namespace marimba_web.Models
         /// <param name="shirtSize">The member's shirt size</param>
         /// <param name="memberType">The type of member in band</param>
         /// <param name="debtsOwed">Amount of debt (e.g. from fees) owed</param>
-        public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId, 
-            Marimba.Faculty faculty, IEnumerable<Marimba.Instrument> instruments, MailAddress email, Marimba.ShirtSize shirtSize,
+        public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId,
+            Marimba.Faculty faculty, IEnumerable<Marimba.Instrument> instruments, string email, Marimba.ShirtSize shirtSize,
             Marimba.MemberType memberType = Marimba.MemberType.General, decimal debtsOwed = 0m)
         {
             this.id = Guid.NewGuid();
@@ -150,7 +150,7 @@ namespace marimba_web.Models
         /// <param name="memberType">The type of member in band</param>
         /// <param name="debtsOwed">Amount of debt (e.g. from fees) owed</param>
         public Member(string firstName, string lastName, Marimba.StudentType studentType, uint studentId,
-            Marimba.Faculty faculty, IEnumerable<Marimba.Instrument> instruments, MailAddress email, Marimba.ShirtSize shirtSize, DateTime signupTime,
+            Marimba.Faculty faculty, IEnumerable<Marimba.Instrument> instruments, string email, Marimba.ShirtSize shirtSize, DateTime signupTime,
             Marimba.MemberType memberType = Marimba.MemberType.General, decimal debtsOwed = 0m)
         {
             this.id = Guid.NewGuid();

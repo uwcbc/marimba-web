@@ -25,21 +25,21 @@ namespace marimba_web.Models
         /// <summary>
         /// Elector email
         /// </summary>
-        public MailAddress email { get; private set; }
+        public string email { get; private set; }
 
         /// <summary>
         /// Whether elector has paid all their membership fees
         /// </summary>
         public bool isMembershipPaid { get; private set; }
 
-        /// <summary>
+        /// <summary> 
         /// Creates an instance of the Elector class
         /// </summary>
         /// <param name="name">Elector name</param>
         /// <param name="instruments">Elector instrument</param>
         /// <param name="email">Elector email</param>
         /// <param name="isMembershipPaid">Whether elector has paid off all membership fees</param>
-        public Elector(string name, IEnumerable<Marimba.Instrument> instruments, MailAddress email, bool isMembershipPaid)
+        public Elector(string name, IEnumerable<Marimba.Instrument> instruments, string email, bool isMembershipPaid)
         {
             this.name = name;
             this.instruments = new List<Marimba.Instrument>(instruments);

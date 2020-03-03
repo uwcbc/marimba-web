@@ -10,6 +10,9 @@ Marimba/
 # App settings
 appsettings.*
 
+# Migrations
+*Migrations/
+
 # User-specific files
 *.rsuser
 *.suo
