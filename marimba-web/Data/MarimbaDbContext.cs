@@ -12,6 +12,7 @@ namespace marimba_web.Data
     public class MarimbaDbContext : DbContext
     {
         public DbSet<Member> Members { get; set; }
+        public DbSet<Term> Terms { get; set; }
 
         public MarimbaDbContext(DbContextOptions<MarimbaDbContext> options) : base(options)
         {
