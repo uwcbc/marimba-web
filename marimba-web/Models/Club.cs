@@ -49,7 +49,7 @@ namespace marimba_web.Models
         /// Retrieve the Member with the given GUID.
         /// </summary>
         /// <param name="id">Member GUID</param>
-        /// <returns>Member with given GUID if exists, otherwise returns null.
+        /// <returns> Member with given GUID if exists, otherwise returns null. </returns>
         public Member GetMemberByGuid(Guid id)
         {
             return memberDict.GetValueOrDefault(id, null);
