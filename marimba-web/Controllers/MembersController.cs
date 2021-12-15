@@ -56,6 +56,23 @@ namespace marimba_web.Controllers
         }
 
         /// <summary>
+        /// Gets a list of members that match the given name by prefix.
+        /// </summary>
+        /// <param name="name">Name to search for</param>
+        /// <returns>List of Members whose first name or last name starts with the given name.</returns>
+        public async Task<IList<Member>> GetMembersByName(string name)
+        {
+            /*
+             * Current assumption: given an input such as "anna", a member whose name
+             * is "Hannah" would not show in the results.
+             */
+            return await context.Members.Where(m =>
+                m.firstName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase) ||
+                m.lastName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Get the attendance records for the given Term.
         /// </summary>
         /// <returns>
